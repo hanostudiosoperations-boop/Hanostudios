@@ -116,6 +116,25 @@
   );
   if (hero) heroObserver.observe(hero);
 
+  // Invert the button while a light section is under it. The root is squeezed to
+  // a band across the top of the viewport, so this tracks what is actually
+  // behind the button rather than whether the section is on screen at all.
+  const lightSections = document.querySelectorAll('.services');
+  if (lightSections.length) {
+    const overLight = new Set();
+    const contrastObserver = new IntersectionObserver(
+      entries => {
+        entries.forEach(en => {
+          if (en.isIntersecting) overLight.add(en.target);
+          else overLight.delete(en.target);
+        });
+        menuBtn.classList.toggle('on-light', overLight.size > 0);
+      },
+      { rootMargin: '0px 0px -90% 0px' }
+    );
+    lightSections.forEach(s => contrastObserver.observe(s));
+  }
+
   /* ---------------- Scroll reveals ---------------- */
 
   const revealObserver = new IntersectionObserver(
@@ -455,9 +474,9 @@
   // travel is actually visible — at xPercent:-6 on a mark that fitted on screen
   // there was nothing to reveal and the motion read as static.
   gsap.fromTo('.footer-mark',
-    { xPercent: 6 },
+    { xPercent: 0 },
     {
-      xPercent: -16,
+      xPercent: -4,
       ease: 'none',
       scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: 0.6 }
     }

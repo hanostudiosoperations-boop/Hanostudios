@@ -138,6 +138,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   background:var(--void);
   transition:transform .35s ease, opacity .25s ease;
 }
+/* Over the light services section a white pill on white is invisible, so it
+   inverts to a dark pill — which is also how Figma draws it there. */
+.menu-btn.on-light{ background:var(--void); }
+.menu-btn.on-light span{ background:var(--frost); }
+
 /* Open, it is a bare white × on the purple ground (Figma frame 183). The white
    pill is only needed closed, where it sits over arbitrary page content. */
 .menu-btn.is-open{ background:transparent; }
@@ -744,7 +749,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 
 .cta{
   position:relative;
-  min-height:82svh;
+  min-height:72svh;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -766,27 +771,27 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   content:'';
   position:absolute;
   left:50%;
-  bottom:6%;
-  width:250%;
+  bottom:-6%;
+  width:210%;
   aspect-ratio:1;
   transform:translateX(-50%);
   border-radius:50%;
   background:radial-gradient(circle closest-side,
     transparent 0%,
-    transparent 84%,
-    rgba(255,255,255,.05) 91%,
-    rgba(255,255,255,.20) 96%,
-    rgba(255,255,255,.04) 99.5%,
+    transparent 85%,
+    rgba(255,255,255,.06) 91%,
+    rgba(255,255,255,.34) 96.5%,
+    rgba(255,255,255,.05) 99.5%,
     transparent 100%);
-  filter:blur(30px);
+  filter:blur(24px);
 }
 
 @media (max-width:600px){
-  .cta-glow::after{ width:380%; bottom:14%; filter:blur(18px); }
+  .cta-glow::after{ width:330%; bottom:2%; filter:blur(16px); }
 }
 .cta-title{
   position:relative; z-index:2;
-  padding:0 var(--pad) clamp(48px,8vw,90px);
+  padding:0 var(--pad) clamp(30px,4.2vw,56px);
   font-size:clamp(34px,6.4vw,92px);
   font-weight:400;
   letter-spacing:-.04em;
@@ -955,10 +960,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .footer-mark{
   position:relative;
   z-index:1;
-  margin:clamp(30px,5vw,60px) 0 0;
-  /* Deliberately wider than the viewport — it bleeds past both edges, which is
-     what gives the parallax something to reveal. */
-  font-size:clamp(56px,16.5vw,300px);
+  /* Negative side margins pull it past the page padding so it bleeds off BOTH
+     edges across the whole parallax range, instead of leaving a gap at one end. */
+  margin:clamp(22px,3.4vw,42px) calc(var(--pad) * -1) 0;
+  /* Slightly wider than the viewport so it bleeds and the parallax has
+     something to reveal — but only just. At 16.5vw it overran by 239px and
+     cropped down to "ANO STUDIO". */
+  font-size:clamp(52px,15.2vw,268px);
   font-weight:600;
   letter-spacing:-.045em;
   line-height:.82;
