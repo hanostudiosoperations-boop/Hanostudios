@@ -251,6 +251,14 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   background:var(--void);
   overflow:hidden;
 }
+/* Scroll room for the pinned sequence. The pin runs until the statement's top
+   reaches the top of the screen, so this margin IS the extra scroll the hero
+   animation gets beyond one viewport (main.js derives the pin length from the
+   statement's position — one source of truth). Compressing the sequence into
+   exactly one viewport made the whole thing rush past in a single flick.
+   The margin region is always behind the pinned hero, never visible.
+   Only when GSAP is actually driving the pin — otherwise it is a real gap. */
+.js:not(.no-gsap) .hero{ margin-bottom:62svh; }
 
 .hero-glow{
   position:absolute;
@@ -379,7 +387,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .statement{
   position:relative;
   padding:0 var(--pad) var(--gap);
-  background:linear-gradient(180deg, #1d1f2b 0%, #121218 22%, var(--void) 62%);
+  /* Starts at pure Void so the top edge is indistinguishable from the hero it
+     replaces at the moment the square finishes fading, then swells to the
+     square's tone as the copy reveals — the surface the text appears on. */
+  background:linear-gradient(180deg, var(--void) 0%, #1d1f2b 12%, #121218 34%, var(--void) 68%);
 }
 
 /* Sized by its content, not the viewport. A 100svh box with the copy centred
@@ -568,6 +579,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   overflow:hidden;
 }
 .showcase-head{ position:relative; z-index:2; max-width:420px; }
+/* Sized to the head's own grid column (~364px at 1440) so the heading breaks
+   after "Ideas" into exactly two lines, as the frame draws it — at the shared
+   62px it broke after "Shaping" into three. On phones it fits on one line,
+   matching mobile frame 196. */
+.showcase-head .h-split{ font-size:clamp(28px,3.6vw,52px); }
 .showcase-controls{ display:flex; gap:26px; margin-top:38px; }
 .arrow{
   font-size:22px;
@@ -1141,12 +1157,19 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 
 @media (max-width:600px){
   .hero-nav{ flex-direction:column; align-items:flex-start; gap:12px; }
-  .hero-nav ul{ flex-wrap:wrap; gap:14px; }
-  /* Stacked two-line title, sized to the mobile frame — the shared clamp() is
-     tuned for the one-line desktop title and reads small once the words stack. */
-  .hero-title{ flex-direction:column; align-items:flex-start; line-height:.94; font-size:15.5vw; }
+  /* Frame 2: the four links spread edge to edge on one row, LET'S TALK on its
+     own row beneath. */
+  .hero-nav ul{ width:100%; justify-content:space-between; gap:0; }
+  /* Stacked two-line title, sized to frame 2 where "STUDIOS." spans nearly the
+     full width — 19vw is the largest size that clears the 20px side pads. */
+  .hero-title{ flex-direction:column; align-items:flex-start; line-height:.94; font-size:19vw; }
   .ht-gap{ display:none; }
   .statement-copy{ font-size:clamp(21px,6.4vw,26px); }
+  /* Frame 196: one big centred phone (~62vw) with the neighbours peeking in
+     from both edges. The side padding is (100vw - phone)/2 so every slide can
+     centre; scroll-snap does the rest. */
+  .phone{ width:62vw; }
+  .showcase-stage{ padding:30px 19vw; gap:6vw; margin-right:calc(var(--pad) * -1); }
   .team-cards{ grid-template-columns:1fr; }
   .cta{ min-height:64svh; }
   /* "HANO STUDIOS" is ~7em wide; at 390px with 20px side pads the biggest size
@@ -1175,4 +1198,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
      one class alone loses to `.js .sc-line > span` whatever the order. */
   .js .sc-line > span{ opacity:1; transform:none; }
   .hero-square{ display:none; }
+  /* No pin runs in this mode, so the pin's scroll-room margin would be a real
+     black gap. Same specificity as the rule that sets it; later in file wins. */
+  .js:not(.no-gsap) .hero{ margin-bottom:0; }
 }

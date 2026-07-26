@@ -487,12 +487,17 @@
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        // Exactly one hero-height of scroll. With pinSpacing:false the statement
-        // climbs behind the pinned hero at scroll speed, so a pin of exactly the
-        // hero's height means the statement's top reaches the top of the screen
-        // at the precise moment the pin releases and the square finishes fading
-        // — no frozen covered frame, no seam, at any viewport size.
-        end: () => '+=' + hero.offsetHeight,
+        // Pin until the statement's top reaches the top of the screen. With
+        // pinSpacing:false the statement climbs behind the opaque hero at scroll
+        // speed, so ending the pin at its document position means it lands
+        // exactly as the pin releases and the square finishes fading — no frozen
+        // frame, no seam, at any viewport size. The hero's margin-bottom (CSS)
+        // sets how much scroll the sequence gets beyond one viewport; exactly
+        // one viewport made the whole animation rush past in a single flick.
+        end: () => {
+          const st = document.querySelector('.statement');
+          return '+=' + (st ? st.offsetTop - hero.offsetTop : hero.offsetHeight * 1.6);
+        },
         // The square covers the whole screen by the end, so the screen-worth of
         // layout that pinSpacing would reserve after the pin is never seen as
         // anything but black — it was a full 1740px of dead scroll between the
