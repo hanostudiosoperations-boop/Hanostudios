@@ -594,7 +594,18 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    TEAM
    ============================================================ */
 
-.team{ padding:var(--gap) var(--pad); }
+/* White backdrop the black team panel grows over, continuing the light services
+   section. Default state is the panel at full width covering it completely, so
+   without GSAP this is invisible and the section looks exactly as before. */
+.team-riser{ background:var(--frost); }
+
+.team{
+  position:relative;
+  margin-inline:auto;
+  padding:var(--gap) var(--pad);
+  background:var(--void);
+  overflow:hidden;              /* keeps content inside the rounded corners */
+}
 
 .team-grid{
   display:grid;

@@ -360,6 +360,28 @@
     });
   }
 
+  // Team panel grows out of the white services section — a narrow rounded card
+  // at the bottom of the viewport that widens to full bleed as it scrolls up.
+  // Default CSS is the finished state, so no GSAP means no broken half-state.
+  if (document.querySelector('.team-riser')) {
+    gsap.fromTo('.team',
+      { width: '64%', borderTopLeftRadius: '44px', borderTopRightRadius: '44px' },
+      {
+        width: '100%',
+        borderTopLeftRadius: '0px',
+        borderTopRightRadius: '0px',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.team-riser',
+          start: 'top 95%',
+          end: 'top 22%',
+          scrub: 0.7,
+          invalidateOnRefresh: true
+        }
+      }
+    );
+  }
+
   // Footer watermark parallax
   gsap.to('.footer-mark', {
     xPercent: -6,
