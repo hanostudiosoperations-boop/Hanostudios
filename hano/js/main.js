@@ -1,0 +1,189 @@
+/* ============================================================
+   HANO STUDIOS — interactions
+   ============================================================ */
+
+(function () {
+  'use strict';
+
+  // Claim the `js` class only once this file is actually executing, so a
+  // failed/blocked script can never leave `.reveal` content stuck invisible.
+  document.documentElement.classList.add('js');
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
+
+  if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
+
+  /* ---------------- Menu ---------------- */
+
+  const menuBtn = document.getElementById('menuBtn');
+  const menuOverlay = document.getElementById('menuOverlay');
+  const hero = document.querySelector('.hero');
+
+  function toggleMenu(open) {
+    const isOpen = open !== undefined ? open : !menuOverlay.classList.contains('is-open');
+    menuOverlay.classList.toggle('is-open', isOpen);
+    menuBtn.classList.toggle('is-open', isOpen);
+    menuBtn.setAttribute('aria-expanded', String(isOpen));
+    menuOverlay.setAttribute('aria-hidden', String(!isOpen));
+    menuBtn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  menuBtn.addEventListener('click', () => toggleMenu());
+  menuOverlay.addEventListener('click', e => {
+    if (e.target.tagName === 'A') toggleMenu(false);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') toggleMenu(false);
+  });
+
+  // Menu button only appears once the hero has scrolled past
+  const heroObserver = new IntersectionObserver(
+    entries => entries.forEach(en => menuBtn.classList.toggle('is-visible', !en.isIntersecting)),
+    { threshold: 0.15 }
+  );
+  if (hero) heroObserver.observe(hero);
+
+  /* ---------------- Scroll reveals ---------------- */
+
+  const revealObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        en.target.animate(
+          [
+            { opacity: 0, transform: 'translateY(26px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ],
+          { duration: reduce ? 1 : 900, easing: 'cubic-bezier(.22,1,.36,1)', fill: 'forwards' }
+        );
+        revealObserver.unobserve(en.target);
+      });
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+  );
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  /* ---------------- Counting stats ---------------- */
+
+  const statObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const el = en.target;
+        const target = parseInt(el.dataset.count, 10);
+        if (reduce) {
+          el.textContent = target + '+';
+          statObserver.unobserve(el);
+          return;
+        }
+        const start = performance.now();
+        const dur = 1400;
+        (function step(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased) + '+';
+          if (p < 1) requestAnimationFrame(step);
+        })(start);
+        statObserver.unobserve(el);
+      });
+    },
+    { threshold: 0.5 }
+  );
+  document.querySelectorAll('.stats dt').forEach(el => statObserver.observe(el));
+
+  /* ---------------- Services hover preview ---------------- */
+
+  const serviceList = document.getElementById('serviceList');
+  const preview = document.getElementById('servicePreview');
+
+  if (serviceList && preview) {
+    serviceList.querySelectorAll('li').forEach(li => {
+      li.addEventListener('mouseenter', () => {
+        preview.setAttribute('data-tone', li.dataset.tone);
+        if (li.dataset.img) preview.style.backgroundImage = "url('" + li.dataset.img + "')";
+        preview.classList.add('is-on');
+      });
+    });
+    serviceList.addEventListener('mouseleave', () => preview.classList.remove('is-on'));
+  }
+
+  /* ---------------- Showcase arrows ---------------- */
+
+  const stage = document.getElementById('showStage');
+  const prev = document.getElementById('showPrev');
+  const next = document.getElementById('showNext');
+
+  function slide(dir) {
+    if (!stage) return;
+    const card = stage.querySelector('.phone');
+    const step = card ? card.offsetWidth + 30 : 260;
+    stage.scrollBy({ left: step * dir, behavior: reduce ? 'auto' : 'smooth' });
+  }
+  if (prev) prev.addEventListener('click', () => slide(-1));
+  if (next) next.addEventListener('click', () => slide(1));
+
+  /* ---------------- GSAP scroll sequences ---------------- */
+
+  if (!hasGSAP || reduce) return;
+
+  // Hero title lifts and fades as you leave
+  gsap.to('.hero-bottom', {
+    yPercent: -18,
+    opacity: 0,
+    ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: 'bottom 92%', end: 'bottom 30%', scrub: true }
+  });
+
+  // Split transition — words pull apart, square rotates through
+  const splitTL = gsap.timeline({
+    scrollTrigger: { trigger: '.split', start: 'top top', end: 'bottom bottom', scrub: 0.6 }
+  });
+  splitTL
+    .fromTo('.split-left', { xPercent: 34, filter: 'blur(0px)' }, { xPercent: -46, filter: 'blur(7px)', ease: 'none' }, 0)
+    .fromTo('.split-right', { xPercent: -34, filter: 'blur(0px)' }, { xPercent: 46, filter: 'blur(7px)', ease: 'none' }, 0)
+    .fromTo('.split-square', { rotate: -18, scale: 0.72 }, { rotate: 4, scale: 1.18, ease: 'none' }, 0);
+
+  // Works — horizontal scroll pinned
+  const track = document.getElementById('worksTrack');
+  if (track) {
+    const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+    gsap.to(track, {
+      x: () => -distance(),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.works',
+        start: 'top top',
+        end: () => '+=' + distance(),
+        scrub: 0.8,
+        pin: '.works-pin',
+        anticipatePin: 1,
+        invalidateOnRefresh: true
+      }
+    });
+  }
+
+  // Circle wipe into the light services section
+  const wipeCircle = document.getElementById('wipeCircle');
+  if (wipeCircle) {
+    ScrollTrigger.create({
+      trigger: '.wipe',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.5,
+      onUpdate: self => {
+        wipeCircle.style.setProperty('--scale', (0.06 + self.progress * 2.6).toFixed(3));
+      }
+    });
+  }
+
+  // Footer watermark parallax
+  gsap.to('.footer-mark', {
+    xPercent: -6,
+    ease: 'none',
+    scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true }
+  });
+
+  window.addEventListener('load', () => ScrollTrigger.refresh());
+})();
