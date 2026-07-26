@@ -375,15 +375,14 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   background:linear-gradient(180deg, #1d1f2b 0%, #121218 22%, var(--void) 62%);
 }
 
-/* Exactly one viewport, so the pin latches the moment the block fills the screen
-   and the copy is centred in it with no leading offset of its own. Anything taller
-   pushes the copy further down inside the box, and that offset is dead scroll
-   between the hero's release and the first line — a whole screen of it at 1740px
-   tall, which is what made the gap so much worse on a large window. */
+/* Sized by its content, not the viewport. A 100svh box with the copy centred
+   left half a screen of empty black between the copy and the client grid in
+   normal flow — the gap kept reappearing at every window height. The top pad
+   puts the copy in the upper-middle of the screen while pinned (where the Figma
+   statement sits); the small bottom pad is all that separates it from the
+   clients once the pin releases. */
 .statement-pin{
-  height:100svh;
-  display:flex;
-  align-items:center;
+  padding:max(20svh, 90px) 0 max(8svh, 44px);
 }
 
 /* Each line clips its own inner span, so the reveal slides up from behind the
@@ -415,7 +414,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   max-width:26ch;
 }
 
-.clients{ margin-top:clamp(52px,8vw,110px); }
+.clients{ margin-top:clamp(24px,4vw,60px); }
 
 .client-grid{
   display:grid;
@@ -834,20 +833,20 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   /* No wash. The frame is flat black apart from the ribbon — a broad glow here
      lifted every corner to grey and the band stopped reading as a band. */
 }
-/* Rising flank: enters low on the left, crests just above the headline. */
 .cta-glow::before,
 .cta-glow::after{
   content:'';
   position:absolute;
   pointer-events:none;
 }
-   The bands are deliberately shallow — height is what decides whether this reads
-   as a light streak or as fog. At 52-62% tall the two gradients filled the frame
-   and the ribbon disappeared into a general haze. */
-   In the frame the ribbon enters at the LEFT EDGE around a third of the way down,
-   climbs to its crest just above the centre of the headline, then eases back down
-   toward the right edge. Rotations are gentle and opposite: too steep and the band
-   runs diagonally off the bottom-right corner instead of arcing. */
+/* Rising flank: enters at the LEFT EDGE around a third of the way down and
+   climbs to its crest just above the headline. The bands are deliberately
+   shallow — height decides whether this reads as a light streak or as fog —
+   and the two rotations are gentle and opposite so the pair arcs instead of
+   running diagonally off a corner.
+   NB: this comment was previously two orphaned fragments with no opening
+   marker, which is invalid CSS — the parser recovered by discarding the very
+   next rule, so the whole left flank of the ribbon was silently dead. */
 .cta-glow::before{
   left:-34%;
   top:24%;
@@ -1020,10 +1019,12 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    FOOTER
    ============================================================ */
 
+/* Figma frame 173: the footer is the BRIGHT purple (Aurora), not Royal Nebula —
+   the deep violet stays on the menu overlay (frame 183). */
 .footer{
   position:relative;
   padding:clamp(46px,6vw,86px) var(--pad) 0;
-  background:var(--nebula);
+  background:var(--aurora);
   overflow:hidden;
 }
 
@@ -1040,14 +1041,15 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   line-height:1.24;
 }
 
-.footer-cols{ display:flex; gap:clamp(26px,4vw,70px); }
+.footer-cols{ display:flex; flex-wrap:wrap; gap:clamp(26px,4vw,70px); }
+/* Was var(--aurora) — invisible now the footer itself is Aurora. */
 .col-head{
   margin-bottom:12px;
   font-size:10px;
   font-weight:500;
   letter-spacing:.12em;
   text-transform:uppercase;
-  color:var(--aurora);
+  color:rgba(255,255,255,.55);
 }
 .footer-cols a{
   display:block;
@@ -1072,9 +1074,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   letter-spacing:-.045em;
   line-height:.82;
   white-space:nowrap;
-  /* 7% on Royal Nebula was effectively invisible; this reads as a watermark
-     without competing with the footer links above it. */
-  color:rgba(255,255,255,.14);
+  /* Frame 173 draws the wordmark as a clearly-visible lavender over the bright
+     purple, not a faint watermark — .14 was tuned for Nebula and vanished on
+     Aurora. */
+  color:rgba(255,255,255,.34);
   user-select:none;
 }
 
@@ -1113,12 +1116,36 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .service-preview{ display:none; }
 }
 
+/* The mobile Figma frames lay the works out as a plain vertical stack of cards,
+   not a pinned horizontal strip — main.js only builds the horizontal tween from
+   701px up (gsap.matchMedia), and this is the matching layout. */
+@media (max-width:700px){
+  .works-pin{ height:auto; overflow:visible; }
+  .works-track{
+    flex-direction:column;
+    align-items:stretch;
+    height:auto;
+    gap:44px;
+    padding:var(--gap) var(--pad);
+  }
+  .works-intro{ width:100%; padding-right:0; }
+  .work-card{ width:100%; }
+}
+
 @media (max-width:600px){
   .hero-nav{ flex-direction:column; align-items:flex-start; gap:12px; }
   .hero-nav ul{ flex-wrap:wrap; gap:14px; }
-  .hero-title{ flex-direction:column; align-items:flex-start; line-height:.94; }
+  /* Stacked two-line title, sized to the mobile frame — the shared clamp() is
+     tuned for the one-line desktop title and reads small once the words stack. */
+  .hero-title{ flex-direction:column; align-items:flex-start; line-height:.94; font-size:15.5vw; }
   .ht-gap{ display:none; }
+  .statement-copy{ font-size:clamp(21px,6.4vw,26px); }
   .team-cards{ grid-template-columns:1fr; }
+  .cta{ min-height:64svh; }
+  /* "HANO STUDIOS" is ~7em wide; at 390px with 20px side pads the biggest size
+     that still shows the whole wordmark is ~12.5vw. 17vw cropped it to
+     "HANO STUD" off the right edge. */
+  .footer-mark{ font-size:12.5vw; }
 }
 
 /* ============================================================

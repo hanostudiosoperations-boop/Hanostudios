@@ -46,12 +46,21 @@ Heading pattern throughout is two-tone: `<h2 class="h-split"><strong>Bold lead</
 
 hero (pinned: title rises to centre, divides, square grows to cover) → statement
 (pinned: lines reveal one per scroll, then floats and sticks) + clients → works
-(horizontal pin) → showcase carousel (video, auto-advance) → circle wipe →
-services (light) → team (grows out of the white on scroll) → FAQ → CTA → footer
+(horizontal pin ≥701px, plain vertical stack below — gsap.matchMedia tears the
+tween down and CSS lays out the stack) → showcase carousel (video, auto-advance) →
+circle wipe → services (light) → team (grows out of the white on scroll) → FAQ →
+CTA → footer (Aurora purple, frame 173; the deep Nebula stays on the menu overlay)
 
 There is no separate split section any more. The hero title itself is the element
 that divides — `.ht-a` / `.ht-b` are the two words and `.hero-square` is the
 transition square. Removing the hero pin means rebuilding that sequence.
+The hero pin uses `pinSpacing:false` (the square covers the screen at the end, so
+reserved spacing was only ever a black void) and the statement pin box is sized by
+padding, not 100svh — both were the causes of the recurring "huge gap" reports.
+
+Footer copyright reads "© 2026 Hano **Animations**" (frame 173 — the legal
+entity); the wordmark and the menu overlay say Hano **Studios** (frame 183).
+This is deliberate, not a typo.
 
 ## Every image in assets/img/ is a placeholder
 

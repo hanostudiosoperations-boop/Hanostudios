@@ -583,24 +583,29 @@
     stTL.to('.statement-copy', { yPercent: -14, ease: 'none', duration: 0.28 }, 0.72);
   }
 
-  // Works — horizontal scroll pinned
+  // Works — horizontal scroll pinned, from 701px up only. The mobile Figma
+  // frames stack the cards vertically; CSS lays that out below 700px and
+  // gsap.matchMedia tears the tween down (and rebuilds it) across resizes.
+  const mm = gsap.matchMedia();
   const track = document.getElementById('worksTrack');
   if (track) {
-    const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
-    gsap.to(track, {
-      x: () => -distance(),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: '.works',
-        start: 'top top',
-        end: () => '+=' + distance(),
-        // anticipatePin pins early based on scroll velocity, which made the
-        // Works panel jump over the client logos on a fast scroll. Off.
-        scrub: 0.6,
-        pin: '.works-pin',
-        pinSpacing: true,
-        invalidateOnRefresh: true
-      }
+    mm.add('(min-width: 701px)', () => {
+      const distance = () => Math.max(0, track.scrollWidth - window.innerWidth);
+      gsap.to(track, {
+        x: () => -distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.works',
+          start: 'top top',
+          end: () => '+=' + distance(),
+          // anticipatePin pins early based on scroll velocity, which made the
+          // Works panel jump over the client logos on a fast scroll. Off.
+          scrub: 0.6,
+          pin: '.works-pin',
+          pinSpacing: true,
+          invalidateOnRefresh: true
+        }
+      });
     });
   }
 
@@ -641,23 +646,26 @@
   }
 
   // Showcase carousel drifts as the section passes, so the phones read as a
-  // moving strip rather than a static row.
+  // moving strip rather than a static row. Desktop only — on a phone the drift
+  // fights the visitor's own swipe through the same strip.
   const showcaseStage = document.getElementById('showStage');
   if (showcaseStage) {
-    gsap.fromTo(showcaseStage,
-      { x: () => Math.min(160, window.innerWidth * 0.10) },
-      {
-        x: () => -Math.min(160, window.innerWidth * 0.10),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.showcase',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 0.8,
-          invalidateOnRefresh: true
+    mm.add('(min-width: 701px)', () => {
+      gsap.fromTo(showcaseStage,
+        { x: () => Math.min(160, window.innerWidth * 0.10) },
+        {
+          x: () => -Math.min(160, window.innerWidth * 0.10),
+          ease: 'none',
+          scrollTrigger: {
+            trigger: '.showcase',
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.8,
+            invalidateOnRefresh: true
+          }
         }
-      }
-    );
+      );
+    });
   }
 
   // Footer watermark rises into place. A horizontal parallax was the wrong move
