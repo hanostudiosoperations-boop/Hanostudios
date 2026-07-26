@@ -756,38 +756,36 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   justify-content:center;
   overflow:hidden;
 }
-/* Figma has a lit curve sweeping behind the headline, not a flat haze. The
-   ::after is an oversized circle whose edge is the arc; the base layer keeps a
-   soft bloom underneath it. */
+/* Figma: one bright ribbon sweeping diagonally from lower-left to upper-right,
+   passing behind the headline. The ::after is a very wide, shallow ellipse whose
+   upper-left flank is that ribbon — an ellipse rather than a circle because a
+   circle flat enough to give this curve would need a ~7000px diameter. */
 .cta-glow{
   position:absolute;
   inset:0;
   overflow:hidden;
-  background:
-    radial-gradient(60% 34% at 50% 12%, rgba(255,255,255,.14) 0%, transparent 70%),
-    radial-gradient(42% 26% at 74% 40%, rgba(255,255,255,.06) 0%, transparent 72%);
+  background:radial-gradient(58% 40% at 62% 26%, rgba(255,255,255,.07) 0%, transparent 72%);
 }
 .cta-glow::after{
   content:'';
   position:absolute;
-  left:50%;
-  bottom:-6%;
-  width:210%;
-  aspect-ratio:1;
-  transform:translateX(-50%);
+  left:-46%;
+  top:11%;
+  width:270%;
+  height:680%;
   border-radius:50%;
-  background:radial-gradient(circle closest-side,
+  background:radial-gradient(closest-side,
     transparent 0%,
-    transparent 85%,
-    rgba(255,255,255,.06) 91%,
-    rgba(255,255,255,.34) 96.5%,
-    rgba(255,255,255,.05) 99.5%,
+    transparent 93%,
+    rgba(255,255,255,.04) 95.4%,
+    rgba(255,255,255,.30) 98.4%,
+    rgba(255,255,255,.04) 99.8%,
     transparent 100%);
-  filter:blur(24px);
+  filter:blur(13px);
 }
 
 @media (max-width:600px){
-  .cta-glow::after{ width:330%; bottom:2%; filter:blur(16px); }
+  .cta-glow::after{ left:-120%; top:12%; width:420%; height:300%; filter:blur(10px); }
 }
 .cta-title{
   position:relative; z-index:2;
@@ -971,7 +969,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   letter-spacing:-.045em;
   line-height:.82;
   white-space:nowrap;
-  color:rgba(255,255,255,.07);
+  /* 7% on Royal Nebula was effectively invisible; this reads as a watermark
+     without competing with the footer links above it. */
+  color:rgba(255,255,255,.14);
   user-select:none;
 }
 
