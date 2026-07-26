@@ -138,6 +138,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   background:var(--void);
   transition:transform .35s ease, opacity .25s ease;
 }
+/* Open, it is a bare white × on the purple ground (Figma frame 183). The white
+   pill is only needed closed, where it sits over arbitrary page content. */
+.menu-btn.is-open{ background:transparent; }
+.menu-btn.is-open span{ width:20px; background:var(--frost); }
 .menu-btn.is-open span:nth-child(1){ transform:translateY(3.25px) rotate(45deg); }
 .menu-btn.is-open span:nth-child(2){ transform:translateY(-3.25px) rotate(-45deg); }
 
@@ -145,27 +149,54 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   position:fixed;
   inset:0;
   z-index:110;
-  display:grid;
-  place-items:center;
-  background:var(--void);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:flex-end;
+  padding:clamp(72px,10vh,120px) clamp(20px,4vw,64px) clamp(64px,9vh,104px);
+  background:var(--nebula);
   clip-path:circle(0% at calc(100% - 40px) 40px);
   transition:clip-path .7s cubic-bezier(.76,0,.24,1);
 }
 .menu-overlay.is-open{ clip-path:circle(150% at calc(100% - 40px) 40px); }
 
-.menu-inner{ text-align:center; }
+/* Logomark sits top-left, opposite the close button */
+.menu-mark{
+  position:absolute;
+  top:clamp(16px,2.4vw,32px);
+  left:clamp(20px,4vw,64px);
+  width:clamp(32px,3.2vw,46px);
+  height:auto;
+}
+
+.menu-inner{ text-align:left; }
 
 .menu-links li{ overflow:hidden; }
 .menu-links a{
-  display:block;
+  display:flex;
+  align-items:baseline;
   padding:2px 0;
-  font-size:clamp(34px, 6vw, 76px);
-  font-weight:300;
-  letter-spacing:-.04em;
-  line-height:1.12;
+  font-size:clamp(28px,5vw,68px);
+  font-weight:400;
+  letter-spacing:-.03em;
+  line-height:1.2;
+  text-transform:uppercase;
   transform:translateY(110%);
-  transition:transform .6s cubic-bezier(.22,1,.36,1), color .3s ease;
+  transition:transform .6s cubic-bezier(.22,1,.36,1), opacity .3s ease;
 }
+/* Arrow lives in a reserved gutter, so revealing it never shifts the word */
+.menu-links a::before{
+  content:'\2192';
+  flex:none;
+  width:.9em;
+  margin-right:.16em;
+  opacity:0;
+  transform:translateX(-.25em);
+  transition:opacity .3s ease, transform .3s ease;
+}
+.menu-links a:hover::before,
+.menu-links a:focus-visible::before{ opacity:1; transform:none; }
+
 .menu-overlay.is-open .menu-links a{ transform:translateY(0); }
 .menu-links li:nth-child(1) a{ transition-delay:.10s; }
 .menu-links li:nth-child(2) a{ transition-delay:.16s; }
@@ -173,21 +204,29 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .menu-links li:nth-child(4) a{ transition-delay:.28s; }
 .menu-links li:nth-child(5) a{ transition-delay:.34s; }
 .menu-links li:nth-child(6) a{ transition-delay:.40s; }
-.menu-links li:nth-child(7) a{ transition-delay:.46s; }
-.menu-links a:hover{ color:var(--aurora); }
 
+/* Copyright left, socials right, pinned to the bottom edge */
 .menu-foot{
+  position:absolute;
+  left:clamp(20px,4vw,64px);
+  right:clamp(20px,4vw,64px);
+  bottom:clamp(18px,3vh,34px);
   display:flex;
   flex-wrap:wrap;
-  justify-content:center;
-  gap:clamp(16px,3vw,38px);
-  margin-top:58px;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px clamp(16px,3vw,38px);
   font-size:12px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  color:var(--ink-40);
+  color:var(--ink-60);
 }
+.menu-social{ display:flex; flex-wrap:wrap; gap:clamp(14px,2.4vw,34px); }
+.menu-foot a{ transition:color .25s ease; }
 .menu-foot a:hover{ color:var(--frost); }
+
+@media (max-width:600px){
+  .menu-overlay{ align-items:flex-start; }
+  .menu-foot{ justify-content:flex-start; }
+}
 
 /* ============================================================
    HERO
@@ -650,61 +689,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 
 /* ============================================================
-   TESTIMONIALS
-   ============================================================ */
-
-.reviews{ padding:var(--gap) var(--pad); }
-
-.review-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:clamp(14px,1.8vw,26px);
-  margin-top:clamp(28px,4vw,50px);
-}
-
-.review{
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  gap:clamp(20px,2.4vw,34px);
-  padding:clamp(20px,2.2vw,32px);
-  border:1px solid var(--ink-14);
-  transition:border-color .3s ease, background .3s ease;
-}
-.review:hover{ border-color:var(--ink-40); background:var(--ink-08); }
-
-.review blockquote p{
-  font-size:clamp(14px,1.25vw,19px);
-  font-weight:400;
-  letter-spacing:-.02em;
-  line-height:1.5;
-  color:var(--ink-90);
-}
-/* Opening mark set on its own line so the quote text stays flush left.
-   Deliberately NOT var(--serif) — Aleo is reserved for the single hero use. */
-.review blockquote p::before{
-  content:'\201C';
-  display:block;
-  margin-bottom:2px;
-  font-size:2.4em;
-  font-weight:600;
-  line-height:.72;
-  color:var(--aurora);
-}
-
-.review figcaption strong{
-  display:block;
-  font-size:clamp(13px,1.1vw,16px);
-  font-weight:600;
-}
-.review figcaption span{
-  display:block;
-  margin-top:3px;
-  font-size:clamp(11px,.9vw,13px);
-  color:var(--ink-40);
-}
-
-/* ============================================================
    FAQ
    ============================================================ */
 
@@ -979,7 +963,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .client-grid li:nth-child(2n){ border-right:0; }
   .client-grid li:nth-child(n+6){ border-bottom:1px solid var(--ink-08); }
   .client-grid li:nth-child(n+9){ border-bottom:0; }
-  .review-grid{ grid-template-columns:1fr; }
   .showcase{ grid-template-columns:1fr; align-items:start; }
   .showcase-stage{ margin-top:40px; }
   .work-meta{ grid-template-columns:1fr; }

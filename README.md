@@ -67,9 +67,8 @@ brand purple instead, change `BG` at the top of the script and re-run.
 
 ## Notes
 
-- **The three testimonials in `#reviews` are placeholder copy attributed to real
-  clients.** They were written to build the section, not sourced from anyone. Swap in
-  real, client-approved quotes before this site goes live.
+- **There is no testimonials section.** Figma's menu and footer both list REVIEWS, so
+  those links are omitted until real client quotes exist.
 - The horizontal Works scroll, the word-split transition, and the circle wipe are all
   GSAP ScrollTrigger. If GSAP fails to load, those sections degrade to normal scrollable
   layout automatically — nothing becomes unreachable.

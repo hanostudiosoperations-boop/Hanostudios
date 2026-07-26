@@ -45,7 +45,8 @@ Heading pattern throughout is two-tone: `<h2 class="h-split"><strong>Bold lead</
 ## Page sections in order
 
 hero → split transition → statement + clients → works (horizontal pin) → showcase
-carousel → circle wipe → services (light) → team → FAQ → CTA → footer (purple)
+carousel → circle wipe → services (light) → team (grows out of the white on scroll)
+→ FAQ → CTA → footer (purple)
 
 ## Every image in assets/img/ is a placeholder
 
@@ -78,10 +79,10 @@ Both were verified by killing the scripts. Keep them if you refactor.
 
 ## Known outstanding work
 
-- **Testimonials are invented copy.** All three quotes, names and titles in `#reviews`
-  were written for layout, but they are attributed to real Hano clients (Bybit EU,
-  Kalshi, Maxy.co). Shipping them unchanged puts words in a real client's mouth.
-  Replace with quotes the client has given and approved. Blocker for launch.
+- **No testimonials section.** It was removed because the quotes were invented. Figma
+  lists REVIEWS in both the menu overlay and the footer, so both links are currently
+  left out — restore the section and both links together once there are real,
+  client-approved quotes.
 - **The Calendly link is a placeholder.** `#calEmbed`'s `data-url` (and the `<noscript>`
   link beside it) read `CALENDLY_HANDLE`. Replace with the real scheduling URL or the
   modal opens straight into its "could not load" fallback.
