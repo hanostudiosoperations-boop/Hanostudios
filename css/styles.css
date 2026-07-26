@@ -256,11 +256,28 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
     radial-gradient(30% 34% at 40% 62%, rgba(255,255,255,.09) 0%, transparent 66%),
     radial-gradient(70% 60% at 84% 12%, rgba(255,255,255,.07) 0%, transparent 70%);
   filter:blur(38px);
-  animation:drift 22s ease-in-out infinite alternate;
+  animation:drift 26s ease-in-out infinite alternate;
+}
+/* A second, counter-drifting layer on a different period. One layer on one loop
+   read as static because every highlight moved together; two layers at 26s and
+   19s cross each other, so the gradient keeps reshaping instead of just sliding. */
+.hero-glow::after{
+  content:'';
+  position:absolute;
+  inset:-14%;
+  background:
+    radial-gradient(38% 32% at 26% 52%, rgba(255,255,255,.13) 0%, transparent 64%),
+    radial-gradient(52% 44% at 82% 68%, rgba(139,50,247,.16) 0%, transparent 68%);
+  filter:blur(46px);
+  animation:drift-b 19s ease-in-out infinite alternate;
 }
 @keyframes drift{
   from{ transform:translate3d(-2%,-1%,0) scale(1);   }
   to  { transform:translate3d(3%,2%,0)   scale(1.10);}
+}
+@keyframes drift-b{
+  from{ transform:translate3d(4%,2%,0)  scale(1.06) rotate(0deg);   }
+  to  { transform:translate3d(-3%,-2%,0) scale(1)    rotate(-6deg); }
 }
 
 .hero-tagline{
