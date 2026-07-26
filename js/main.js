@@ -385,13 +385,52 @@
   });
 
   // Split transition — words pull apart, square rotates through
-  const splitTL = gsap.timeline({
-    scrollTrigger: { trigger: '.split', start: 'top top', end: 'bottom bottom', scrub: 0.6 }
-  });
-  splitTL
-    .fromTo('.split-left', { xPercent: 34, filter: 'blur(0px)' }, { xPercent: -46, filter: 'blur(7px)', ease: 'none' }, 0)
-    .fromTo('.split-right', { xPercent: -34, filter: 'blur(0px)' }, { xPercent: 46, filter: 'blur(7px)', ease: 'none' }, 0)
-    .fromTo('.split-square', { rotate: -18, scale: 0.72 }, { rotate: 4, scale: 1.18, ease: 'none' }, 0);
+  // Split sequence, scrubbed across .split's 260vh:
+  //   0.00-0.55  the words part left/right and blur out
+  //   0.20-0.62  the square untwists from its kite into a true square
+  //   0.30-1.00  it scales past the viewport diagonal and squares off its corners,
+  //              carrying the next section's gradient so the handoff is seamless
+  // Scale target is computed from the diagonal so it always covers, at any
+  // viewport, and is recalculated on refresh.
+  const splitSquare = document.querySelector('.split-square');
+  if (splitSquare) {
+    const coverScale = () => {
+      const size = splitSquare.offsetWidth || 1;
+      const diagonal = Math.hypot(window.innerWidth, window.innerHeight);
+      return (diagonal / size) * 1.08;          // 8% margin so no corner shows
+    };
+
+    const splitTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: '.split',
+        start: 'top top',
+        // 'bottom bottom' lands exactly on the point the sticky stage unsticks,
+        // so the timeline and the pin release together.
+        end: 'bottom bottom',
+        scrub: 0.6,
+        invalidateOnRefresh: true
+      }
+    });
+    splitTL
+      // Start at their natural positions so the words read as "HANO STUDIOS"
+      // before they divide. They used to start at +/-34%, pulled toward each
+      // other, which rendered as "HANSTUDIOS" — it looked like a bug.
+      .fromTo('.split-left',
+        { xPercent: 0, filter: 'blur(0px)', opacity: 1 },
+        { xPercent: -78, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.6 }, 0)
+      .fromTo('.split-right',
+        { xPercent: 0, filter: 'blur(0px)', opacity: 1 },
+        { xPercent: 78, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.6 }, 0)
+      // One continuous scale, so it never dips. Two overlapping fromTo tweens
+      // each re-asserted their own `from` value and the square visibly shrank
+      // before it grew. Rotation runs alongside on its own track.
+      .fromTo(splitSquare,
+        { rotate: -42 },
+        { rotate: 0, ease: 'none', duration: 0.5 }, 0.22)
+      .fromTo(splitSquare,
+        { scale: 0.34, borderRadius: '10px' },
+        { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.6 }, 0.22);
+  }
 
   // Works — horizontal scroll pinned
   const track = document.getElementById('worksTrack');

@@ -328,18 +328,22 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    SPLIT TRANSITION
    ============================================================ */
 
+/* Longer than before so the sequence has room: words part, then the square
+   rotates out of its kite and grows to cover the screen. */
 .split{
-  height:150vh;
+  height:260vh;
   position:relative;
 }
 .split-stage{
   position:sticky;
   top:0;
-  height:100vh;
+  height:100svh;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:clamp(20px,6vw,90px);
+  /* The square is absolutely positioned now, so this gap is what the small
+     kite first appears inside. */
+  gap:clamp(24px,6vw,96px);
   overflow:hidden;
 }
 .split-word{
@@ -349,13 +353,21 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   line-height:1;
   will-change:transform, filter;
 }
+
+/* The square becomes the transition itself: it starts as a small rotated kite
+   and scales past the viewport diagonal, carrying the next section's gradient
+   so the handoff to .statement is seamless. Centred via absolute positioning
+   rather than as a flex item, so scaling it does not push the words around. */
 .split-square{
+  position:absolute;
+  top:50%;
+  left:50%;
   width:clamp(90px,17vw,290px);
   aspect-ratio:1;
-  flex:none;
+  margin:calc(clamp(90px,17vw,290px) / -2) 0 0 calc(clamp(90px,17vw,290px) / -2);
   border-radius:6px;
-  background:linear-gradient(148deg, #232323 0%, #101010 58%, #191919 100%);
-  will-change:transform;
+  background:linear-gradient(160deg, #191b2e 0%, #0E0E0E 46%, var(--void) 100%);
+  will-change:transform, border-radius;
 }
 
 /* ============================================================
