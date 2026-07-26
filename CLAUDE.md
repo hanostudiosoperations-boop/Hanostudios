@@ -19,6 +19,10 @@ js/main.js                 menu, reveals, counters, GSAP scroll sequences
 assets/logo/               real brand logos (final, do not replace)
 assets/img/                ALL PLACEHOLDER — see below
 tools/make-placeholders.py regenerates the placeholder set
+tools/make-favicons.py     regenerates the favicon set from the logomark
+favicon.ico                root — browsers request this path implicitly
+apple-touch-icon.png       root — iOS requests this path implicitly
+assets/favicon/            the linked PNG sizes
 ```
 
 ## Brand tokens — do not invent new colours

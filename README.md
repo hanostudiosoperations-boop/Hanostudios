@@ -52,6 +52,19 @@ larger for no visible gain, and load time is a real conversion cost on mobile.
 
 `tools/make-placeholders.py` regenerates the placeholder set if you ever need it back.
 
+## Favicons
+
+Generated from `assets/logo/logomark_black.png` by `tools/make-favicons.py` — pure
+standard library, no Pillow or ImageMagick needed. Re-run it if the logomark changes:
+
+```
+python3 tools/make-favicons.py
+```
+
+The mark is centred on a white square rather than stretched, because it is 580×280 and
+black — on a transparent ground it would disappear in a dark browser tab. To put it on
+brand purple instead, change `BG` at the top of the script and re-run.
+
 ## Notes
 
 - **The three testimonials in `#reviews` are placeholder copy attributed to real
