@@ -432,6 +432,38 @@
         { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.6 }, 0.22);
   }
 
+  // Statement copy: the block pins, its lines reveal one per scroll step, then it
+  // floats up and releases into the client grid. Lines are staggered across the
+  // first 70% of the pin so the last one lands before the float begins.
+  const statementPin = document.getElementById('statementPin');
+  const scLines = document.querySelectorAll('.sc-line > span');
+
+  if (statementPin && scLines.length) {
+    const stTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: statementPin,
+        start: 'center center',
+        end: () => '+=' + window.innerHeight * 1.5,
+        scrub: 0.55,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 0,
+        invalidateOnRefresh: true
+      }
+    });
+
+    const step = 0.7 / scLines.length;
+    scLines.forEach((line, i) => {
+      stTL.fromTo(line,
+        { yPercent: 105, opacity: 0 },
+        { yPercent: 0, opacity: 1, ease: 'power2.out', duration: step * 0.9 },
+        i * step);
+    });
+
+    // Float to the top of the pin once every line has landed.
+    stTL.to('.statement-copy', { yPercent: -14, ease: 'none', duration: 0.28 }, 0.72);
+  }
+
   // Works — horizontal scroll pinned
   const track = document.getElementById('worksTrack');
   if (track) {

@@ -150,12 +150,17 @@
 
 <!-- ============ ABOUT / STATEMENT ============ -->
 <section class="statement" id="about">
-  <p class="statement-copy reveal">
-    We partner with ambitious companies to build brands
-    that lead markets. Through strategy, design, motion, and
-    marketing; we create digital experiences that earn trust,
-    drive growth, and leave a lasting impression.
+  <!-- Split into explicit lines so each can reveal on its own scroll step. Each
+       line is wrapped so the inner span can slide up from behind its own edge.
+       Without JS these are plain lines of a paragraph and read normally. -->
+  <div class="statement-pin" id="statementPin">
+  <p class="statement-copy">
+    <span class="sc-line"><span>We partner with ambitious companies to build brands</span></span>
+    <span class="sc-line"><span>that lead markets. Through strategy, design, motion, and</span></span>
+    <span class="sc-line"><span>marketing; we create digital experiences that earn trust,</span></span>
+    <span class="sc-line"><span>drive growth, and leave a lasting impression.</span></span>
   </p>
+  </div>
 
   <div class="clients reveal">
     <p class="eyebrow">Worked with 100+ clients</p>
