@@ -319,7 +319,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 
 .statement-copy{
-  max-width:22ch;
   font-size:clamp(24px, 3.5vw, 50px);
   font-weight:400;
   letter-spacing:-.035em;
@@ -634,10 +633,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   flex:none;
   font-size:19px;
   font-weight:300;
+  line-height:1;               /* tight box so the glyph rotates about its own centre */
   color:var(--ink-40);
   transition:transform .3s ease;
 }
-.faq-list details[open] summary::after{ content:'\00d7'; }
+/* The + rotates into an ×. Swapping content to '\00d7' instead would snap,
+   because content is not an animatable property. */
+.faq-list details[open] summary::after{ transform:rotate(45deg); }
 .faq-list summary:hover{ color:var(--aurora); }
 .faq-list p{
   max-width:62ch;
