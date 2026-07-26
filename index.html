@@ -123,6 +123,11 @@
 
   <img class="hero-mark" src="assets/logo/logomark_white.png" alt="Hano Studios mark">
 
+  <!-- The transition square. Appears between the two words of the real hero title
+       as they divide, rotates out of its kite, then grows to cover the screen
+       carrying the next section's gradient. Hidden until GSAP drives it. -->
+  <span class="hero-square" aria-hidden="true"></span>
+
   <div class="hero-bottom">
     <h1 class="hero-title" id="heroTitle">
       <span class="ht-a">HANO</span><span class="ht-gap"></span><span class="ht-b">STUDIOS.</span>
@@ -138,15 +143,6 @@
     </nav>
   </div>
 </header>
-
-<!-- ============ SPLIT TRANSITION ============ -->
-<section class="split" id="split" aria-hidden="true">
-  <div class="split-stage">
-    <span class="split-word split-left">HANO</span>
-    <span class="split-square"></span>
-    <span class="split-word split-right">STUDIOS</span>
-  </div>
-</section>
 
 <!-- ============ ABOUT / STATEMENT ============ -->
 <section class="statement" id="about">

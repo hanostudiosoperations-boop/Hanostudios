@@ -106,8 +106,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 
 /* Fallbacks when GSAP is unavailable (blocked CDN, CSP, offline).
    Pinned/scrubbed sections degrade to plain scrollable layout. */
-.no-gsap .split{ height:auto; }
-.no-gsap .split-stage{ position:static; height:auto; padding:14vh 0; }
 .no-gsap .works-pin{ height:auto; overflow-x:auto; overflow-y:hidden; }
 .no-gsap .works-track{ padding-block:12vh; }
 .no-gsap .wipe{ display:none; }
@@ -304,6 +302,23 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   height:auto;
 }
 
+/* Centred on the hero, above the glow but below the words, so the title reads
+   over it while it is small and it swallows the screen once it grows.
+   opacity:0 by default — with no GSAP it simply never appears. */
+.hero-square{
+  position:absolute;
+  top:50%;
+  left:50%;
+  z-index:1;
+  width:clamp(90px,17vw,290px);
+  aspect-ratio:1;
+  margin:calc(clamp(90px,17vw,290px) / -2) 0 0 calc(clamp(90px,17vw,290px) / -2);
+  border-radius:10px;
+  background:linear-gradient(160deg, #34374d 0%, #1d1f2b 48%, #121218 100%);
+  opacity:0;
+  will-change:transform, border-radius, opacity;
+}
+
 .hero-bottom{ position:relative; z-index:2; }
 
 .hero-title{
@@ -320,6 +335,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   white-space:nowrap;
 }
 .ht-gap{ flex:0 0 .22em; }
+.ht-a,.ht-b{ display:inline-block; will-change:transform, filter, opacity; }
 
 .hero-nav{
   display:flex;
@@ -340,54 +356,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   transition:color .25s ease;
 }
 .hero-nav a:hover{ color:var(--aurora); }
-
-/* ============================================================
-   SPLIT TRANSITION
-   ============================================================ */
-
-/* Enough room for the sequence, but no more — at 260vh most of it was dead
-   black scroll with a tiny dark square in the middle of it. */
-.split{
-  height:170vh;
-  position:relative;
-}
-.split-stage{
-  position:sticky;
-  top:0;
-  height:100svh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  /* The square is absolutely positioned now, so this gap is what the small
-     kite first appears inside. */
-  gap:clamp(24px,6vw,96px);
-  overflow:hidden;
-}
-/* Matches .hero-title exactly (12.2vw), so the words read as the hero headline
-   carrying on into the split rather than a second, differently sized set. */
-.split-word{
-  font-size:clamp(40px,12.2vw,300px);
-  font-weight:500;
-  letter-spacing:-.045em;
-  line-height:1;
-  will-change:transform, filter;
-}
-
-/* The square becomes the transition itself: it starts as a small rotated kite
-   and scales past the viewport diagonal, carrying the next section's gradient
-   so the handoff to .statement is seamless. Centred via absolute positioning
-   rather than as a flex item, so scaling it does not push the words around. */
-.split-square{
-  position:absolute;
-  top:50%;
-  left:50%;
-  width:clamp(90px,17vw,290px);
-  aspect-ratio:1;
-  margin:calc(clamp(90px,17vw,290px) / -2) 0 0 calc(clamp(90px,17vw,290px) / -2);
-  border-radius:6px;
-  background:linear-gradient(160deg, #34374d 0%, #1d1f2b 48%, #121218 100%);
-  will-change:transform, border-radius;
-}
 
 /* ============================================================
    STATEMENT / CLIENTS
@@ -1095,7 +1063,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .hero-title{ flex-direction:column; align-items:flex-start; line-height:.94; }
   .ht-gap{ display:none; }
   .team-cards{ grid-template-columns:1fr; }
-  .split-stage{ gap:10px; }
 }
 
 /* ============================================================
@@ -1110,7 +1077,5 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   }
   html{ scroll-behavior:auto; }
   .reveal{ opacity:1; transform:none; }
-  .split{ height:auto; }
-  .split-stage{ position:static; height:auto; padding:80px 0; }
   .wipe{ display:none; }
 }

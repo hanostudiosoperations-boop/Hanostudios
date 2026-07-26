@@ -109,12 +109,15 @@
     }
   });
 
-  // Menu button only appears once the hero has scrolled past
-  const heroObserver = new IntersectionObserver(
-    entries => entries.forEach(en => menuBtn.classList.toggle('is-visible', !en.isIntersecting)),
-    { threshold: 0.15 }
-  );
-  if (hero) heroObserver.observe(hero);
+  // Menu button appears once you have scrolled past the first screen. This used
+  // to watch .hero with an IntersectionObserver, but the hero is pinned now, so
+  // it stays fully on screen through the whole split and the button never showed.
+  // Scroll position works whether or not GSAP is driving the pin.
+  const revealMenuBtn = () => {
+    menuBtn.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.6);
+  };
+  window.addEventListener('scroll', revealMenuBtn, { passive: true });
+  revealMenuBtn();
 
   // Invert the button while a light section is under it. The root is squeezed to
   // a band across the top of the viewport, so this tracks what is actually
@@ -434,62 +437,70 @@
 
   if (!hasGSAP || reduce) return;
 
-  // Hero title lifts and fades as you leave. Starts at the hero's midpoint, not
-  // 'bottom 92%' — that began fading ~76px into the scroll, so the title read as
-  // washed-out grey almost immediately.
-  gsap.to('.hero-bottom', {
-    yPercent: -18,
-    opacity: 0,
-    ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: true }
-  });
+  // Hero sequence, one pinned timeline (Figma frames 1 -> 151 -> 152):
+  //   0.00-0.30  tagline, nav and logomark fade; the title rises from the bottom
+  //              of the hero to the vertical centre of the screen
+  //   0.26-0.62  the title divides — HANO left, STUDIOS right — blurring out
+  //   0.24-1.00  the square fades in between them, untwists from its kite, and
+  //              grows past the viewport diagonal carrying the next section's
+  //              gradient, until the words are gone and it covers the screen
+  //
+  // The hero title IS the splitting element — there is no second copy of the
+  // words in a separate section any more.
+  const heroSquare = document.querySelector('.hero-square');
+  const heroTitle = document.getElementById('heroTitle');
 
-  // Split transition — words pull apart, square rotates through
-  // Split sequence, scrubbed across .split's 260vh:
-  //   0.00-0.55  the words part left/right and blur out
-  //   0.20-0.62  the square untwists from its kite into a true square
-  //   0.30-1.00  it scales past the viewport diagonal and squares off its corners,
-  //              carrying the next section's gradient so the handoff is seamless
-  // Scale target is computed from the diagonal so it always covers, at any
-  // viewport, and is recalculated on refresh.
-  const splitSquare = document.querySelector('.split-square');
-  if (splitSquare) {
+  if (heroSquare && heroTitle && hero) {
+    // How far the title must travel to sit on the viewport's centre line.
+    const toCentre = () => {
+      const r = heroTitle.getBoundingClientRect();
+      const centreOfTitle = r.top + window.scrollY + r.height / 2;
+      const heroTop = hero.getBoundingClientRect().top + window.scrollY;
+      return (window.innerHeight / 2) - (centreOfTitle - heroTop);
+    };
     const coverScale = () => {
-      const size = splitSquare.offsetWidth || 1;
-      const diagonal = Math.hypot(window.innerWidth, window.innerHeight);
-      return (diagonal / size) * 1.08;          // 8% margin so no corner shows
+      const size = heroSquare.offsetWidth || 1;
+      return (Math.hypot(window.innerWidth, window.innerHeight) / size) * 1.08;
     };
 
-    const splitTL = gsap.timeline({
+    const heroTL = gsap.timeline({
       scrollTrigger: {
-        trigger: '.split',
+        trigger: hero,
         start: 'top top',
-        // 'bottom bottom' lands exactly on the point the sticky stage unsticks,
-        // so the timeline and the pin release together.
-        end: 'bottom bottom',
+        end: () => '+=' + window.innerHeight * 1.7,
         scrub: 0.6,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 0,
         invalidateOnRefresh: true
       }
     });
-    splitTL
-      // Start at their natural positions so the words read as "HANO STUDIOS"
-      // before they divide. They used to start at +/-34%, pulled toward each
-      // other, which rendered as "HANSTUDIOS" — it looked like a bug.
-      .fromTo('.split-left',
+
+    heroTL
+      .to('.hero-tagline', { opacity: 0, y: -40, ease: 'none', duration: 0.24 }, 0)
+      .to('.hero-mark',    { opacity: 0, ease: 'none', duration: 0.24 }, 0)
+      .to('.hero-nav',     { opacity: 0, y: 30, ease: 'none', duration: 0.22 }, 0)
+      // Title climbs to the middle of the screen before anything divides.
+      .to(heroTitle, { y: toCentre, ease: 'none', duration: 0.3 }, 0)
+      // Then the two words part. They start at their natural positions so the
+      // headline reads "HANO STUDIOS." right up until it divides.
+      .fromTo('.ht-a',
         { xPercent: 0, filter: 'blur(0px)', opacity: 1 },
-        { xPercent: -85, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.52 }, 0)
-      .fromTo('.split-right',
+        { xPercent: -92, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.36 }, 0.26)
+      .fromTo('.ht-b',
         { xPercent: 0, filter: 'blur(0px)', opacity: 1 },
-        { xPercent: 85, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.52 }, 0)
-      // One continuous scale, so it never dips. Two overlapping fromTo tweens
-      // each re-asserted their own `from` value and the square visibly shrank
-      // before it grew. Rotation runs alongside on its own track.
-      .fromTo(splitSquare,
+        { xPercent: 92, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.36 }, 0.26)
+      // Square appears between them as they go, then takes the screen. Scale is
+      // one continuous tween so it never dips; rotation runs alongside.
+      .fromTo(heroSquare,
+        { opacity: 0, scale: 0.22 },
+        { opacity: 1, ease: 'none', duration: 0.1 }, 0.24)
+      .fromTo(heroSquare,
         { rotate: -42 },
-        { rotate: 0, ease: 'none', duration: 0.44 }, 0.1)
-      .fromTo(splitSquare,
-        { scale: 0.62, borderRadius: '10px' },
-        { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.72 }, 0.1);
+        { rotate: 0, ease: 'none', duration: 0.42 }, 0.24)
+      .fromTo(heroSquare,
+        { scale: 0.22, borderRadius: '10px' },
+        { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.74 }, 0.24);
   }
 
   // Statement copy: the block pins, its lines reveal one per scroll step, then it
