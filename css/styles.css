@@ -329,7 +329,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   aspect-ratio:1;
   margin:calc(clamp(90px,17vw,290px) / -2) 0 0 calc(clamp(90px,17vw,290px) / -2);
   border-radius:10px;
-  background:linear-gradient(160deg, #34374d 0%, #1d1f2b 48%, #121218 100%);
+  background:linear-gradient(160deg, #1c1c1c 0%, #101010 55%, var(--void) 100%);
   opacity:0;
   will-change:transform, border-radius, opacity;
 }
@@ -390,7 +390,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
      below the pinned hero mid-sequence (z-index:3). */
   z-index:2;
   padding:0 var(--pad) var(--gap);
-  background:linear-gradient(172deg, #2e3143 0, #1d1f2b 44svh, #171922 88svh, var(--void) 140svh);
+  background:linear-gradient(172deg, #1c1c1c 0, #141414 44svh, #0f0f0f 88svh, var(--void) 140svh);
 }
 
 /* Sized by its content, not the viewport. A 100svh box with the copy centred
