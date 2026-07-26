@@ -32,6 +32,9 @@ From the official brand guidelines. Defined in `:root`.
 | `--nebula` | `#47127C` | Royal Nebula |
 | `--aurora` | `#8B32F7` | Aurora Purple |
 
+`--alert` (`#FF5C5C`) also exists. It is **not** a brand colour — it is the form
+validation error state only, and nothing decorative should use it.
+
 Type: **Instrument Sans** display + body (letter-spacing -2% to -4.5% on large sizes),
 **Aleo** italic used exactly once, on "dominate markets" in the hero. The guidelines call
 for restraint on the serif — keep it that way.
@@ -78,8 +81,9 @@ Both were verified by killing the scripts. Keep them if you refactor.
   were written for layout, but they are attributed to real Hano clients (Bybit EU,
   Kalshi, Maxy.co). Shipping them unchanged puts words in a real client's mouth.
   Replace with quotes the client has given and approved. Blocker for launch.
-- `mailto:hello@hano.studios` on the CTA should become a real form (Formspree / Tally) —
-  currently no lead capture or tracking.
+- **The contact form has no endpoint yet.** `#contactForm` posts to
+  `https://formspree.io/f/FORMSPREE_ID` — create the form at formspree.io and replace
+  that literal. Until then every submission 404s and the user sees the error state.
 - Footer social links point at bare domains; needs the real profile URLs.
 - Figma source reads "AD CAMPAINGS" — corrected to "Ad Campaigns" here.
 - No analytics installed yet.

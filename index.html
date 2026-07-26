@@ -345,7 +345,67 @@
 <section class="cta" id="contact">
   <div class="cta-glow" aria-hidden="true"></div>
   <h2 class="cta-title">Let's bring your<br>vision to life</h2>
-  <a class="cta-bar" href="mailto:hello@hano.studios">Let's talk</a>
+
+  <!-- Posts natively to Formspree with no JS at all, in which case the browser's
+       own required/type validation applies and Formspree renders its own thank-you
+       page. main.js upgrades it to a fetch() submit with inline validation and an
+       in-page confirmation.
+       SETUP: create a form at formspree.io and replace FORMSPREE_ID below. -->
+  <form class="cta-form" id="contactForm" method="POST"
+        action="https://formspree.io/f/FORMSPREE_ID">
+
+    <div class="cta-fields">
+      <div class="field">
+        <label for="cf-name">Name</label>
+        <input id="cf-name" name="name" type="text" required autocomplete="name"
+               aria-describedby="cf-name-msg">
+        <span class="field-msg" id="cf-name-msg"></span>
+      </div>
+
+      <div class="field">
+        <label for="cf-email">Email</label>
+        <input id="cf-email" name="email" type="email" required autocomplete="email"
+               aria-describedby="cf-email-msg">
+        <span class="field-msg" id="cf-email-msg"></span>
+      </div>
+
+      <div class="field">
+        <label for="cf-company">Company <span class="opt">optional</span></label>
+        <input id="cf-company" name="company" type="text" autocomplete="organization"
+               aria-describedby="cf-company-msg">
+        <span class="field-msg" id="cf-company-msg"></span>
+      </div>
+
+      <div class="field">
+        <label for="cf-budget">Budget range <span class="opt">optional</span></label>
+        <select id="cf-budget" name="budget" aria-describedby="cf-budget-msg">
+          <option value="">Select a range</option>
+          <option>Under €5k</option>
+          <option>€5k – €15k</option>
+          <option>€15k – €50k</option>
+          <option>€50k+</option>
+          <option>Not sure yet</option>
+        </select>
+        <span class="field-msg" id="cf-budget-msg"></span>
+      </div>
+
+      <div class="field field--wide">
+        <label for="cf-message">What are you building?</label>
+        <textarea id="cf-message" name="message" rows="4" required
+                  aria-describedby="cf-message-msg"></textarea>
+        <span class="field-msg" id="cf-message-msg"></span>
+      </div>
+
+      <!-- Spam trap. Real people never fill this in; Formspree drops it if they do. -->
+      <div class="hp" aria-hidden="true">
+        <label for="cf-gotcha">Leave this empty</label>
+        <input id="cf-gotcha" name="_gotcha" type="text" tabindex="-1" autocomplete="off">
+      </div>
+    </div>
+
+    <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+    <button type="submit" class="cta-bar">Let's talk</button>
+  </form>
 </section>
 
 <!-- ============ FOOTER ============ -->

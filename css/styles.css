@@ -19,6 +19,11 @@
   --dark-60:   rgba(10,10,10,.60);
   --dark-14:   rgba(10,10,10,.14);
 
+  /* Functional state colour, form validation only — NOT a brand colour and not
+     for decorative use. An error state needs to read as an error, which the
+     four-token palette cannot express on its own. */
+  --alert:     #FF5C5C;
+
   /* Type */
   --sans: 'Instrument Sans', system-ui, -apple-system, sans-serif;
   --serif:'Aleo', Georgia, serif;
@@ -737,6 +742,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .cta-bar{
   position:relative; z-index:2;
+  display:block;
   width:100%;
   margin-top:auto;
   padding:clamp(20px,2.6vw,34px);
@@ -750,6 +756,129 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   transition:background .35s ease, color .35s ease, letter-spacing .35s ease;
 }
 .cta-bar:hover{ background:var(--aurora); color:var(--frost); letter-spacing:.14em; }
+.cta-bar[disabled]{ cursor:progress; background:var(--ink-40); color:var(--void); }
+.cta-bar[disabled]:hover{ background:var(--ink-40); color:var(--void); letter-spacing:.06em; }
+
+/* ---------- Contact form ---------- */
+
+.cta-form{
+  position:relative;
+  z-index:2;
+  width:100%;
+  margin-top:auto;
+}
+
+.cta-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:clamp(15px,1.9vw,26px);
+  width:min(100%,780px);
+  margin:0 auto;
+  padding:clamp(20px,3vw,40px) var(--pad) clamp(20px,2.4vw,32px);
+  text-align:left;
+}
+
+.field{ display:flex; flex-direction:column; }
+.field--wide{ grid-column:1 / -1; }
+
+.field label{
+  margin-bottom:7px;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  color:var(--ink-60);
+}
+.field .opt{
+  font-size:10px;
+  letter-spacing:.06em;
+  text-transform:none;
+  color:var(--ink-40);
+}
+
+.field input,
+.field select,
+.field textarea{
+  width:100%;
+  padding:9px 2px;
+  font-family:inherit;
+  font-size:clamp(13px,1.05vw,15px);
+  letter-spacing:-.01em;
+  color:var(--frost);
+  background:none;
+  border:0;
+  border-bottom:1px solid var(--ink-14);
+  border-radius:0;
+  appearance:none;
+  -webkit-appearance:none;
+  transition:border-color .3s ease;
+}
+.field textarea{ min-height:92px; resize:vertical; line-height:1.5; }
+.field select{ cursor:pointer; }
+/* Native dropdown list still paints in the OS palette, so set it explicitly */
+.field select option{ background:var(--void); color:var(--frost); }
+.field input::placeholder,
+.field textarea::placeholder{ color:var(--ink-40); }
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus{ border-bottom-color:var(--frost); }
+
+/* Validation. Colour is never the only signal — .field-msg carries the reason
+   and aria-invalid carries it to assistive tech. */
+.field.is-valid input,
+.field.is-valid select,
+.field.is-valid textarea{ border-bottom-color:var(--ink-40); }
+.field.is-invalid input,
+.field.is-invalid select,
+.field.is-invalid textarea{ border-bottom-color:var(--alert); }
+
+.field-msg{
+  min-height:1.15em;               /* reserved so nothing shifts when a message appears */
+  margin-top:5px;
+  font-size:11px;
+  letter-spacing:0;
+  line-height:1.15;
+  color:var(--alert);
+}
+
+.form-status{
+  width:min(100%,780px);
+  margin:0 auto;
+  padding:0 var(--pad) clamp(14px,1.8vw,22px);
+  font-size:12px;
+  line-height:1.45;
+  text-align:left;
+  color:var(--ink-60);
+}
+.form-status.is-error{ color:var(--alert); }
+.form-status:empty{ display:none; }
+
+.form-done{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  width:min(100%,780px);
+  margin:0 auto;
+  padding:clamp(34px,5vw,64px) var(--pad);
+  text-align:center;
+}
+.form-done:focus{ outline:none; }
+.form-done strong{
+  font-size:clamp(21px,2.8vw,36px);
+  font-weight:500;
+  letter-spacing:-.03em;
+}
+.form-done span{ font-size:clamp(12px,1vw,15px); color:var(--ink-60); }
+
+/* Spam trap — off-screen rather than display:none so bots still see it */
+.hp{
+  position:absolute;
+  left:-9999px;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
 
 /* ============================================================
    FOOTER
@@ -848,6 +977,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .ht-gap{ display:none; }
   .team-cards{ grid-template-columns:1fr; }
   .split-stage{ gap:10px; }
+  .cta-fields{ grid-template-columns:1fr; }
 }
 
 /* ============================================================

@@ -61,5 +61,9 @@ larger for no visible gain, and load time is a real conversion cost on mobile.
   GSAP ScrollTrigger. If GSAP fails to load, those sections degrade to normal scrollable
   layout automatically — nothing becomes unreachable.
 - `prefers-reduced-motion` is respected throughout.
-- Contact CTA points at `mailto:hello@hano.studios`. Change it, or swap for a real form.
+- **Contact form needs an endpoint before launch.** It posts to
+  `https://formspree.io/f/FORMSPREE_ID` in `index.html`. Create a free form at
+  formspree.io and replace `FORMSPREE_ID` with the real ID — that is the only change
+  needed. The form validates and confirms in-page with JS, and falls back to a plain
+  browser-validated POST without it.
 - The services list in the Figma read "AD CAMPAINGS" — corrected to "Ad Campaigns" here.
