@@ -626,6 +626,23 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .phone:hover{ filter:brightness(1); transform:translateY(-10px); }
 
+/* The notch. Frame 198's phones are proper device mockups — this was a plain
+   rounded card with no hardware cues at all, which is why it read as "just a
+   card" rather than "a phone playing a video". Sits inside the frame's own
+   bounds so .phone's overflow:hidden never clips it. */
+.phone::before{
+  content:'';
+  position:absolute;
+  top:9px;
+  left:50%;
+  z-index:3;
+  width:32%;
+  height:5px;
+  transform:translateX(-50%);
+  border-radius:5px;
+  background:rgba(0,0,0,.55);
+}
+
 /* The active slide is lit and lifted while its video plays, so the strip reads
    as one playing phone flanked by dimmed neighbours. */
 .phone.is-active{ filter:brightness(1); transform:translateY(-10px); }
@@ -1134,8 +1151,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .client-grid li:nth-child(n+9){ border-bottom:0; }
   .showcase{ grid-template-columns:1fr; align-items:start; }
   .showcase-stage{ margin-top:40px; }
-  .work-meta{ grid-template-columns:1fr; }
-  .work-meta .tag{ grid-column:1; }
+  /* Was 1fr (stacked title above description). Frame 196 keeps the title in a
+     narrow left column and the description in a wider right column all the
+     way down to phone width — the stack was never in the reference. */
   .service-preview{ display:none; }
 }
 
