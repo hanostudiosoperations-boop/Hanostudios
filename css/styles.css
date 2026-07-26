@@ -280,7 +280,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   inset:-14%;
   background:
     radial-gradient(38% 32% at 26% 52%, rgba(255,255,255,.13) 0%, transparent 64%),
-    radial-gradient(52% 44% at 82% 68%, rgba(139,50,247,.16) 0%, transparent 68%);
+    radial-gradient(52% 44% at 82% 68%, rgba(255,255,255,.10) 0%, transparent 68%);
   filter:blur(46px);
   animation:drift-b 19s ease-in-out infinite alternate;
 }
@@ -320,19 +320,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 /* Centred on the hero, above the glow but below the words, so the title reads
    over it while it is small and it swallows the screen once it grows.
    opacity:0 by default — with no GSAP it simply never appears. */
-/* Built only from brand tokens via color-mix() — Aurora, Nebula, Void — per
-   CLAUDE.md ("do not invent new colours"). This was previously an invented
-   slate-grey gradient (#34374d / #1d1f2b / #121218) with zero purple in it
-   anywhere — the square (and everything downstream of it: .statement) read
-   as neutral charcoal instead of carrying the brand.
-   Same 3-stop skeleton and contrast profile as that slate version on purpose
-   (a first attempt used full-strength Aurora, high-contrast against Nebula):
-   this box is scaled ~8x and the viewport only sees a centre crop of it, so
-   .statement's matching gradient below can never line up with it pixel-
-   perfectly — only closely. Adjacent stops that are close in tone (as these
-   are, and as the slate ones were) make that unavoidable small mismatch
-   invisible; the full-strength Aurora version made the same mismatch read as
-   an obvious seam. */
 .hero-square{
   position:absolute;
   top:50%;
@@ -342,10 +329,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   aspect-ratio:1;
   margin:calc(clamp(90px,17vw,290px) / -2) 0 0 calc(clamp(90px,17vw,290px) / -2);
   border-radius:10px;
-  background:linear-gradient(160deg,
-    color-mix(in srgb, var(--aurora) 35%, var(--nebula) 65%) 0%,
-    var(--nebula) 48%,
-    color-mix(in srgb, var(--nebula) 35%, var(--void) 65%) 100%);
+  background:linear-gradient(160deg, #34374d 0%, #1d1f2b 48%, #121218 100%);
   opacity:0;
   will-change:transform, border-radius, opacity;
 }
@@ -406,16 +390,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
      below the pinned hero mid-sequence (z-index:3). */
   z-index:2;
   padding:0 var(--pad) var(--gap);
-  /* THE COVERED SQUARE'S SURFACE — same color-mix() recipe and low-contrast
-     stop profile as .hero-square, so the section this scrolls into keeps the
-     brand purple the square carries instead of fading to invented neutral
-     grey the instant the hero releases. Change .hero-square and this must
-     change with it or the handoff will visibly jump. */
-  background:linear-gradient(172deg,
-    color-mix(in srgb, var(--aurora) 35%, var(--nebula) 65%) 0,
-    var(--nebula) 44svh,
-    color-mix(in srgb, var(--nebula) 35%, var(--void) 65%) 88svh,
-    var(--void) 140svh);
+  background:linear-gradient(172deg, #2e3143 0, #1d1f2b 44svh, #171922 88svh, var(--void) 140svh);
 }
 
 /* Sized by its content, not the viewport. A 100svh box with the copy centred
