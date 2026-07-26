@@ -470,15 +470,18 @@
     );
   }
 
-  // Footer watermark parallax. The mark is wider than the viewport, so this
-  // travel is actually visible — at xPercent:-6 on a mark that fitted on screen
-  // there was nothing to reveal and the motion read as static.
+  // Footer watermark rises into place. A horizontal parallax was the wrong move
+  // once the mark was sized to fit inside the page margins — with no overflow
+  // there is nothing to reveal, so sideways travel just read as a wobble.
+  // .footer already clips, so the mark climbs out from behind the bottom edge.
+  // Default CSS is the settled state, so no GSAP leaves it in place and visible.
   gsap.fromTo('.footer-mark',
-    { xPercent: 1.6 },
+    { yPercent: 42, opacity: 0 },
     {
-      xPercent: -1.6,
+      yPercent: 0,
+      opacity: 1,
       ease: 'none',
-      scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: 0.6 }
+      scrollTrigger: { trigger: '.footer', start: 'top 82%', end: 'bottom bottom', scrub: 0.6 }
     }
   );
 
