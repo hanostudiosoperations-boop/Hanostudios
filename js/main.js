@@ -477,19 +477,19 @@
       // other, which rendered as "HANSTUDIOS" — it looked like a bug.
       .fromTo('.split-left',
         { xPercent: 0, filter: 'blur(0px)', opacity: 1 },
-        { xPercent: -78, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.6 }, 0)
+        { xPercent: -85, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.52 }, 0)
       .fromTo('.split-right',
         { xPercent: 0, filter: 'blur(0px)', opacity: 1 },
-        { xPercent: 78, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.6 }, 0)
+        { xPercent: 85, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.52 }, 0)
       // One continuous scale, so it never dips. Two overlapping fromTo tweens
       // each re-asserted their own `from` value and the square visibly shrank
       // before it grew. Rotation runs alongside on its own track.
       .fromTo(splitSquare,
         { rotate: -42 },
-        { rotate: 0, ease: 'none', duration: 0.5 }, 0.22)
+        { rotate: 0, ease: 'none', duration: 0.44 }, 0.1)
       .fromTo(splitSquare,
-        { scale: 0.34, borderRadius: '10px' },
-        { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.6 }, 0.22);
+        { scale: 0.62, borderRadius: '10px' },
+        { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.72 }, 0.1);
   }
 
   // Statement copy: the block pins, its lines reveal one per scroll step, then it
