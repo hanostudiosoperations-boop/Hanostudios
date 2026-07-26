@@ -235,13 +235,20 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    HERO
    ============================================================ */
 
+/* Opaque and stacked above the statement: the hero pin runs with
+   pinSpacing:false, so the statement scrolls up BEHIND the pinned hero during
+   the sequence. Without the background + z-index it crept up on top instead,
+   covering the bottom of the screen while the title was still dividing — most
+   visible on phones, where it swallowed a quarter of the hero. */
 .hero{
   position:relative;
+  z-index:3;
   min-height:100svh;
   padding:var(--pad);
   display:flex;
   flex-direction:column;
   justify-content:space-between;
+  background:var(--void);
   overflow:hidden;
 }
 

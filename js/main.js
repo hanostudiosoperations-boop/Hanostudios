@@ -12,7 +12,13 @@
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hasGSAP = typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined';
 
-  if (hasGSAP) gsap.registerPlugin(ScrollTrigger);
+  if (hasGSAP) {
+    gsap.registerPlugin(ScrollTrigger);
+    // Phone browsers fire resize as the URL bar collapses and expands during
+    // scroll; without this every one of those re-measures the pinned sections
+    // mid-scrub and the hero visibly jumps. Real rotations still refresh.
+    ScrollTrigger.config({ ignoreMobileResize: true });
+  }
 
   /* ---------------- Menu ---------------- */
 
@@ -471,22 +477,22 @@
       const size = heroSquare.offsetWidth || 1;
       return (Math.hypot(window.innerWidth, window.innerHeight) / size) * 1.01;
     };
+    // Half the vertical distance between the stacked words' line boxes,
+    // measured from layout (offsetTop is immune to the tweens' transforms).
+    const htA = document.querySelector('.ht-a');
+    const htB = document.querySelector('.ht-b');
+    const mergeY = () => (htB.offsetTop - htA.offsetTop) / 2;
 
     const heroTL = gsap.timeline({
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        // Length is derived, not a magic multiple of the viewport. The square's
-        // size comes from 17vw, so on a tall window a viewport-proportional pin
-        // grew while the square did not: the cover finished around 55% of the pin
-        // and then sat frozen for over a full screen. Scaling by the travel the
-        // title actually has to do keeps the whole sequence in step at any aspect
-        // ratio. Clamped so very short and very tall windows stay sane.
-        end: () => {
-          const travel = Math.abs(toCentre()) + window.innerHeight * 0.42;
-          return '+=' + Math.max(window.innerHeight * 0.85,
-                                 Math.min(travel, window.innerHeight * 1.25));
-        },
+        // Exactly one hero-height of scroll. With pinSpacing:false the statement
+        // climbs behind the pinned hero at scroll speed, so a pin of exactly the
+        // hero's height means the statement's top reaches the top of the screen
+        // at the precise moment the pin releases and the square finishes fading
+        // — no frozen covered frame, no seam, at any viewport size.
+        end: () => '+=' + hero.offsetHeight,
         // The square covers the whole screen by the end, so the screen-worth of
         // layout that pinSpacing would reserve after the pin is never seen as
         // anything but black — it was a full 1740px of dead scroll between the
@@ -507,13 +513,17 @@
       // Title climbs to the middle of the screen before anything divides.
       .to(heroTitle, { y: toCentre, ease: 'none', duration: 0.3 }, 0)
       // Then the two words part. They start at their natural positions so the
-      // headline reads "HANO STUDIOS." right up until it divides.
+      // headline reads "HANO STUDIOS." right up until it divides. On phones the
+      // title is stacked two lines, and mobile frame 2 shows the words meeting
+      // on a SINGLE line as they divide ("O ◆ ST") — so each word also travels
+      // half the stack offset toward the shared centre line. Inline (desktop)
+      // the offset is zero and the y tween is a no-op.
       .fromTo('.ht-a',
-        { xPercent: 0, filter: 'blur(0px)', opacity: 1 },
-        { xPercent: -92, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.36 }, 0.26)
+        { xPercent: 0, y: 0, filter: 'blur(0px)', opacity: 1 },
+        { xPercent: -92, y: mergeY, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.36 }, 0.26)
       .fromTo('.ht-b',
-        { xPercent: 0, filter: 'blur(0px)', opacity: 1 },
-        { xPercent: 92, filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.36 }, 0.26)
+        { xPercent: 0, y: 0, filter: 'blur(0px)', opacity: 1 },
+        { xPercent: 92, y: () => -mergeY(), filter: 'blur(9px)', opacity: 0, ease: 'none', duration: 0.36 }, 0.26)
       // Square appears between them as they go, then takes the screen. Scale is
       // one continuous tween so it never dips; rotation runs alongside.
       .fromTo(heroSquare,
