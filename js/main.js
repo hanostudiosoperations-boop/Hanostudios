@@ -441,12 +441,17 @@
   //   0.00-0.30  tagline, nav and logomark fade; the title rises from the bottom
   //              of the hero to the vertical centre of the screen
   //   0.26-0.62  the title divides — HANO left, STUDIOS right — blurring out
-  //   0.24-1.00  the square fades in between them, untwists from its kite, and
+  //   0.24-0.92  the square fades in between them, untwists from its kite, and
   //              grows past the viewport diagonal carrying the next section's
   //              gradient, until the words are gone and it covers the screen
+  //   0.92-1.00  the square hands off to the statement behind it and fades out
   //
   // The hero title IS the splitting element — there is no second copy of the
   // words in a separate section any more.
+  //
+  // The pin ends the moment the cover completes. It used to run 1.7 viewports,
+  // which left ~1.4 viewports of already-covered screen with nothing changing —
+  // the first half of the black gap between the square and the client list.
   const heroSquare = document.querySelector('.hero-square');
   const heroTitle = document.getElementById('heroTitle');
 
@@ -467,7 +472,7 @@
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        end: () => '+=' + window.innerHeight * 1.7,
+        end: () => '+=' + window.innerHeight * 1.15,
         scrub: 0.6,
         pin: true,
         pinSpacing: true,
@@ -500,7 +505,13 @@
         { rotate: 0, ease: 'none', duration: 0.42 }, 0.24)
       .fromTo(heroSquare,
         { scale: 0.22, borderRadius: '10px' },
-        { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.74 }, 0.24);
+        { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.68 }, 0.24)
+      // Hand off: the statement sits behind the square wearing the same gradient,
+      // so fading the square out reads as arriving on the next screen rather than
+      // as the square vanishing. Without this the square stayed at full opacity
+      // for the whole rest of the page and its bottom edge scrolled through the
+      // statement as a stray grey band.
+      .to(heroSquare, { opacity: 0, ease: 'none', duration: 0.08 }, 0.92);
   }
 
   // Statement copy: the block pins, its lines reveal one per scroll step, then it
@@ -513,8 +524,14 @@
     const stTL = gsap.timeline({
       scrollTrigger: {
         trigger: statementPin,
-        start: 'center center',
-        end: () => '+=' + window.innerHeight * 1.5,
+        // Anchored so the reveal runs while the copy is actually on screen.
+        // 'center center' (the original) made the block travel half a viewport
+        // before the first line lit, leaving it visible-but-blank — the second
+        // half of the black gap. 'top 78%' overshot the other way and ran the
+        // whole reveal below the fold. 'top 30%' starts it just as the copy
+        // crosses in and keeps it pinned through the last line.
+        start: 'top 30%',
+        end: () => '+=' + window.innerHeight * 1.15,
         scrub: 0.55,
         pin: true,
         pinSpacing: true,

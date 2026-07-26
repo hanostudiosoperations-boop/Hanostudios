@@ -362,11 +362,17 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    ============================================================ */
 
 /* Tall enough that the copy can pin while its lines reveal one per scroll step,
-   then release into the client grid. */
+   then release into the client grid.
+
+   The top of this gradient is the same colour the .hero-square carries, so when
+   the square fades out at the end of the hero pin the statement is already
+   sitting behind it wearing that exact tone — the cover hands over instead of
+   cutting. No leading padding: the square finishes flush against this section,
+   and a --gap of empty space there was part of the black void. */
 .statement{
   position:relative;
-  padding:var(--gap) var(--pad);
-  background:linear-gradient(180deg, #0E0E0E 0%, var(--void) 100%);
+  padding:0 var(--pad) var(--gap);
+  background:linear-gradient(180deg, #1d1f2b 0%, #121218 22%, var(--void) 62%);
 }
 
 .statement-pin{
@@ -386,9 +392,12 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   will-change:transform, opacity;
 }
 /* Only hidden when JS is running — same guard as .reveal, so a blocked script
-   leaves the statement fully readable instead of stranding it invisible. */
+   leaves the statement fully readable instead of stranding it invisible.
+
+   Opacity only, no transform. GSAP owns the Y position of these spans, and a
+   translateY here stacked on top of its yPercent so the lines finished 130px
+   below a 124px clip box — fully lit but clipped out of sight. */
 .js .sc-line > span{
-  transform:translateY(105%);
   opacity:0;
 }
 .no-gsap .sc-line > span{ transform:none; opacity:1; }
