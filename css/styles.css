@@ -424,20 +424,53 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   color:var(--ink-40);
 }
 
-/* Placeholder art tones — swap for real project images */
-[data-tone="amber"] { background-image:linear-gradient(135deg,#3a2a10,#0d0906 62%,#241906); }
-[data-tone="green"] { background-image:linear-gradient(135deg,#0d2a1c,#050d09 62%,#0a1f15); }
-[data-tone="orange"]{ background-image:linear-gradient(135deg,#3a1c08,#0d0704 62%,#2a1406); }
-[data-tone="lilac"] { background-image:linear-gradient(135deg,#2a2440,#0a0910 62%,#1e1a30); }
-[data-tone="steel"] { background-image:linear-gradient(135deg,#242424,#0b0b0b 62%,#1a1a1a); }
-[data-tone="purple"]{ background-image:linear-gradient(135deg,var(--nebula),#120520 62%,#2a0d47); }
+/* Placeholder art tones — swap for real project images.
+   Scoped to the four elements that actually show art. Unscoped, these matched
+   any [data-tone] and painted gradients across the service list rows, whose
+   data-tone is only there for main.js to copy onto .service-preview. */
+.work-img[data-tone="amber"],
+.phone[data-tone="amber"],
+.member-photo[data-tone="amber"],
+.service-preview[data-tone="amber"] { background-image:linear-gradient(135deg,#3a2a10,#0d0906 62%,#241906); }
+
+.work-img[data-tone="green"],
+.phone[data-tone="green"],
+.member-photo[data-tone="green"],
+.service-preview[data-tone="green"] { background-image:linear-gradient(135deg,#0d2a1c,#050d09 62%,#0a1f15); }
+
+.work-img[data-tone="orange"],
+.phone[data-tone="orange"],
+.member-photo[data-tone="orange"],
+.service-preview[data-tone="orange"]{ background-image:linear-gradient(135deg,#3a1c08,#0d0704 62%,#2a1406); }
+
+.work-img[data-tone="lilac"],
+.phone[data-tone="lilac"],
+.member-photo[data-tone="lilac"],
+.service-preview[data-tone="lilac"] { background-image:linear-gradient(135deg,#2a2440,#0a0910 62%,#1e1a30); }
+
+.work-img[data-tone="steel"],
+.phone[data-tone="steel"],
+.member-photo[data-tone="steel"],
+.service-preview[data-tone="steel"] { background-image:linear-gradient(135deg,#242424,#0b0b0b 62%,#1a1a1a); }
+
+.work-img[data-tone="purple"],
+.phone[data-tone="purple"],
+.member-photo[data-tone="purple"],
+.service-preview[data-tone="purple"]{ background-image:linear-gradient(135deg,var(--nebula),#120520 62%,#2a0d47); }
 
 /* ============================================================
    SHOWCASE
    ============================================================ */
 
+/* Two real columns — heading left, carousel right. This used to be a single
+   column with the stage yanked up by a negative margin-top, which overlapped
+   the heading as soon as the viewport was wide enough. */
 .showcase{
   position:relative;
+  display:grid;
+  grid-template-columns:minmax(240px,.72fr) 1.75fr;
+  gap:clamp(24px,4vw,64px);
+  align-items:center;
   padding:var(--gap) var(--pad);
   overflow:hidden;
 }
@@ -454,12 +487,12 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .showcase-stage{
   display:flex;
   gap:clamp(18px,2.6vw,40px);
-  margin-top:clamp(-260px,-18vw,-40px);
+  /* bleed past the page padding so the carousel reads as continuing off-screen */
+  margin-right:calc(var(--pad) * -1);
   padding:40px 0;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
   scrollbar-width:none;
-  justify-content:flex-end;
 }
 .showcase-stage::-webkit-scrollbar{ display:none; }
 
@@ -936,7 +969,8 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .client-grid li:nth-child(n+6){ border-bottom:1px solid var(--ink-08); }
   .client-grid li:nth-child(n+9){ border-bottom:0; }
   .review-grid{ grid-template-columns:1fr; }
-  .showcase-stage{ margin-top:40px; justify-content:flex-start; }
+  .showcase{ grid-template-columns:1fr; align-items:start; }
+  .showcase-stage{ margin-top:40px; }
   .work-meta{ grid-template-columns:1fr; }
   .work-meta .tag{ grid-column:1; }
   .service-preview{ display:none; }
