@@ -474,9 +474,9 @@
   // travel is actually visible — at xPercent:-6 on a mark that fitted on screen
   // there was nothing to reveal and the motion read as static.
   gsap.fromTo('.footer-mark',
-    { xPercent: 0 },
+    { xPercent: 1.6 },
     {
-      xPercent: -4,
+      xPercent: -1.6,
       ease: 'none',
       scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: 0.6 }
     }
