@@ -36,9 +36,6 @@ From the official brand guidelines. Defined in `:root`.
 | `--nebula` | `#47127C` | Royal Nebula |
 | `--aurora` | `#8B32F7` | Aurora Purple |
 
-`--alert` (`#FF5C5C`) also exists. It is **not** a brand colour — it is the form
-validation error state only, and nothing decorative should use it.
-
 Type: **Instrument Sans** display + body (letter-spacing -2% to -4.5% on large sizes),
 **Aleo** italic used exactly once, on "dominate markets" in the hero. The guidelines call
 for restraint on the serif — keep it that way.
@@ -85,15 +82,15 @@ Both were verified by killing the scripts. Keep them if you refactor.
   were written for layout, but they are attributed to real Hano clients (Bybit EU,
   Kalshi, Maxy.co). Shipping them unchanged puts words in a real client's mouth.
   Replace with quotes the client has given and approved. Blocker for launch.
-- **The contact form has no endpoint yet.** `#contactForm` posts to
-  `https://formspree.io/f/FORMSPREE_ID` — create the form at formspree.io and replace
-  that literal. Until then every submission 404s and the user sees the error state.
+- **The Calendly link is a placeholder.** `#calEmbed`'s `data-url` (and the `<noscript>`
+  link beside it) read `CALENDLY_HANDLE`. Replace with the real scheduling URL or the
+  modal opens straight into its "could not load" fallback.
 - Footer social links point at bare domains; needs the real profile URLs.
 - Figma source reads "AD CAMPAINGS" — corrected to "Ad Campaigns" here.
 - Plausible is wired in `<head>` with `data-domain="hano.studios"`. It only starts
   recording once the site is added in the Plausible dashboard. Cookieless, so no
-  consent banner. A `Contact form submitted` goal fires from `main.js` on a
-  successful send — add it as a goal in Plausible to see conversions.
+  consent banner. A `Booking opened` goal fires from `main.js` when the Calendly
+  modal opens — add it as a goal in Plausible to see conversions.
 
 ## Conventions
 

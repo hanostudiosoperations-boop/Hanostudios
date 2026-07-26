@@ -26,23 +26,24 @@
     return menuOverlay.classList.contains('is-open');
   }
 
-  // Take the page behind the overlay out of the tab order and the accessibility
-  // tree. Only aria-hidden we added ourselves is removed again — .split and
-  // .wipe are decorative and carry their own in the markup.
-  function setBehindInert(on) {
+  // Take the page behind an open overlay out of the tab order and the
+  // accessibility tree, keeping only the elements in `keep` live. Shared by the
+  // menu and the booking modal. Only aria-hidden we added ourselves is removed
+  // again — .split and .wipe are decorative and carry their own in the markup.
+  function setPageInert(on, keep) {
     Array.from(document.body.children).forEach(el => {
-      if (el === menuOverlay || el === menuBtn) return;
+      if (keep.indexOf(el) !== -1) return;
       if (on) {
         el.setAttribute('inert', '');
         if (!el.hasAttribute('aria-hidden')) {
           el.setAttribute('aria-hidden', 'true');
-          el.dataset.menuHid = '';
+          el.dataset.inertHid = '';
         }
       } else {
         el.removeAttribute('inert');
-        if ('menuHid' in el.dataset) {
+        if ('inertHid' in el.dataset) {
           el.removeAttribute('aria-hidden');
-          delete el.dataset.menuHid;
+          delete el.dataset.inertHid;
         }
       }
     });
@@ -62,7 +63,7 @@
     menuOverlay.setAttribute('aria-hidden', String(!next));
     menuBtn.setAttribute('aria-label', next ? 'Close menu' : 'Open menu');
     document.body.style.overflow = next ? 'hidden' : '';
-    setBehindInert(next);
+    setPageInert(next, [menuOverlay, menuBtn]);
 
     if (next) {
       menuOverlay.removeAttribute('inert');
@@ -194,95 +195,114 @@
   if (prev) prev.addEventListener('click', () => slide(-1));
   if (next) next.addEventListener('click', () => slide(1));
 
-  /* ---------------- Contact form ---------------- */
+  /* ---------------- Calendly booking modal ---------------- */
 
-  const form = document.getElementById('contactForm');
+  const calModal = document.getElementById('calModal');
 
-  if (form) {
-    const status = document.getElementById('formStatus');
-    const submitBtn = form.querySelector('.cta-bar');
-    const fields = Array.from(form.querySelectorAll('input:not([type="hidden"]), select, textarea'))
-      .filter(el => !el.closest('.hp'));
+  if (calModal) {
+    const calEmbed = document.getElementById('calEmbed');
+    const calPanel = calModal.querySelector('.cal-panel');
+    let lastFocus = null;
+    let requested = false;
 
-    // Only now that this script is running do we take validation off the browser.
-    // Without it, a plain POST still gets native required/type checks.
-    form.noValidate = true;
-
-    let attempted = false;
-
-    function validate(el) {
-      const wrap = el.closest('.field');
-      if (!wrap) return true;
-      const msg = wrap.querySelector('.field-msg');
-      const value = el.value.trim();
-      let error = '';
-
-      if (el.required && !value) {
-        error = el.tagName === 'SELECT' ? 'Please choose an option.' : 'This one is required.';
-      } else if (el.type === 'email' && value && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
-        error = 'That does not look like an email address.';
-      }
-
-      wrap.classList.toggle('is-invalid', !!error);
-      wrap.classList.toggle('is-valid', !error && !!value);
-      el.setAttribute('aria-invalid', error ? 'true' : 'false');
-      if (msg) msg.textContent = error;
-      return !error;
+    function calFallback() {
+      const url = (calEmbed.dataset.url || '').split('?')[0];
+      calEmbed.innerHTML =
+        '<div class="cal-fallback"><p>The booking widget could not load.</p>' +
+        '<a href="' + url + '" target="_blank" rel="noopener">Open the booking page &rarr;</a>' +
+        '<a href="mailto:hello@hano.studios">Or email hello@hano.studios</a></div>';
     }
 
-    // Stay quiet until the first submit, then correct in real time.
-    fields.forEach(el => {
-      el.addEventListener('blur', () => { if (attempted) validate(el); });
-      el.addEventListener('input', () => { if (attempted) validate(el); });
-      el.addEventListener('change', () => { if (attempted) validate(el); });
+    // Fetched on first open only — visitors who never book pay nothing for it.
+    function loadCalendly() {
+      if (requested) return;
+      requested = true;
+
+      const css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.href = 'https://assets.calendly.com/assets/external/widget.css';
+      document.head.appendChild(css);
+
+      const script = document.createElement('script');
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      script.onload = () => {
+        if (window.Calendly && calEmbed.dataset.url) {
+          window.Calendly.initInlineWidget({
+            url: calEmbed.dataset.url,
+            parentElement: calEmbed
+          });
+        } else {
+          calFallback();
+        }
+      };
+      script.onerror = calFallback;      // blocked CDN, ad blocker, offline
+      document.head.appendChild(script);
+    }
+
+    function openCal(returnTo) {
+      lastFocus = returnTo;
+      calModal.hidden = false;
+      requestAnimationFrame(() => calModal.classList.add('is-open'));
+      document.body.style.overflow = 'hidden';
+      setPageInert(true, [calModal]);
+      loadCalendly();
+      const close = calModal.querySelector('.cal-close');
+      if (close) close.focus();
+      if (window.plausible) window.plausible('Booking opened');
+    }
+
+    function closeCal() {
+      calModal.classList.remove('is-open');
+      document.body.style.overflow = '';
+      setPageInert(false, []);
+      if (lastFocus) lastFocus.focus();
+      window.setTimeout(() => { calModal.hidden = true; }, reduce ? 0 : 300);
+    }
+
+    document.querySelectorAll('[data-calendly]').forEach(trigger => {
+      trigger.addEventListener('click', e => {
+        e.preventDefault();
+        // Stop the overlay's own link handler from also running — it would
+        // clear the inert state this modal is about to set.
+        e.stopPropagation();
+        const fromMenu = menuOverlay.contains(trigger);
+        if (isMenuOpen()) toggleMenu(false, false);
+        // A trigger inside the menu is inert once the menu closes, so send
+        // focus back to the menu button instead.
+        openCal(fromMenu ? menuBtn : trigger);
+      });
     });
 
-    function setStatus(text, isError) {
-      status.textContent = text;
-      status.classList.toggle('is-error', !!isError);
-    }
+    calModal.addEventListener('click', e => {
+      if (e.target.hasAttribute('data-cal-close')) closeCal();
+    });
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      attempted = true;
+    document.addEventListener('keydown', e => {
+      if (calModal.hidden) return;
 
-      const allValid = fields.map(validate).every(Boolean);
-      if (!allValid) {
-        setStatus('Please check the highlighted fields.', true);
-        const firstBad = form.querySelector('.field.is-invalid input, .field.is-invalid select, .field.is-invalid textarea');
-        if (firstBad) firstBad.focus();
+      if (e.key === 'Escape') {
+        closeCal();
         return;
       }
+      if (e.key !== 'Tab') return;
 
-      const label = submitBtn.textContent;
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending…';
-      setStatus('', false);
+      const items = Array.from(calPanel.querySelectorAll(FOCUSABLE));
+      if (!items.length) return;
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
 
-      fetch(form.action, {
-        method: 'POST',
-        body: new FormData(form),
-        headers: { Accept: 'application/json' }
-      })
-        .then(res => {
-          if (!res.ok) throw new Error('HTTP ' + res.status);
-          form.classList.add('is-done');
-          form.innerHTML =
-            '<div class="form-done" tabindex="-1" role="status">' +
-            '<strong>Thanks — that has landed.</strong>' +
-            '<span>We read every enquiry ourselves and reply within one working day.</span>' +
-            '</div>';
-          const done = form.querySelector('.form-done');
-          if (done) done.focus();
-          // Conversion goal. The head stub means this is safe even if the
-          // analytics script was blocked or has not loaded yet.
-          if (window.plausible) window.plausible('Contact form submitted');
-        })
-        .catch(() => {
-          submitBtn.disabled = false;
-          submitBtn.textContent = label;
-          setStatus('That did not send. Please try again, or email hello@hano.studios directly.', true);
-        });
+      if (!calPanel.contains(active)) {
+        e.preventDefault();
+        first.focus();
+      } else if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     });
   }
 
