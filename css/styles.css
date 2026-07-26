@@ -235,14 +235,14 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    HERO
    ============================================================ */
 
-/* Opaque and stacked above the statement: the hero pin runs with
-   pinSpacing:false, so the statement scrolls up BEHIND the pinned hero during
-   the sequence. Without the background + z-index it crept up on top instead,
-   covering the bottom of the screen while the title was still dividing — most
-   visible on phones, where it swallowed a quarter of the hero. */
+/* Opaque, and stacked above the statement while pinned: the pin runs with
+   pinSpacing:false, so the statement scrolls up BEHIND the hero during the
+   sequence. The z-index is managed INLINE by main.js (3 while pinned, 1 once
+   released so the statement paints over the riding hero) — it must NOT be set
+   here: GSAP's pin-spacer clones the element's computed z-index at pin setup,
+   and a spacer stuck at 3 out-stacks the statement whatever the hero says. */
 .hero{
   position:relative;
-  z-index:3;
   min-height:100svh;
   padding:var(--pad);
   display:flex;
@@ -386,11 +386,18 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    and a --gap of empty space there was part of the black void. */
 .statement{
   position:relative;
+  /* Above the released hero (main.js drops it to z-index:1 at pin end) but
+     below the pinned hero mid-sequence (z-index:3). */
+  z-index:2;
   padding:0 var(--pad) var(--gap);
-  /* Starts at pure Void so the top edge is indistinguishable from the hero it
-     replaces at the moment the square finishes fading, then swells to the
-     square's tone as the copy reveals — the surface the text appears on. */
-  background:linear-gradient(180deg, var(--void) 0%, #1d1f2b 12%, #121218 34%, var(--void) 68%);
+  /* THE COVERED SQUARE'S SURFACE. The hero pin releases with the square still
+     filling the screen (it never fades — frames 192 -> 193: the box becomes the
+     next background), and this section replaces it in the same frame. The first
+     ~100svh reproduce the slice of the square's 160deg gradient the viewport
+     sees at cover scale (#2e3143 -> #1d1f2b -> #171922), then it settles into
+     Void before the client grid. Change the square's gradient and this must
+     change with it, or the handoff will visibly jump. */
+  background:linear-gradient(172deg, #2e3143 0, #1d1f2b 44svh, #171922 88svh, var(--void) 140svh);
 }
 
 /* Sized by its content, not the viewport. A 100svh box with the copy centred

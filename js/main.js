@@ -507,9 +507,28 @@
         scrub: 0.6,
         pin: true,
         anticipatePin: 0,
-        invalidateOnRefresh: true
+        invalidateOnRefresh: true,
+        // With pinSpacing:false the released hero keeps its translation and
+        // rides one full viewport over whatever follows — which meant the
+        // opaque, square-covered hero sat ON TOP of the statement through its
+        // entire reveal ("a blurred screen, then the text comes a scroll
+        // later"). The moment the scroll crosses the pin end, drop the hero
+        // beneath the statement, which wears the same surface, so the swap is
+        // invisible. Raw-scroll callbacks, not a timeline .set: the scrubbed
+        // playhead approaches 1 asymptotically and left the hero on top for
+        // up to a second after release. onRefresh restores the right state on
+        // load/refresh mid-page. Inline z only — a z-index in the CSS gets
+        // cloned onto GSAP's pin-spacer at setup, and a spacer stuck above
+        // the statement defeats everything set on the hero inside it.
+        onLeave: () => { hero.style.zIndex = '1'; },
+        onEnterBack: () => { hero.style.zIndex = '3'; },
+        onRefresh: self => { hero.style.zIndex = self.progress >= 1 ? '1' : '3'; }
       }
     });
+
+    // Above the statement from the first frame — onRefresh keeps it correct
+    // from here on, but the first refresh may land after the first paint.
+    hero.style.zIndex = '3';
 
     heroTL
       .to('.hero-tagline', { opacity: 0, y: -40, ease: 'none', duration: 0.24 }, 0)
@@ -541,16 +560,16 @@
       // scale covers the screen far faster at the end than the start — the last
       // stretch of the tween was redundant and full cover landed at ~0.80 of the
       // pin, leaving a frozen frame before the hand-off. Easing in spreads the
-      // coverage evenly so it completes right as the fade begins.
+      // coverage evenly so it completes near the end of the pin.
+      //
+      // The square NEVER fades. Per the design (frames 192 -> 193) the covered
+      // square IS the next section's background: the pin releases with the
+      // square still filling the screen, and the statement — whose gradient is
+      // the same surface — replaces it in the same frame. Fading it out here
+      // used to flash the bare hero glow ("blurred screen") before the text.
       .fromTo(heroSquare,
         { scale: 0.22, borderRadius: '10px' },
-        { scale: coverScale, borderRadius: '0px', ease: 'power1.in', duration: 0.68 }, 0.24)
-      // Hand off: the statement sits behind the square wearing the same gradient,
-      // so fading the square out reads as arriving on the next screen rather than
-      // as the square vanishing. Without this the square stayed at full opacity
-      // for the whole rest of the page and its bottom edge scrolled through the
-      // statement as a stray grey band.
-      .to(heroSquare, { opacity: 0, ease: 'none', duration: 0.08 }, 0.92);
+        { scale: coverScale, borderRadius: '0px', ease: 'power1.in', duration: 0.76 }, 0.24);
   }
 
   // Statement copy: the block pins, its lines reveal one per scroll step, then it
