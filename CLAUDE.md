@@ -83,6 +83,13 @@ Both were verified by killing the scripts. Keep them if you refactor.
   lists REVIEWS in both the menu overlay and the footer, so both links are currently
   left out — restore the section and both links together once there are real,
   client-approved quotes.
+- **Showcase videos are not supplied yet.** Each `.phone` holds a `<video>` with the
+  existing still as its `poster`. The playback controller in `main.js` is finished and
+  verified: it plays the active slide, auto-advances on `ended`, wraps around, pauses
+  off-screen, and the arrows work. It activates per phone the moment you add
+  `data-src="assets/video/showcase/<slug>.mp4"` to that `<video>` — there is a comment
+  beside each one with the exact line. A phone with no `data-src` just shows its poster,
+  so no missing file is ever requested.
 - **The Calendly link is a placeholder.** `#calEmbed`'s `data-url` (and the `<noscript>`
   link beside it) read `CALENDLY_HANDLE`. Replace with the real scheduling URL or the
   modal opens straight into its "could not load" fallback.

@@ -259,12 +259,42 @@
     </div>
   </div>
 
+  <!-- Each phone holds a video that plays when it becomes the active slide, then
+       auto-advances to the next on 'ended'. The poster is the existing still, so
+       until real files land in assets/video/showcase/ the section looks exactly as
+       it does now — main.js only attaches a source once a file is present.
+       muted + playsinline are required for autoplay on iOS and Chrome. -->
   <div class="showcase-stage" id="showStage">
-    <div class="phone" data-tone="purple" style="background-image:url('assets/img/showcase/hano-crypto.jpg')"><span>Hano Crypto</span></div>
-    <div class="phone" data-tone="amber" style="background-image:url('assets/img/showcase/bybit-card.jpg')"><span>Bybit Card</span></div>
-    <div class="phone" data-tone="green" style="background-image:url('assets/img/showcase/kalshi.jpg')"><span>Kalshi</span></div>
-    <div class="phone" data-tone="steel" style="background-image:url('assets/img/showcase/the-crypteum.jpg')"><span>The Crypteum</span></div>
-    <div class="phone" data-tone="orange" style="background-image:url('assets/img/showcase/maxy.jpg')"><span>Maxy.co</span></div>
+    <div class="phone" data-tone="purple" data-label="Hano Crypto">
+      <video class="phone-video" playsinline muted preload="none"
+             poster="assets/img/showcase/hano-crypto.jpg"></video>
+      <!-- add data-src="assets/video/showcase/hano-crypto.mp4" once the clip exists -->
+      <span>Hano Crypto</span>
+    </div>
+    <div class="phone" data-tone="amber" data-label="Bybit Card">
+      <video class="phone-video" playsinline muted preload="none"
+             poster="assets/img/showcase/bybit-card.jpg"></video>
+      <!-- add data-src="assets/video/showcase/bybit-card.mp4" once the clip exists -->
+      <span>Bybit Card</span>
+    </div>
+    <div class="phone" data-tone="green" data-label="Kalshi">
+      <video class="phone-video" playsinline muted preload="none"
+             poster="assets/img/showcase/kalshi.jpg"></video>
+      <!-- add data-src="assets/video/showcase/kalshi.mp4" once the clip exists -->
+      <span>Kalshi</span>
+    </div>
+    <div class="phone" data-tone="steel" data-label="The Crypteum">
+      <video class="phone-video" playsinline muted preload="none"
+             poster="assets/img/showcase/the-crypteum.jpg"></video>
+      <!-- add data-src="assets/video/showcase/the-crypteum.mp4" once the clip exists -->
+      <span>The Crypteum</span>
+    </div>
+    <div class="phone" data-tone="orange" data-label="Maxy.co">
+      <video class="phone-video" playsinline muted preload="none"
+             poster="assets/img/showcase/maxy.jpg"></video>
+      <!-- add data-src="assets/video/showcase/maxy.mp4" once the clip exists -->
+      <span>Maxy.co</span>
+    </div>
   </div>
 </section>
 

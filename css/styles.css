@@ -575,7 +575,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   gap:clamp(18px,2.6vw,40px);
   /* bleed past the page padding so the carousel reads as continuing off-screen */
   margin-right:calc(var(--pad) * -1);
-  padding:40px 0;
+  /* Side padding equal to half the free track width, so the first and last
+     slides can actually reach the centre. Without it scrollLeft clamps at 0 and
+     the outer slides never centre however far you scroll. */
+  padding:40px 42% 40px 38%;
   overflow-x:auto;
   scroll-snap-type:x mandatory;
   scrollbar-width:none;
@@ -583,6 +586,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .showcase-stage::-webkit-scrollbar{ display:none; }
 
 .phone{
+  position:relative;
   flex:none;
   width:clamp(150px,15vw,232px);
   aspect-ratio:9/19.5;
@@ -593,10 +597,25 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   border:1px solid var(--ink-14);
   border-radius:26px;
   background-size:cover;
+  overflow:hidden;                 /* keeps the video inside the rounded frame */
   filter:brightness(.5);
   transition:filter .5s ease, transform .5s ease;
 }
 .phone:hover{ filter:brightness(1); transform:translateY(-10px); }
+
+/* The active slide is lit and lifted while its video plays, so the strip reads
+   as one playing phone flanked by dimmed neighbours. */
+.phone.is-active{ filter:brightness(1); transform:translateY(-10px); }
+
+.phone-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:inherit;
+  pointer-events:none;
+}
 .phone span{
   font-size:11px;
   font-weight:500;

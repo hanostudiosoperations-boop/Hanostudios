@@ -199,20 +199,80 @@
     serviceList.addEventListener('mouseleave', () => preview.classList.remove('is-on'));
   }
 
-  /* ---------------- Showcase arrows ---------------- */
+  /* ---------------- Showcase carousel + video ---------------- */
 
   const stage = document.getElementById('showStage');
   const prev = document.getElementById('showPrev');
   const next = document.getElementById('showNext');
 
-  function slide(dir) {
-    if (!stage) return;
-    const card = stage.querySelector('.phone');
-    const step = card ? card.offsetWidth + 30 : 260;
-    stage.scrollBy({ left: step * dir, behavior: reduce ? 'auto' : 'smooth' });
+  if (stage) {
+    const phones = Array.from(stage.querySelectorAll('.phone'));
+    let current = 0;
+
+    function centreOn(index, smooth) {
+      const phone = phones[index];
+      if (!phone) return;
+      // Centre the target within the stage rather than scrollBy'ing a guessed
+      // step, so the active slide lines up exactly however wide the phones are.
+      const left = phone.offsetLeft - (stage.clientWidth - phone.offsetWidth) / 2;
+      stage.scrollTo({ left: left, behavior: smooth && !reduce ? 'smooth' : 'auto' });
+    }
+
+    // A video only gets a src the first time it becomes active, so nothing is
+    // fetched for slides the visitor never reaches. A phone with no data-src has
+    // no clip yet — it keeps showing its poster and the carousel still works, so
+    // the section degrades to exactly what it was before rather than 404ing.
+    function play(index) {
+      phones.forEach((phone, i) => {
+        const video = phone.querySelector('.phone-video');
+        phone.classList.toggle('is-active', i === index);
+        if (!video || !video.dataset.src) return;
+
+        if (i === index) {
+          if (!video.src && video.dataset.src) video.src = video.dataset.src;
+          // Autoplay is refused in some contexts and rejects; the poster stays,
+          // so swallow it rather than throwing.
+          const attempt = video.play();
+          if (attempt && attempt.catch) attempt.catch(() => {});
+        } else {
+          video.pause();
+          if (video.currentTime) video.currentTime = 0;
+        }
+      });
+    }
+
+    function goTo(index, smooth) {
+      current = (index + phones.length) % phones.length;
+      centreOn(current, smooth);
+      if (!reduce) play(current);
+    }
+
+    // Auto-advance when a clip finishes.
+    phones.forEach((phone, i) => {
+      const video = phone.querySelector('.phone-video');
+      if (video) video.addEventListener('ended', () => { if (i === current) goTo(current + 1, true); });
+      // Clicking a phone makes it the active slide.
+      phone.addEventListener('click', () => goTo(i, true));
+    });
+
+    if (prev) prev.addEventListener('click', () => goTo(current - 1, true));
+    if (next) next.addEventListener('click', () => goTo(current + 1, true));
+
+    // Only start once the carousel is actually on screen, and stop when it is not,
+    // so a video is never playing off-screen.
+    const showObserver = new IntersectionObserver(
+      entries => entries.forEach(en => {
+        if (reduce) return;
+        if (en.isIntersecting) play(current);
+        else phones.forEach(p => {
+          const v = p.querySelector('.phone-video');
+          if (v) v.pause();
+        });
+      }),
+      { threshold: 0.35 }
+    );
+    showObserver.observe(stage);
   }
-  if (prev) prev.addEventListener('click', () => slide(-1));
-  if (next) next.addEventListener('click', () => slide(1));
 
   /* ---------------- FAQ smooth open/close ---------------- */
 
