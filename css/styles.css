@@ -375,8 +375,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   background:linear-gradient(180deg, #1d1f2b 0%, #121218 22%, var(--void) 62%);
 }
 
+/* Exactly one viewport, so the pin latches the moment the block fills the screen
+   and the copy is centred in it with no leading offset of its own. Anything taller
+   pushes the copy further down inside the box, and that offset is dead scroll
+   between the hero's release and the first line — a whole screen of it at 1740px
+   tall, which is what made the gap so much worse on a large window. */
 .statement-pin{
-  min-height:100svh;
+  height:100svh;
   display:flex;
   align-items:center;
 }
@@ -1129,4 +1134,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   html{ scroll-behavior:auto; }
   .reveal{ opacity:1; transform:none; }
   .wipe{ display:none; }
+  /* main.js returns before building any timeline when reduced motion is set, so
+     nothing is left to reveal these — without this the whole statement stays at
+     opacity:0 and the copy is unreadable. Same guarantee as .no-gsap.
+     Needs the .js prefix to match the specificity of the rule that hides them;
+     one class alone loses to `.js .sc-line > span` whatever the order. */
+  .js .sc-line > span{ opacity:1; transform:none; }
+  .hero-square{ display:none; }
 }

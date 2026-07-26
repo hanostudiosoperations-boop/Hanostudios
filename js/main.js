@@ -463,19 +463,38 @@
       const heroTop = hero.getBoundingClientRect().top + window.scrollY;
       return (window.innerHeight / 2) - (centreOfTitle - heroTop);
     };
+    // Exactly enough to cover, with a hair of margin. The scale tween is linear
+    // and runs 0.24 -> 0.92, so any overshoot here means the screen is fully
+    // covered before 0.92 and the remainder of the pin is a frozen frame. At the
+    // old 1.08 the cover landed at ~0.80 of the pin on a tall window.
     const coverScale = () => {
       const size = heroSquare.offsetWidth || 1;
-      return (Math.hypot(window.innerWidth, window.innerHeight) / size) * 1.08;
+      return (Math.hypot(window.innerWidth, window.innerHeight) / size) * 1.01;
     };
 
     const heroTL = gsap.timeline({
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        end: () => '+=' + window.innerHeight * 1.15,
+        // Length is derived, not a magic multiple of the viewport. The square's
+        // size comes from 17vw, so on a tall window a viewport-proportional pin
+        // grew while the square did not: the cover finished around 55% of the pin
+        // and then sat frozen for over a full screen. Scaling by the travel the
+        // title actually has to do keeps the whole sequence in step at any aspect
+        // ratio. Clamped so very short and very tall windows stay sane.
+        end: () => {
+          const travel = Math.abs(toCentre()) + window.innerHeight * 0.42;
+          return '+=' + Math.max(window.innerHeight * 0.85,
+                                 Math.min(travel, window.innerHeight * 1.25));
+        },
+        // The square covers the whole screen by the end, so the screen-worth of
+        // layout that pinSpacing would reserve after the pin is never seen as
+        // anything but black — it was a full 1740px of dead scroll between the
+        // hero and the statement at this window height. The next section follows
+        // straight on instead.
+        pinSpacing: false,
         scrub: 0.6,
         pin: true,
-        pinSpacing: true,
         anticipatePin: 0,
         invalidateOnRefresh: true
       }
@@ -503,9 +522,14 @@
       .fromTo(heroSquare,
         { rotate: -42 },
         { rotate: 0, ease: 'none', duration: 0.42 }, 0.24)
+      // power1.in, not linear. Area grows as the square of scale, so a linear
+      // scale covers the screen far faster at the end than the start — the last
+      // stretch of the tween was redundant and full cover landed at ~0.80 of the
+      // pin, leaving a frozen frame before the hand-off. Easing in spreads the
+      // coverage evenly so it completes right as the fade begins.
       .fromTo(heroSquare,
         { scale: 0.22, borderRadius: '10px' },
-        { scale: coverScale, borderRadius: '0px', ease: 'none', duration: 0.68 }, 0.24)
+        { scale: coverScale, borderRadius: '0px', ease: 'power1.in', duration: 0.68 }, 0.24)
       // Hand off: the statement sits behind the square wearing the same gradient,
       // so fading the square out reads as arriving on the next screen rather than
       // as the square vanishing. Without this the square stayed at full opacity
@@ -526,12 +550,19 @@
         trigger: statementPin,
         // Anchored so the reveal runs while the copy is actually on screen.
         // 'center center' (the original) made the block travel half a viewport
-        // before the first line lit, leaving it visible-but-blank — the second
-        // half of the black gap. 'top 78%' overshot the other way and ran the
-        // whole reveal below the fold. 'top 30%' starts it just as the copy
-        // crosses in and keeps it pinned through the last line.
-        start: 'top 30%',
-        end: () => '+=' + window.innerHeight * 1.15,
+        // before the first line lit, leaving it visible-but-blank. 'top 78%'
+        // overshot the other way and ran the whole reveal below the fold.
+        // 'top top' — the block must be filling the screen before its lines
+        // reveal. Latching earlier (while it is still entering) runs the whole
+        // reveal below the fold on a tall window, so by the time the copy is
+        // visible the animation is already over. The dead scroll that used to sit
+        // in front of this is removed structurally instead: see .statement, whose
+        // leading spacer no longer reserves a screen of its own.
+        start: 'top top',
+        // One viewport is enough for four lines plus the float. Any longer and
+        // the last line lands well before the pin releases, which on a tall
+        // window read as the copy just sitting there.
+        end: () => '+=' + window.innerHeight,
         scrub: 0.55,
         pin: true,
         pinSpacing: true,
