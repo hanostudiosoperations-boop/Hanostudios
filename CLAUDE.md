@@ -86,7 +86,10 @@ Both were verified by killing the scripts. Keep them if you refactor.
   that literal. Until then every submission 404s and the user sees the error state.
 - Footer social links point at bare domains; needs the real profile URLs.
 - Figma source reads "AD CAMPAINGS" — corrected to "Ad Campaigns" here.
-- No analytics installed yet.
+- Plausible is wired in `<head>` with `data-domain="hano.studios"`. It only starts
+  recording once the site is added in the Plausible dashboard. Cookieless, so no
+  consent banner. A `Contact form submitted` goal fires from `main.js` on a
+  successful send — add it as a goal in Plausible to see conversions.
 
 ## Conventions
 

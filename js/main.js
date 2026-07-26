@@ -274,6 +274,9 @@
             '</div>';
           const done = form.querySelector('.form-done');
           if (done) done.focus();
+          // Conversion goal. The head stub means this is safe even if the
+          // analytics script was blocked or has not loaded yet.
+          if (window.plausible) window.plausible('Contact form submitted');
         })
         .catch(() => {
           submitBtn.disabled = false;

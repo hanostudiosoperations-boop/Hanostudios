@@ -18,6 +18,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Aleo:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="css/styles.css">
+
+<!-- Plausible: cookieless, so no consent banner is required under GDPR.
+     Add hano.studios in the Plausible dashboard for this to start recording.
+     The stub below queues custom events fired before the script loads, and
+     no-ops harmlessly if an ad blocker drops it. -->
+<script defer data-domain="hano.studios" src="https://plausible.io/js/script.js"></script>
+<script>
+  window.plausible = window.plausible || function () {
+    (window.plausible.q = window.plausible.q || []).push(arguments);
+  };
+</script>
+
 <script>
   // GSAP availability is checked after load; main.js owns the `js` class,
   // so if main.js fails to run, no content is left hidden.
