@@ -74,6 +74,10 @@ Both were verified by killing the scripts. Keep them if you refactor.
 
 ## Known outstanding work
 
+- **Testimonials are invented copy.** All three quotes, names and titles in `#reviews`
+  were written for layout, but they are attributed to real Hano clients (Bybit EU,
+  Kalshi, Maxy.co). Shipping them unchanged puts words in a real client's mouth.
+  Replace with quotes the client has given and approved. Blocker for launch.
 - `mailto:hello@hano.studios` on the CTA should become a real form (Formspree / Tally) —
   currently no lead capture or tracking.
 - Footer social links point at bare domains; needs the real profile URLs.

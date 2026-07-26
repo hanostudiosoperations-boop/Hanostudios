@@ -54,6 +54,9 @@ larger for no visible gain, and load time is a real conversion cost on mobile.
 
 ## Notes
 
+- **The three testimonials in `#reviews` are placeholder copy attributed to real
+  clients.** They were written to build the section, not sourced from anyone. Swap in
+  real, client-approved quotes before this site goes live.
 - The horizontal Works scroll, the word-split transition, and the circle wipe are all
   GSAP ScrollTrigger. If GSAP fails to load, those sections degrade to normal scrollable
   layout automatically — nothing becomes unreachable.

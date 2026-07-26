@@ -605,6 +605,61 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 
 /* ============================================================
+   TESTIMONIALS
+   ============================================================ */
+
+.reviews{ padding:var(--gap) var(--pad); }
+
+.review-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:clamp(14px,1.8vw,26px);
+  margin-top:clamp(28px,4vw,50px);
+}
+
+.review{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  gap:clamp(20px,2.4vw,34px);
+  padding:clamp(20px,2.2vw,32px);
+  border:1px solid var(--ink-14);
+  transition:border-color .3s ease, background .3s ease;
+}
+.review:hover{ border-color:var(--ink-40); background:var(--ink-08); }
+
+.review blockquote p{
+  font-size:clamp(14px,1.25vw,19px);
+  font-weight:400;
+  letter-spacing:-.02em;
+  line-height:1.5;
+  color:var(--ink-90);
+}
+/* Opening mark set on its own line so the quote text stays flush left.
+   Deliberately NOT var(--serif) — Aleo is reserved for the single hero use. */
+.review blockquote p::before{
+  content:'\201C';
+  display:block;
+  margin-bottom:2px;
+  font-size:2.4em;
+  font-weight:600;
+  line-height:.72;
+  color:var(--aurora);
+}
+
+.review figcaption strong{
+  display:block;
+  font-size:clamp(13px,1.1vw,16px);
+  font-weight:600;
+}
+.review figcaption span{
+  display:block;
+  margin-top:3px;
+  font-size:clamp(11px,.9vw,13px);
+  color:var(--ink-40);
+}
+
+/* ============================================================
    FAQ
    ============================================================ */
 
@@ -779,6 +834,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .client-grid li:nth-child(2n){ border-right:0; }
   .client-grid li:nth-child(n+6){ border-bottom:1px solid var(--ink-08); }
   .client-grid li:nth-child(n+9){ border-bottom:0; }
+  .review-grid{ grid-template-columns:1fr; }
   .showcase-stage{ margin-top:40px; justify-content:flex-start; }
   .work-meta{ grid-template-columns:1fr; }
   .work-meta .tag{ grid-column:1; }
