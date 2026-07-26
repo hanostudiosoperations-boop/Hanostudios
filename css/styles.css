@@ -288,7 +288,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   display:flex;
   align-items:baseline;
   width:100%;
-  font-size:clamp(48px, 15.2vw, 260px);
+  /* "HANO STUDIOS." is ~7.26x its font-size wide and must not wrap, so the
+     largest size that still fits inside the page padding is ~12.67vw.
+     15.2vw overflowed the viewport at every width below ~2500px. */
+  font-size:clamp(40px, 12.2vw, 300px);
   font-weight:500;
   letter-spacing:-.045em;
   line-height:.86;
@@ -728,6 +731,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .faq-list summary:hover{ color:var(--aurora); }
 .faq-list p{
   max-width:62ch;
+  overflow:hidden;              /* so main.js can animate the height cleanly */
   padding:0 0 22px;
   font-size:clamp(12px,1vw,15px);
   line-height:1.6;
@@ -747,12 +751,38 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   justify-content:center;
   overflow:hidden;
 }
+/* Figma has a lit curve sweeping behind the headline, not a flat haze. The
+   ::after is an oversized circle whose edge is the arc; the base layer keeps a
+   soft bloom underneath it. */
 .cta-glow{
-  position:absolute; inset:0;
+  position:absolute;
+  inset:0;
+  overflow:hidden;
   background:
-    radial-gradient(58% 30% at 46% 26%, rgba(255,255,255,.22) 0%, transparent 66%),
-    radial-gradient(40% 24% at 72% 42%, rgba(255,255,255,.09) 0%, transparent 70%);
-  filter:blur(34px);
+    radial-gradient(60% 34% at 50% 12%, rgba(255,255,255,.14) 0%, transparent 70%),
+    radial-gradient(42% 26% at 74% 40%, rgba(255,255,255,.06) 0%, transparent 72%);
+}
+.cta-glow::after{
+  content:'';
+  position:absolute;
+  left:50%;
+  bottom:6%;
+  width:250%;
+  aspect-ratio:1;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:radial-gradient(circle closest-side,
+    transparent 0%,
+    transparent 84%,
+    rgba(255,255,255,.05) 91%,
+    rgba(255,255,255,.20) 96%,
+    rgba(255,255,255,.04) 99.5%,
+    transparent 100%);
+  filter:blur(30px);
+}
+
+@media (max-width:600px){
+  .cta-glow::after{ width:380%; bottom:14%; filter:blur(18px); }
 }
 .cta-title{
   position:relative; z-index:2;
@@ -926,7 +956,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   position:relative;
   z-index:1;
   margin:clamp(30px,5vw,60px) 0 0;
-  font-size:clamp(46px,13.4vw,230px);
+  /* Deliberately wider than the viewport — it bleeds past both edges, which is
+     what gives the parallax something to reveal. */
+  font-size:clamp(56px,16.5vw,300px);
   font-weight:600;
   letter-spacing:-.045em;
   line-height:.82;

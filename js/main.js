@@ -195,6 +195,51 @@
   if (prev) prev.addEventListener('click', () => slide(-1));
   if (next) next.addEventListener('click', () => slide(1));
 
+  /* ---------------- FAQ smooth open/close ---------------- */
+
+  // <details> snaps open — there is no native way to transition it. Drive the
+  // panel height ourselves. Sits before the GSAP block's early return so this
+  // still runs under prefers-reduced-motion, just without the tween.
+  document.querySelectorAll('.faq-list details').forEach(item => {
+    const summary = item.querySelector('summary');
+    const panel = item.querySelector('p');
+    if (!summary || !panel) return;
+
+    let anim = null;
+
+    summary.addEventListener('click', e => {
+      e.preventDefault();
+
+      if (reduce) {
+        item.open = !item.open;
+        return;
+      }
+      if (anim) anim.cancel();
+
+      const opening = !item.open;
+      // Height has to be measured with the panel rendered, so open first and
+      // animate from zero when opening.
+      if (opening) item.open = true;
+
+      const pad = getComputedStyle(panel).paddingBottom;
+      const full = panel.scrollHeight + 'px';
+
+      const from = { height: opening ? '0px' : full, paddingBottom: opening ? '0px' : pad, opacity: opening ? 0 : 1 };
+      const to   = { height: opening ? full : '0px', paddingBottom: opening ? pad : '0px', opacity: opening ? 1 : 0 };
+
+      anim = panel.animate([from, to], {
+        duration: opening ? 380 : 300,
+        easing: 'cubic-bezier(.22,1,.36,1)'
+      });
+
+      anim.onfinish = () => {
+        if (!opening) item.open = false;
+        panel.style.height = '';
+        anim = null;
+      };
+    });
+  });
+
   /* ---------------- Calendly booking modal ---------------- */
 
   const calModal = document.getElementById('calModal');
@@ -310,12 +355,14 @@
 
   if (!hasGSAP || reduce) return;
 
-  // Hero title lifts and fades as you leave
+  // Hero title lifts and fades as you leave. Starts at the hero's midpoint, not
+  // 'bottom 92%' — that began fading ~76px into the scroll, so the title read as
+  // washed-out grey almost immediately.
   gsap.to('.hero-bottom', {
     yPercent: -18,
     opacity: 0,
     ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'bottom 92%', end: 'bottom 30%', scrub: true }
+    scrollTrigger: { trigger: '.hero', start: 'center top', end: 'bottom top', scrub: true }
   });
 
   // Split transition — words pull apart, square rotates through
@@ -338,9 +385,11 @@
         trigger: '.works',
         start: 'top top',
         end: () => '+=' + distance(),
-        scrub: 0.8,
+        // anticipatePin pins early based on scroll velocity, which made the
+        // Works panel jump over the client logos on a fast scroll. Off.
+        scrub: 0.6,
         pin: '.works-pin',
-        anticipatePin: 1,
+        pinSpacing: true,
         invalidateOnRefresh: true
       }
     });
@@ -382,12 +431,37 @@
     );
   }
 
-  // Footer watermark parallax
-  gsap.to('.footer-mark', {
-    xPercent: -6,
-    ease: 'none',
-    scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: true }
-  });
+  // Showcase carousel drifts as the section passes, so the phones read as a
+  // moving strip rather than a static row.
+  const showcaseStage = document.getElementById('showStage');
+  if (showcaseStage) {
+    gsap.fromTo(showcaseStage,
+      { x: () => Math.min(160, window.innerWidth * 0.10) },
+      {
+        x: () => -Math.min(160, window.innerWidth * 0.10),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.showcase',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.8,
+          invalidateOnRefresh: true
+        }
+      }
+    );
+  }
+
+  // Footer watermark parallax. The mark is wider than the viewport, so this
+  // travel is actually visible — at xPercent:-6 on a mark that fitted on screen
+  // there was nothing to reveal and the motion read as static.
+  gsap.fromTo('.footer-mark',
+    { xPercent: 6 },
+    {
+      xPercent: -16,
+      ease: 'none',
+      scrollTrigger: { trigger: '.footer', start: 'top bottom', end: 'bottom bottom', scrub: 0.6 }
+    }
+  );
 
   window.addEventListener('load', () => ScrollTrigger.refresh());
 })();
