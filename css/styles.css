@@ -811,40 +811,82 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   justify-content:center;
   overflow:hidden;
 }
-/* Figma: one bright ribbon sweeping diagonally from lower-left to upper-right,
-   passing behind the headline. The ::after is a very wide, shallow ellipse whose
-   upper-left flank is that ribbon — an ellipse rather than a circle because a
-   circle flat enough to give this curve would need a ~7000px diameter. */
+/* Figma frame 172: a soft light ribbon that rises from the left edge, crests
+   behind the top of the headline, and falls away to the right — an S-sweep, not
+   a ring.
+
+   Built from two overlapping elliptical gradients rather than the flank of one
+   big ellipse. An ellipse edge has uniform curvature, so it can only ever read
+   as a circle corner cutting through whatever it crosses; that is exactly what
+   it was doing at the bottom-left. Two ellipses — one for the rising left half,
+   one for the falling right half — meet mid-frame and give the bend. Blur is on
+   the gradients themselves via soft colour stops, so there is no hard edge to
+   catch the eye. */
 .cta-glow{
   position:absolute;
   inset:0;
   overflow:hidden;
-  background:radial-gradient(58% 40% at 62% 26%, rgba(255,255,255,.07) 0%, transparent 72%);
+  /* No wash. The frame is flat black apart from the ribbon — a broad glow here
+     lifted every corner to grey and the band stopped reading as a band. */
 }
+/* Rising flank: enters low on the left, crests just above the headline. */
+.cta-glow::before,
 .cta-glow::after{
   content:'';
   position:absolute;
-  left:-46%;
-  top:-16%;
-  width:270%;
-  height:640%;
-  border-radius:50%;
-  background:radial-gradient(closest-side,
-    transparent 0%,
-    transparent 93%,
-    rgba(255,255,255,.04) 95.4%,
-    rgba(255,255,255,.30) 98.4%,
-    rgba(255,255,255,.04) 99.8%,
-    transparent 100%);
-  filter:blur(13px);
+  pointer-events:none;
+}
+   The bands are deliberately shallow — height is what decides whether this reads
+   as a light streak or as fog. At 52-62% tall the two gradients filled the frame
+   and the ribbon disappeared into a general haze. */
+   In the frame the ribbon enters at the LEFT EDGE around a third of the way down,
+   climbs to its crest just above the centre of the headline, then eases back down
+   toward the right edge. Rotations are gentle and opposite: too steep and the band
+   runs diagonally off the bottom-right corner instead of arcing. */
+.cta-glow::before{
+  left:-34%;
+  top:24%;
+  width:86%;
+  height:19%;
+  background:radial-gradient(closest-side ellipse,
+    rgba(255,255,255,.44) 0%,
+    rgba(255,255,255,.17) 40%,
+    rgba(255,255,255,.045) 68%,
+    transparent 82%);
+  transform:rotate(-9deg);
+  filter:blur(17px);
+}
+/* Falling flank: continues the crest out toward the right edge, fading as it
+   goes so the ribbon thins out rather than stopping. */
+.cta-glow::after{
+  left:30%;
+  top:17%;
+  width:88%;
+  height:17%;
+  background:radial-gradient(closest-side ellipse,
+    rgba(255,255,255,.32) 0%,
+    rgba(255,255,255,.12) 42%,
+    rgba(255,255,255,.032) 70%,
+    transparent 84%);
+  transform:rotate(7deg);
+  filter:blur(19px);
 }
 
-@media (max-width:600px){
-  .cta-glow::after{ left:-120%; top:12%; width:420%; height:300%; filter:blur(10px); }
+@media (max-width:900px){
+  .cta-glow::before{ left:-24%; top:21%; width:92%; height:16%; filter:blur(13px); }
+  .cta-glow::after{ left:40%; top:17%; width:92%; height:14%; filter:blur(14px); }
 }
+@media (max-width:600px){
+  .cta-glow::before{ left:-28%; top:23%; width:110%; height:13%; filter:blur(9px); }
+  .cta-glow::after{ left:34%; top:20%; width:106%; height:11%; filter:blur(10px); }
+}
+/* The bar is pushed to the bottom by margin-top:auto, so the headline must be
+   centred in the space above it rather than sitting at the top of the flex
+   column — it was starting at 0% with ~340px of dead black underneath. */
 .cta-title{
   position:relative; z-index:2;
-  padding:0 var(--pad) clamp(30px,4.2vw,56px);
+  margin:auto 0;
+  padding:clamp(30px,4.2vw,56px) var(--pad);
   /* 7.2vw matches the cap height in frame 172; 6.4vw read noticeably small. */
   font-size:clamp(38px,7.2vw,128px);
   font-weight:400;
