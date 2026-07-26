@@ -35,7 +35,9 @@
   <span></span><span></span>
 </button>
 
-<nav class="menu-overlay" id="menuOverlay" aria-hidden="true">
+<!-- `inert` while closed: the overlay stays in the layout (clipped to a 0% circle),
+     so without it these links are invisible but still tabbable. main.js lifts it on open. -->
+<nav class="menu-overlay" id="menuOverlay" aria-hidden="true" inert>
   <div class="menu-inner">
     <ul class="menu-links">
       <li><a href="#about" data-i="01">About</a></li>

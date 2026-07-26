@@ -20,22 +20,92 @@
   const menuOverlay = document.getElementById('menuOverlay');
   const hero = document.querySelector('.hero');
 
-  function toggleMenu(open) {
-    const isOpen = open !== undefined ? open : !menuOverlay.classList.contains('is-open');
-    menuOverlay.classList.toggle('is-open', isOpen);
-    menuBtn.classList.toggle('is-open', isOpen);
-    menuBtn.setAttribute('aria-expanded', String(isOpen));
-    menuOverlay.setAttribute('aria-hidden', String(!isOpen));
-    menuBtn.setAttribute('aria-label', isOpen ? 'Close menu' : 'Open menu');
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+  const FOCUSABLE = 'a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])';
+
+  function isMenuOpen() {
+    return menuOverlay.classList.contains('is-open');
+  }
+
+  // Take the page behind the overlay out of the tab order and the accessibility
+  // tree. Only aria-hidden we added ourselves is removed again — .split and
+  // .wipe are decorative and carry their own in the markup.
+  function setBehindInert(on) {
+    Array.from(document.body.children).forEach(el => {
+      if (el === menuOverlay || el === menuBtn) return;
+      if (on) {
+        el.setAttribute('inert', '');
+        if (!el.hasAttribute('aria-hidden')) {
+          el.setAttribute('aria-hidden', 'true');
+          el.dataset.menuHid = '';
+        }
+      } else {
+        el.removeAttribute('inert');
+        if ('menuHid' in el.dataset) {
+          el.removeAttribute('aria-hidden');
+          delete el.dataset.menuHid;
+        }
+      }
+    });
+  }
+
+  // The button sits outside the overlay but is its only visible dismiss control
+  // while open, so it belongs in the cycle. DOM order already puts it first.
+  function focusCycle() {
+    return [menuBtn].concat(Array.from(menuOverlay.querySelectorAll(FOCUSABLE)));
+  }
+
+  function toggleMenu(open, restoreFocus) {
+    const next = open !== undefined ? open : !isMenuOpen();
+    menuOverlay.classList.toggle('is-open', next);
+    menuBtn.classList.toggle('is-open', next);
+    menuBtn.setAttribute('aria-expanded', String(next));
+    menuOverlay.setAttribute('aria-hidden', String(!next));
+    menuBtn.setAttribute('aria-label', next ? 'Close menu' : 'Open menu');
+    document.body.style.overflow = next ? 'hidden' : '';
+    setBehindInert(next);
+
+    if (next) {
+      menuOverlay.removeAttribute('inert');
+      const first = menuOverlay.querySelector('.menu-links a');
+      if (first) first.focus();
+    } else {
+      // Move focus out before inerting, otherwise the browser drops it to <body>.
+      if (restoreFocus !== false) menuBtn.focus();
+      menuOverlay.setAttribute('inert', '');
+    }
   }
 
   menuBtn.addEventListener('click', () => toggleMenu());
   menuOverlay.addEventListener('click', e => {
-    if (e.target.tagName === 'A') toggleMenu(false);
+    // Following a link hands focus to the target section — don't pull it back.
+    if (e.target.tagName === 'A') toggleMenu(false, false);
   });
+
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') toggleMenu(false);
+    if (!isMenuOpen()) return;
+
+    if (e.key === 'Escape') {
+      toggleMenu(false);
+      return;
+    }
+    if (e.key !== 'Tab') return;
+
+    const items = focusCycle();
+    if (!items.length) return;
+    const first = items[0];
+    const last = items[items.length - 1];
+    const active = document.activeElement;
+
+    if (active !== menuBtn && !menuOverlay.contains(active)) {
+      e.preventDefault();
+      first.focus();
+    } else if (e.shiftKey && active === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && active === last) {
+      e.preventDefault();
+      first.focus();
+    }
   });
 
   // Menu button only appears once the hero has scrolled past
