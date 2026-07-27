@@ -461,9 +461,12 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   /* Capped on BOTH axes, because the real set mixes wide wordmarks with square
      roundels. Width alone let a roundel's own aspect squash it to ~39px of
      visible art inside a width-limited box; the height cap is what actually
-     governs those, and the width cap governs the wordmarks. */
-  max-width:min(100%,168px);
-  max-height:clamp(38px,4vw,52px);
+     governs those, and the width cap governs the wordmarks.
+     Sized to the Figma, where a mark occupies roughly 45% of its cell's width
+     and ~22% of its height. At 168/52 they filled ~67% of the cell and the
+     wall read heavy and cramped next to the reference. */
+  max-width:min(100%,112px);
+  max-height:clamp(26px,2.4vw,34px);
   height:auto;
   /* .42 was tuned for flat grey placeholder text. Real marks (several of them
      white silhouettes) need more presence to read on Void Black. */

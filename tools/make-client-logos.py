@@ -64,9 +64,15 @@ JOBS = [
     # (source file,               output name,             mode)
     ("Kalshi.png",                "kalshi.png",            "keep"),
     ("Algorand.png",              "algorand.png",          "whiten"),
-    ("Pudgy Penguins.png",        "pudgy-penguins.png",    "keep"),
-    ("onara.png",                 "onara.png",             "keep"),
-    ("Abstract.jpg",              "abstract.png",          "dropbg"),
+    # v2 of the wordmark. An earlier wordmark set "PENGUINS" in dark navy,
+    # which measured as near-black ink and half-vanished on Void Black; this
+    # one sets it pale (measured 237 luminance), so the whole mark reads.
+    ("Pudgy Penguin Wordmark v2.png", "pudgy-penguins.png", "keep"),
+    ("Onara Wordmark.png",        "onara.png",             "keep"),
+    # The green wordmark, which is what the Figma shows. `Abstract.jpg` in the
+    # same folder is the older dark-badge icon (a light mark inside a dark
+    # badge on a white page) — kept there for reference, not built.
+    ("Abstract Wordmark.png",     "abstract.png",          "keep"),
     ("Humanity Protocol.png",     "humanity-protocol.png", "keep"),
     # Ships on a near-black square (#1E1E1E) that would read as a subtle panel
     # against Void Black, so the background is flooded away.
