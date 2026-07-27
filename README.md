@@ -40,10 +40,10 @@ with the final filename**, already wired into the page.
 
 | Folder | Files | Size | What |
 |---|---|---|---|
-| `works/` | 6 | 1364×860 | **already real** — rasterised from `Work Showcases/`, see below |
+| `works/` | 6 | 682×430 SVG | **already real** — built from `Work Showcases/`, see below |
 | `showcase/` | 5 | 1080×2340 | vertical phone-screen stills |
 | `services/` | 7 | 800×800 | one still per service, shown on row hover |
-| `team/` | 2 | 800×1000 | Johannes, Hannah |
+| `team/` | 2 | square | **already real** — built from `Team Photos/`, see below |
 | `clients/` | 10 | tightly cropped | **already real** — 8 PNG via `tools/make-client-logos.py`, plus `bybit.svg` / `maxy.svg` |
 | `og-image.jpg` | 1 | 1200×630 | link preview for X / LinkedIn / iMessage |
 
@@ -56,18 +56,34 @@ which reads `Client Logos/` at the repo root. Both are pure stdlib (plus macOS `
 
 ### Work card images
 
-`Work Showcases/` (repo root, **not served**) holds the delivered Figma exports. They are
-composed scenes — background fill, a positioned and sometimes mirrored raster, a border —
-wrapping a base64 PNG, so the embedded raster cannot simply be pulled out without losing
-the composition. They are rendered whole and saved to `assets/img/works/<slug>.jpg`.
+`Work Showcases/` (repo root, **not served**) holds the delivered Figma exports;
+`tools/build-work-svgs.py` turns them into `assets/img/works/<slug>.svg`.
 
-That conversion matters: as delivered the six came to **3.4 MB**; rasterised to JPEG at
-q86 they are **472 KB**, for no visible difference. Photographic content as PNG, then
-base64'd (+33%), is the worst case for weight — the same reason this file says to export
-work as JPG.
+**They stay SVG** — the frame, background fill, border stroke and clip paths are real
+vector and scale cleanly to any card width. What is *not* vector is the photograph each
+one embeds, which Figma writes out as a base64 PNG. PNG is the worst container for a
+photo, and base64 adds a further 33%: as delivered the six came to **3.4 MB**, nearly all
+of it one lossless-encoded photo per file.
 
-To replace one: drop the new SVG in `Work Showcases/` and re-render it to the matching
-`<slug>.jpg`. The filenames in `index.html` never change, so no code edit is needed.
+So the tool rewrites only that payload — the embedded raster is re-encoded as JPEG and
+spliced back into the same SVG. The vector composition is untouched, the file is still an
+SVG, it still scales. **3.4 MB → 368 KB.**
+
+One exception, handled automatically: JPEG has no alpha, so a payload that genuinely uses
+transparency can't be converted without compositing it onto something. Each is tested for
+*real* (not merely declared) alpha first — all six declare RGBA, but only `Hano_Showcase`
+actually varies it, so that one keeps its PNG payload.
+
+To replace one: drop the new SVG in `Work Showcases/`, add it to `JOBS` if the name is
+new, re-run the tool. The filenames in `index.html` never change, so no code edit needed.
+
+### Team photos
+
+`Team Photos/` (repo root, **not served**) holds the originals. They are converted to
+`assets/img/team/<slug>.jpg` at q86 — 1.6 MB of PNG down to 76 KB, at native resolution
+(don't upscale with `sips -Z`; it adds bytes, not detail). Both are square while the card
+is 4:5, so `background-size:cover` crops the sides — centred faces survive that, off-centre
+ones won't.
 
 ## Favicons
 
