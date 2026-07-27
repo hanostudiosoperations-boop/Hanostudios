@@ -128,19 +128,12 @@ for i, (slug, name, role, tone) in enumerate([
     save(im, f"{BASE}/team/{slug}.jpg")
 
 # ---------------------------------------------------------------- CLIENT LOGOS
-print("\nClient logos (440x120, transparent PNG)")
-CLIENTS = ["Bybit","Kalshi","Algorand","Pudgy Penguins","Levels Socials",
-           "Humanity Protocol","Virtune","Onara","Maxy","Abstract"]
-for name in CLIENTS:
-    slug = name.lower().replace(" ", "-")
-    im = Image.new("RGBA", (440, 120), (0, 0, 0, 0))
-    d = ImageDraw.Draw(im)
-    fs = 46 if len(name) < 12 else 34
-    f = ImageFont.truetype(F_BOLD, fs)
-    bb = d.textbbox((0, 0), name, font=f)
-    d.text(((440 - (bb[2] - bb[0])) / 2, (120 - (bb[3] - bb[1])) / 2 - bb[1]),
-           name, font=f, fill=(255, 255, 255, 205))
-    save(im, f"{BASE}/clients/{slug}.png")
+# Deliberately NOT generated any more. assets/img/clients/ holds real supplied
+# brand marks, built by tools/make-client-logos.py from `Client Logos/` at the
+# repo root. Regenerating fake wordmarks over the top of real client logos is
+# never what you want, so this script no longer touches that directory.
+print("\nClient logos: skipped — assets/img/clients/ is real artwork.")
+print("  rebuild with: python3 tools/make-client-logos.py")
 
 # ---------------------------------------------------------------- OG IMAGE
 print("\nSocial share image (1200x630)")

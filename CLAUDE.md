@@ -73,11 +73,24 @@ overwrite the file at the same path. No code changes needed.**
 | `assets/img/showcase/` | 5 | 1080×2340 (9:19.5) |
 | `assets/img/services/` | 7 | 800×800 (1:1) |
 | `assets/img/team/` | 2 | 800×1000 (4:5) |
-| `assets/img/clients/` | 10 | 440×120 transparent PNG |
 | `assets/img/og-image.jpg` | 1 | 1200×630 |
 
-Client logos are text wordmarks standing in for real brand marks. Replace with the actual
-logos — Hano has the rights as their client. Do not scrape brand logos from the web.
+**`assets/img/clients/` is real, not placeholder.** Six supplied brand marks, built from
+`Client Logos/` (repo root) by `tools/make-client-logos.py`. Re-run that after changing
+anything in there; don't hand-edit the output. Bybit stays `.svg` (vector); the rest are
+tightly-cropped transparent PNGs — *not* padded to a fixed canvas, because the set mixes
+wide wordmarks with square roundels, and the CSS caps both width and height so the two
+kinds land at the same optical weight.
+
+The grid sits on Void Black, so polarity matters more than format: Algorand arrived as
+pure-black artwork and Abstract as a light mark inside a dark badge on a white page. The
+tool's per-logo modes (`keep` / `whiten` / `dropbg`) handle that — see its docstring
+before adding a logo, and check the result against black rather than assuming.
+
+Levels Socials, Humanity Protocol, Virtune and Maxy are in neither folder; their tiles
+were removed rather than left as fake wordmarks. Add the artwork, add a line to `JOBS`,
+re-run, and restore the `<li>`. `Client Logos/` also holds a dozen further real client
+marks that are not on the site yet.
 
 ## Two deliberate resilience behaviours — don't remove them
 

@@ -434,9 +434,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 
 .clients{ margin-top:clamp(24px,4vw,60px); }
 
+/* 3 x 2 for the six supplied marks. Was 5 columns for ten placeholder
+   wordmarks; at 5 wide, six items left an orphan row of one. */
 .client-grid{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
+  grid-template-columns:repeat(3,1fr);
   margin-top:18px;
   border:1px solid var(--ink-08);
 }
@@ -457,14 +459,23 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .client-grid li:hover{ color:var(--frost); background:var(--ink-08); }
 .client-grid img{
   width:auto;
-  max-width:min(100%,140px);
+  /* Capped on BOTH axes, because the real set mixes wide wordmarks with square
+     roundels. Width alone let a roundel's own aspect squash it to ~39px of
+     visible art inside a width-limited box; the height cap is what actually
+     governs those, and the width cap governs the wordmarks. */
+  max-width:min(100%,168px);
+  max-height:clamp(38px,4vw,52px);
   height:auto;
-  opacity:.42;
+  /* .42 was tuned for flat grey placeholder text. Real marks (several of them
+     white silhouettes) need more presence to read on Void Black. */
+  opacity:.62;
   transition:opacity .3s ease;
 }
 .client-grid li:hover img{ opacity:1; }
-.client-grid li:nth-child(5n){ border-right:0; }
-.client-grid li:nth-child(n+6){ border-bottom:0; }
+/* 3 across, 2 down: no right edge on the 3rd of each row, no bottom edge on
+   the last row. The outer border on .client-grid supplies the frame. */
+.client-grid li:nth-child(3n){ border-right:0; }
+.client-grid li:nth-child(n+4){ border-bottom:0; }
 
 /* ============================================================
    WORKS — horizontal scroll
@@ -1163,11 +1174,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .faq{ grid-template-columns:1fr; }
   .team-grid{ grid-template-columns:1fr; }
   .footer-top{ grid-template-columns:1fr; }
+  /* 2 across, 3 down. Each override has to undo the desktop rule it replaces,
+     since these are the same specificity — hence the explicit re-adds. */
   .client-grid{ grid-template-columns:repeat(2,1fr); }
-  .client-grid li:nth-child(5n){ border-right:1px solid var(--ink-08); }
+  .client-grid li:nth-child(3n){ border-right:1px solid var(--ink-08); }
   .client-grid li:nth-child(2n){ border-right:0; }
-  .client-grid li:nth-child(n+6){ border-bottom:1px solid var(--ink-08); }
-  .client-grid li:nth-child(n+9){ border-bottom:0; }
+  .client-grid li:nth-child(n+4){ border-bottom:1px solid var(--ink-08); }
+  .client-grid li:nth-child(n+5){ border-bottom:0; }
   .showcase{ grid-template-columns:1fr; align-items:start; }
   /* Was 40px. Frame 198's gap from the arrows down to the phones is much
      tighter than that — measured against the reference at roughly half this. */
