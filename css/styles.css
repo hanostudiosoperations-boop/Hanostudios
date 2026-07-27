@@ -429,7 +429,15 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   font-weight:400;
   letter-spacing:-.035em;
   line-height:1.24;
-  max-width:26ch;
+  /* em, not ch. Each .sc-line is a pre-broken line from the Figma and must sit
+     on ONE visual line — the reveal animates each as a single unit, so a line
+     that wraps reveals as a two-line block and the whole rhythm is wrong.
+     Measured across 390-1920, the longest of the four lines is a consistent
+     ~23.7x its own font-size, so 25em clears it at every size while still
+     constraining the column on very wide screens. The old 26ch resolved to just
+     807px against a 1187px line, so all four lines wrapped and the section was
+     eight lines tall instead of four. */
+  max-width:25em;
 }
 
 .clients{ margin-top:clamp(24px,4vw,60px); }
@@ -444,7 +452,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .client-grid li{
   display:grid;
   place-items:center;
-  min-height:clamp(74px,7vw,104px);
+  /* ~8.6% of the grid's width per row, measured off the reference (105px tall
+     rows on a 1225px-wide grid at a 1332 viewport). 7vw gave 93px and the wall
+     read shallower than the frame. */
+  min-height:clamp(78px,7.9vw,112px);
   padding:12px;
   font-size:clamp(12px,1.15vw,17px);
   font-weight:600;
@@ -468,12 +479,12 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   max-width:min(100%,112px);
   max-height:clamp(26px,2.4vw,34px);
   height:auto;
-  /* .42 was tuned for flat grey placeholder text. Real marks (several of them
-     white silhouettes) need more presence to read on Void Black. */
-  opacity:.62;
-  transition:opacity .3s ease;
+  /* Full strength. These are the clients' own marks in their own brand colours,
+     and the Figma draws them at full saturation — Kalshi's green, Maxy's orange,
+     Abstract's green all read as themselves. Dimming (.42, then .62) was carried
+     over from the flat grey text placeholders and muted every one of them. */
+  opacity:1;
 }
-.client-grid li:hover img{ opacity:1; }
 /* 5 across, 2 down: no right edge on the 5th of each row, no bottom edge on
    the last row. The outer border on .client-grid supplies the frame. */
 .client-grid li:nth-child(5n){ border-right:0; }
