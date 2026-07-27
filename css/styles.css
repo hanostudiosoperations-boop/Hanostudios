@@ -636,7 +636,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   position:relative;
   flex:none;
   width:clamp(150px,15vw,232px);
-  aspect-ratio:9/19.5;
+  /* Matches the clips (540x960). At the 9/19.5 of a modern handset, cover
+     cropped ~11% off each side — enough to lose the client logo in the corner
+     and clip the captions, which sit close to the edge in every one of these.
+     Showing the work whole beats a taller mockup. */
+  aspect-ratio:9/16;
   scroll-snap-align:center;
   display:flex;
   align-items:flex-end;
@@ -645,10 +649,14 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   border-radius:26px;
   background-size:cover;
   overflow:hidden;                 /* keeps the video inside the rounded frame */
-  filter:brightness(.5);
+  /* Inactive slides are dimmed AND blurred, per the reference. The blur is what
+     makes the strip read as one phone in focus rather than several competing
+     for attention; main.js pauses these same videos, so a blurred neighbour is
+     genuinely stopped, not merely out of focus. */
+  filter:brightness(.42) blur(4px);
   transition:filter .5s ease, transform .5s ease;
 }
-.phone:hover{ filter:brightness(1); transform:translateY(-10px); }
+.phone:hover{ filter:brightness(.72) blur(1.5px); }
 
 /* The notch. Frame 198's phones are proper device mockups — this was a plain
    rounded card with no hardware cues at all, which is why it read as "just a
@@ -667,9 +675,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   background:rgba(0,0,0,.55);
 }
 
-/* The active slide is lit and lifted while its video plays, so the strip reads
-   as one playing phone flanked by dimmed neighbours. */
-.phone.is-active{ filter:brightness(1); transform:translateY(-10px); }
+/* The active slide is sharp and lifted while its video plays. Also wins over
+   :hover — without the second selector, pointing at the playing phone would
+   drop it back to the dimmed hover state. */
+.phone.is-active,
+.phone.is-active:hover{ filter:brightness(1) blur(0); transform:translateY(-10px); }
 
 .phone-video{
   position:absolute;

@@ -9,3 +9,14 @@
 
 # Node (not used — no build step — but keeps stray installs out of the repo)
 node_modules/
+
+# Camera-original showcase footage. 317MB across four files, one of them
+# 192MB — GitHub hard-rejects anything over 100MB, and committing this would
+# bloat the repo permanently even if later deleted. Keep the originals here
+# locally to re-encode from; only the 5.8MB web versions in
+# assets/video/showcase/ are tracked. See README.
+Showcase Videos (source)/
+
+# Oversized design originals kept locally to re-export from. The OG source is
+# 7200x3780 / 20MB for an image that ships at 1200x630 / 28KB.
+Brand Assets (source)/

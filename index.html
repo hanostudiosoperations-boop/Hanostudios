@@ -260,41 +260,39 @@
     </div>
   </div>
 
-  <!-- Each phone holds a video that plays when it becomes the active slide, then
-       auto-advances to the next on 'ended'. The poster is the existing still, so
-       until real files land in assets/video/showcase/ the section looks exactly as
-       it does now — main.js only attaches a source once a file is present.
-       muted + playsinline are required for autoplay on iOS and Chrome. -->
+  <!-- Each phone holds one clip. main.js plays only the active slide, pauses and
+       rewinds the rest, and advances on 'ended'; the arrows drive the same
+       scroll the pin does, so nothing fights.
+       muted + playsinline are required for autoplay on iOS and Chrome — the
+       clips are encoded with no audio track at all, so there is nothing to
+       unmute. preload="none" plus data-src (main.js attaches src only when a
+       slide first becomes active) means a visitor downloads one clip, not four.
+       Posters are real first frames of each clip, so a phone looks right before
+       its video has loaded. -->
   <div class="showcase-stage" id="showStage">
-    <div class="phone" data-tone="purple" data-label="Hano Crypto">
+    <div class="phone" data-tone="lilac" data-label="Levels Socials">
       <video class="phone-video" playsinline muted preload="none"
-             poster="assets/img/showcase/hano-crypto.jpg"></video>
-      <!-- add data-src="assets/video/showcase/hano-crypto.mp4" once the clip exists -->
-      <span>Hano Crypto</span>
+             poster="assets/img/showcase/levels-socials.jpg"
+             data-src="assets/video/showcase/levels-socials.mp4"></video>
+      <span>Levels Socials</span>
     </div>
-    <div class="phone" data-tone="amber" data-label="Bybit Card">
+    <div class="phone" data-tone="steel" data-label="XRP Bank">
       <video class="phone-video" playsinline muted preload="none"
-             poster="assets/img/showcase/bybit-card.jpg"></video>
-      <!-- add data-src="assets/video/showcase/bybit-card.mp4" once the clip exists -->
-      <span>Bybit Card</span>
+             poster="assets/img/showcase/xrp-bank.jpg"
+             data-src="assets/video/showcase/xrp-bank.mp4"></video>
+      <span>XRP Bank</span>
     </div>
-    <div class="phone" data-tone="green" data-label="Kalshi">
+    <div class="phone" data-tone="amber" data-label="War Against China">
       <video class="phone-video" playsinline muted preload="none"
-             poster="assets/img/showcase/kalshi.jpg"></video>
-      <!-- add data-src="assets/video/showcase/kalshi.mp4" once the clip exists -->
-      <span>Kalshi</span>
+             poster="assets/img/showcase/war-against-china.jpg"
+             data-src="assets/video/showcase/war-against-china.mp4"></video>
+      <span>War Against China</span>
     </div>
-    <div class="phone" data-tone="steel" data-label="The Crypteum">
+    <div class="phone" data-tone="purple" data-label="Elites Crypto">
       <video class="phone-video" playsinline muted preload="none"
-             poster="assets/img/showcase/the-crypteum.jpg"></video>
-      <!-- add data-src="assets/video/showcase/the-crypteum.mp4" once the clip exists -->
-      <span>The Crypteum</span>
-    </div>
-    <div class="phone" data-tone="orange" data-label="Maxy.co">
-      <video class="phone-video" playsinline muted preload="none"
-             poster="assets/img/showcase/maxy.jpg"></video>
-      <!-- add data-src="assets/video/showcase/maxy.mp4" once the clip exists -->
-      <span>Maxy.co</span>
+             poster="assets/img/showcase/elites-crypto.jpg"
+             data-src="assets/video/showcase/elites-crypto.mp4"></video>
+      <span>Elites Crypto</span>
     </div>
   </div>
 </section>

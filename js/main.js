@@ -239,17 +239,26 @@
       return (p.left + p.width / 2) - (s.left + s.width / 2);
     };
 
-    // Which phone is actually nearest centre right now. Needed because a nav
-    // link (href="#process") jumps here via the browser's own native
-    // smooth-scroll (html{scroll-behavior:smooth}), which runs outside GSAP's
-    // ticker — ScrollTrigger's onUpdate can miss/lag behind it, so `current`
-    // can go stale. Re-deriving from actual position at every resync point,
-    // instead of trusting whatever `current` last was, fixes that regardless
-    // of how the visitor got here.
+    // Which phone the strip is HEADING for. Re-derived from position at every
+    // resync point rather than trusting whatever `current` last was, because a
+    // nav link (href="#process") arrives via the browser's own native
+    // smooth-scroll, outside GSAP's ticker, and can leave `current` stale.
+    //
+    // Crucially this reads the trigger's progress, not stage.scrollLeft. The
+    // pin scrubs scrollLeft with 0.6s of easing, so scrollLeft trails the real
+    // scroll position — and 'scrollend' fires when the WINDOW stops, while the
+    // scrub is still catching up. Resyncing off the lagging value therefore
+    // resolved to the phone we were leaving and undid the move: auto-advance
+    // on 'ended' silently rewound to the clip that had just finished.
+    // Progress is the raw scroll-derived value, so it is already at the target.
     var nearestPhone = function () {
+      const span = stage.scrollWidth - stage.clientWidth;
+      // Where scrollLeft will settle, vs where it is this instant.
+      const target = showST ? showST.progress * span : stage.scrollLeft;
+      const lag = target - stage.scrollLeft;
       let best = 0, bestDist = Infinity;
       phones.forEach((phone, i) => {
-        const d = Math.abs(centreDelta(phone));
+        const d = Math.abs(centreDelta(phone) + lag);
         if (d < bestDist) { bestDist = d; best = i; }
       });
       return best;

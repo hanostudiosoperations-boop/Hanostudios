@@ -41,11 +41,11 @@ with the final filename**, already wired into the page.
 | Folder | Files | Size | What |
 |---|---|---|---|
 | `works/` | 6 | 682×430 SVG | **already real** — built from `Work Showcases/`, see below |
-| `showcase/` | 5 | 1080×2340 | vertical phone-screen stills |
+| `showcase/` | 4 | 540×960 | **already real** — poster frames; clips in `assets/video/showcase/` |
 | `services/` | 7 | 800×800 | one still per service, shown on row hover |
 | `team/` | 2 | square | **already real** — built from `Team Photos/`, see below |
 | `clients/` | 10 | tightly cropped | **already real** — 8 PNG via `tools/make-client-logos.py`, plus `bybit.svg` / `maxy.svg` |
-| `og-image.jpg` | 1 | 1200×630 | link preview for X / LinkedIn / iMessage |
+| `og-image.jpg` | 1 | 1200×630 | **already real** — link preview for X / LinkedIn / iMessage |
 
 Export photographic work as JPG at ~80% quality, not PNG — PNG screenshots run 5–10×
 larger for no visible gain, and load time is a real conversion cost on mobile.
@@ -76,6 +76,33 @@ actually varies it, so that one keeps its PNG payload.
 
 To replace one: drop the new SVG in `Work Showcases/`, add it to `JOBS` if the name is
 new, re-run the tool. The filenames in `index.html` never change, so no code edit needed.
+
+### Showcase videos
+
+Four clips play in the phone carousel, wired in `index.html` via `data-src`. `main.js`
+plays only the active slide, pauses and rewinds the rest, and advances on `ended`.
+
+**They are encoded, not the originals.** As delivered the four were **317 MB** — 1080×1920
+camera masters at 14–16 Mbps, one of them 192 MB. GitHub hard-rejects any file over
+100 MB, so this was a blocker, not just a slow page. Re-encoded to **5.8 MB total**:
+
+```
+ffmpeg -i SOURCE -map 0:v:0 -vf scale=540:-2 -c:v libx264 -preset slow -crf 30 \
+       -profile:v main -level 3.1 -pix_fmt yuv420p -an -write_tmcd 0 \
+       -movflags +faststart assets/video/showcase/<slug>.mp4
+```
+
+- `540:-2` — the phone renders ~216 px wide, so 540 covers 2× retina.
+- `-an` — the clips play muted, so the audio track is pure waste.
+- `-map 0:v:0` + `-write_tmcd 0` — drops the camera's timecode track; without both, a
+  stray `tmcd` data stream survives into the output.
+- `+faststart` — moves the index to the front so playback can begin while downloading.
+
+Posters are real first frames (`ffmpeg -ss 1.5 -frames:v 1`), so a phone looks right
+before its clip loads. `.phone` is `aspect-ratio:9/16` to match the footage exactly —
+at a handset's 9/19.5, `cover` cropped ~11% off each side and cut the captions.
+
+Originals live in `Showcase Videos (source)/`, which is **gitignored**.
 
 ### Team photos
 
