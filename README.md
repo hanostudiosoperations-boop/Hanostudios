@@ -40,7 +40,7 @@ with the final filename**, already wired into the page.
 
 | Folder | Files | Size | What |
 |---|---|---|---|
-| `works/` | 6 | 1600×1000 | Bybit, Kalshi, Maxy, Levels Socials, The Crypteum, Hano Crypto |
+| `works/` | 6 | 1364×860 | **already real** — rasterised from `Work Showcases/`, see below |
 | `showcase/` | 5 | 1080×2340 | vertical phone-screen stills |
 | `services/` | 7 | 800×800 | one still per service, shown on row hover |
 | `team/` | 2 | 800×1000 | Johannes, Hannah |
@@ -53,6 +53,21 @@ larger for no visible gain, and load time is a real conversion cost on mobile.
 `tools/make-placeholders.py` regenerates the placeholder set if you ever need it back.
 It no longer owns `clients/` — those are real marks now; use `tools/make-client-logos.py`,
 which reads `Client Logos/` at the repo root. Both are pure stdlib (plus macOS `sips`).
+
+### Work card images
+
+`Work Showcases/` (repo root, **not served**) holds the delivered Figma exports. They are
+composed scenes — background fill, a positioned and sometimes mirrored raster, a border —
+wrapping a base64 PNG, so the embedded raster cannot simply be pulled out without losing
+the composition. They are rendered whole and saved to `assets/img/works/<slug>.jpg`.
+
+That conversion matters: as delivered the six came to **3.4 MB**; rasterised to JPEG at
+q86 they are **472 KB**, for no visible difference. Photographic content as PNG, then
+base64'd (+33%), is the worst case for weight — the same reason this file says to export
+work as JPG.
+
+To replace one: drop the new SVG in `Work Showcases/` and re-render it to the matching
+`<slug>.jpg`. The filenames in `index.html` never change, so no code edit is needed.
 
 ## Favicons
 
