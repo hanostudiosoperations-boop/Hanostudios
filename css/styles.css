@@ -571,6 +571,12 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    the heading as soon as the viewport was wide enough. */
 .showcase{
   position:relative;
+  /* Explicit, not inherited from body. main.js now pins this whole section
+     (position:fixed while pinned), and a fixed box with no background of its
+     own is transparent everywhere its children don't paint — Works, still
+     scrolling underneath in normal flow, showed straight through the grid
+     gaps and the empty space around the phones. */
+  background:var(--void);
   display:grid;
   grid-template-columns:minmax(240px,.72fr) 1.75fr;
   gap:clamp(24px,4vw,64px);
@@ -603,9 +609,14 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
      the outer slides never centre however far you scroll. */
   padding:40px 42% 40px 38%;
   overflow-x:auto;
-  scroll-snap-type:x mandatory;
   scrollbar-width:none;
 }
+/* Snap only when nothing is driving scrollLeft itself: the GSAP pin below sets
+   it every scrub tick, and the browser's own snap-settling logic fights that —
+   once the tween paused mid-scrub the stage would visibly snap to whichever
+   phone was nearest and jump, rather than tracking smoothly. Under .no-gsap /
+   reduced motion nothing scrubs it at all, so a manual swipe needs the snap. */
+.no-gsap .showcase-stage{ scroll-snap-type:x mandatory; }
 .showcase-stage::-webkit-scrollbar{ display:none; }
 
 .phone{
@@ -674,16 +685,24 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   position:sticky;
   top:0;
   height:100vh;
-  display:grid;
-  place-items:center;
   overflow:hidden;
 }
+/* Absolute + translate(-50%,-50%), not display:grid;place-items:center. The
+   circle's own unscaled box is 56vmax square (~473px on a 390-wide phone) —
+   wider than the container even before it starts growing. Centering an
+   oversized box that overflows its container is exactly the case where grid
+   alignment is inconsistent: it rendered visibly off-centre to the right on a
+   phone. An explicit centre-point + translate has no such ambiguity — it is
+   centred on the container's actual midpoint at every scale, full stop. */
 .wipe-circle::after{
   content:'';
+  position:absolute;
+  top:50%;
+  left:50%;
   width:56vmax; height:56vmax;
   border-radius:50%;
   background:var(--frost);
-  transform:scale(var(--scale));
+  transform:translate(-50%,-50%) scale(var(--scale));
   will-change:transform;
 }
 
@@ -1150,7 +1169,12 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .client-grid li:nth-child(n+6){ border-bottom:1px solid var(--ink-08); }
   .client-grid li:nth-child(n+9){ border-bottom:0; }
   .showcase{ grid-template-columns:1fr; align-items:start; }
-  .showcase-stage{ margin-top:40px; }
+  /* Was 40px. Frame 198's gap from the arrows down to the phones is much
+     tighter than that — measured against the reference at roughly half this. */
+  .showcase-stage{ margin-top:20px; }
+  /* Was 38px, hugely overshooting the reference's tight gap under the
+     subtext (~8px). */
+  .showcase-controls{ margin-top:14px; }
   /* Was 1fr (stacked title above description). Frame 196 keeps the title in a
      narrow left column and the description in a wider right column all the
      way down to phone width — the stack was never in the reference. */
@@ -1219,4 +1243,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   /* No pin runs in this mode, so the pin's scroll-room margin would be a real
      black gap. Same specificity as the rule that sets it; later in file wins. */
   .js:not(.no-gsap) .hero{ margin-bottom:0; }
+  /* Nothing scrubs .showcase-stage's scrollLeft in this mode either (main.js
+     gates that pin on !reduce) — same reasoning as .no-gsap above. */
+  .showcase-stage{ scroll-snap-type:x mandatory; }
 }

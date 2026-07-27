@@ -213,17 +213,69 @@
   const stage = document.getElementById('showStage');
   const prev = document.getElementById('showPrev');
   const next = document.getElementById('showNext');
+  // Hoisted out of the `if (stage)` block below so the pinned scroll-scrub —
+  // set up later, alongside the other pins, in actual page order (see the
+  // long comment down there for why the ordering itself matters) — can reach
+  // them too. showST is that pin's ScrollTrigger once it exists.
+  // navLock: true while an arrow/click/ended-driven page scroll is in flight,
+  // so the pin's per-tick resync doesn't fight it. See goTo().
+  let phones = [], current = 0, showST = null, navLock = false;
 
   if (stage) {
-    const phones = Array.from(stage.querySelectorAll('.phone'));
-    let current = 0;
+    phones = Array.from(stage.querySelectorAll('.phone'));
+
+    // How far this phone's centre currently sits from the stage's centre, in
+    // px. Measured from bounding rects, NOT offsetLeft: .showcase-stage is
+    // position:static, so a .phone's offsetParent is the .showcase section
+    // rather than the scroll container, and offsetLeft is therefore measured
+    // from the wrong origin (it includes the stage's own offset inside the
+    // section). centreOn() and nearestPhone() both used that same wrong origin
+    // before, so they agreed with each other while both being wrong — the
+    // active phone settled ~490px off centre. Rects are origin-independent and
+    // are exactly what "centred in the stage" means on screen.
+    var centreDelta = function (phone) {
+      const p = phone.getBoundingClientRect();
+      const s = stage.getBoundingClientRect();
+      return (p.left + p.width / 2) - (s.left + s.width / 2);
+    };
+
+    // Which phone is actually nearest centre right now. Needed because a nav
+    // link (href="#process") jumps here via the browser's own native
+    // smooth-scroll (html{scroll-behavior:smooth}), which runs outside GSAP's
+    // ticker — ScrollTrigger's onUpdate can miss/lag behind it, so `current`
+    // can go stale. Re-deriving from actual position at every resync point,
+    // instead of trusting whatever `current` last was, fixes that regardless
+    // of how the visitor got here.
+    var nearestPhone = function () {
+      let best = 0, bestDist = Infinity;
+      phones.forEach((phone, i) => {
+        const d = Math.abs(centreDelta(phone));
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      return best;
+    };
 
     function centreOn(index, smooth) {
       const phone = phones[index];
       if (!phone) return;
-      // Centre the target within the stage rather than scrollBy'ing a guessed
-      // step, so the active slide lines up exactly however wide the phones are.
-      const left = phone.offsetLeft - (stage.clientWidth - phone.offsetWidth) / 2;
+      const span = Math.max(1, stage.scrollWidth - stage.clientWidth);
+      // Where scrollLeft needs to land for this phone to sit dead centre.
+      // Derived from where it is NOW plus how far off centre it is, so it
+      // never depends on offsetParent (see centreDelta). Clamped, because the
+      // outermost phones can sit beyond the scrollable range.
+      const left = Math.max(0, Math.min(span, stage.scrollLeft + centreDelta(phone)));
+
+      // While the pin is live it OWNS stage.scrollLeft — it rewrites it from
+      // the page's scroll position on every tick, so setting scrollLeft here
+      // directly would be undone on the next frame (the arrows appeared to do
+      // nothing). Move the page instead, to the vertical offset that maps to
+      // this phone: one source of truth, and the arrows now travel through the
+      // same motion as a scroll rather than fighting it.
+      if (showST) {
+        const y = showST.start + (left / span) * (showST.end - showST.start);
+        window.scrollTo({ top: y, behavior: smooth && !reduce ? 'smooth' : 'auto' });
+        return;
+      }
       stage.scrollTo({ left: left, behavior: smooth && !reduce ? 'smooth' : 'auto' });
     }
 
@@ -231,7 +283,10 @@
     // fetched for slides the visitor never reaches. A phone with no data-src has
     // no clip yet — it keeps showing its poster and the carousel still works, so
     // the section degrades to exactly what it was before rather than 404ing.
-    function play(index) {
+    // `var`, not `function` — this file is strict mode, where a `function`
+    // declared inside a block is block-scoped and invisible to the pin set up
+    // later, outside this block.
+    var play = function (index) {
       phones.forEach((phone, i) => {
         const video = phone.querySelector('.phone-video');
         phone.classList.toggle('is-active', i === index);
@@ -252,6 +307,14 @@
 
     function goTo(index, smooth) {
       current = (index + phones.length) % phones.length;
+      // A programmatic move is now a PAGE scroll (see centreOn), and the pin's
+      // onUpdate re-derives `current` from stage.scrollLeft on every tick of
+      // it. With scrub easing, scrollLeft lags well behind — so mid-flight
+      // those ticks would keep resetting `current` back to where the strip
+      // still is, and a second goTo(current + 1) would compute its target off
+      // that stale value and stall. While we're driving, intent wins; once
+      // motion settles, position wins again (scrollend clears this).
+      navLock = true;
       centreOn(current, smooth);
       if (!reduce) play(current);
     }
@@ -272,8 +335,12 @@
     const showObserver = new IntersectionObserver(
       entries => entries.forEach(en => {
         if (reduce) return;
-        if (en.isIntersecting) play(current);
-        else phones.forEach(p => {
+        if (en.isIntersecting) {
+          // Resync to wherever the strip actually is, not whatever `current`
+          // last held — see nearestPhone()'s comment.
+          current = nearestPhone();
+          play(current);
+        } else phones.forEach(p => {
           const v = p.querySelector('.phone-video');
           if (v) v.pause();
         });
@@ -282,6 +349,8 @@
     );
     showObserver.observe(stage);
   }
+  // The pin itself is set up later, with the other pins — see that comment
+  // for why creating it here, this early, silently broke it.
 
   /* ---------------- FAQ smooth open/close ---------------- */
 
@@ -643,6 +712,63 @@
     });
   }
 
+  // Showcase carousel: pin the section and drive the strip's native
+  // scrollLeft with vertical scroll, the same pattern as Works just above —
+  // first phone starts centred, continued scrolling pushes the active phone
+  // left as the next one takes centre, and the pin releases the instant the
+  // last phone is centred. Every width, not gsap.matchMedia'd to desktop like
+  // Works — the Figma prototype (frame 198) shows this exact scroll-driven
+  // interaction on a phone screen too. Arrows/click/video-ended still call
+  // goTo() -> stage.scrollTo() as a manual nudge on top of this.
+  //
+  // This has to be created HERE — after Works — not back where the rest of
+  // the carousel (arrows, click, IntersectionObserver) is set up. That
+  // earlier spot runs before Works' own pin exists yet, and ScrollTrigger
+  // measures a trigger's start position from the CURRENT layout at the
+  // moment it's created: built that early, .showcase's start landed almost
+  // exactly on top of Works' start (they measured ~1px apart), and the two
+  // pins overlapped for the entire length of the Works horizontal scroll
+  // instead of running one after the other. Every other pin on this page is
+  // already created in the same order its section appears on the page —
+  // this was the one exception, and that was the bug.
+  if (stage) {
+    const showDistance = () => Math.max(0, stage.scrollWidth - stage.clientWidth);
+    const showTween = gsap.to(stage, {
+      scrollLeft: () => showDistance(),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '.showcase',
+        start: 'top top',
+        end: () => '+=' + showDistance(),
+        scrub: 0.6,
+        pin: true,
+        pinSpacing: true,
+        invalidateOnRefresh: true,
+        onUpdate: () => {
+          if (navLock) return;      // an arrow/click move is mid-flight
+          const idx = nearestPhone();
+          if (idx !== current) { current = idx; play(current); }
+        }
+      }
+    });
+    // centreOn() needs this to translate a phone into a page-scroll offset.
+    showST = showTween.scrollTrigger;
+    // Belt-and-braces final resync once the browser reports scrolling has
+    // genuinely stopped. A nav link (href="#process") lands here via native
+    // smooth-scroll, which can cross this section's intersection threshold
+    // (triggering the IntersectionObserver's resync, set up earlier) well
+    // before the animation is actually done travelling — so that resync can
+    // itself run against a stale mid-flight scrollLeft. 'scrollend' only
+    // fires once motion has fully settled, whatever caused it, so this is
+    // the one point that is never early.
+    window.addEventListener('scrollend', () => {
+      // Motion has stopped, so release the lock and let position win again.
+      navLock = false;
+      const idx = nearestPhone();
+      if (idx !== current) { current = idx; play(current); }
+    });
+  }
+
   // Circle wipe into the light services section
   const wipeCircle = document.getElementById('wipeCircle');
   if (wipeCircle) {
@@ -679,28 +805,10 @@
     );
   }
 
-  // Showcase carousel drifts as the section passes, so the phones read as a
-  // moving strip rather than a static row. Desktop only — on a phone the drift
-  // fights the visitor's own swipe through the same strip.
-  const showcaseStage = document.getElementById('showStage');
-  if (showcaseStage) {
-    mm.add('(min-width: 701px)', () => {
-      gsap.fromTo(showcaseStage,
-        { x: () => Math.min(160, window.innerWidth * 0.10) },
-        {
-          x: () => -Math.min(160, window.innerWidth * 0.10),
-          ease: 'none',
-          scrollTrigger: {
-            trigger: '.showcase',
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 0.8,
-            invalidateOnRefresh: true
-          }
-        }
-      );
-    });
-  }
+  // Showcase carousel is now driven by the pinned scroll-scrub set up back in
+  // the carousel block above (search "showDistance") — see the comment there
+  // for why. This used to be a subtle desktop-only parallax drift; that is
+  // gone, because the real motion is now the scrub itself.
 
   // Footer watermark rises into place. A horizontal parallax was the wrong move
   // once the mark was sized to fit inside the page margins — with no overflow
