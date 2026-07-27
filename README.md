@@ -87,16 +87,27 @@ camera masters at 14–16 Mbps, one of them 192 MB. GitHub hard-rejects any file
 100 MB, so this was a blocker, not just a slow page. Re-encoded to **5.8 MB total**:
 
 ```
-ffmpeg -i SOURCE -map 0:v:0 -vf scale=540:-2 -c:v libx264 -preset slow -crf 30 \
-       -profile:v main -level 3.1 -pix_fmt yuv420p -an -write_tmcd 0 \
-       -movflags +faststart assets/video/showcase/<slug>.mp4
+ffmpeg -i SOURCE -map 0:v:0 -map 0:a:0 -vf scale=540:-2 \
+       -c:v libx264 -preset slow -crf 30 -profile:v main -level 3.1 \
+       -pix_fmt yuv420p -c:a aac -b:a 96k -ac 2 -ar 44100 \
+       -write_tmcd 0 -movflags +faststart assets/video/showcase/<slug>.mp4
 ```
 
 - `540:-2` — the phone renders ~216 px wide, so 540 covers 2× retina.
-- `-an` — the clips play muted, so the audio track is pure waste.
-- `-map 0:v:0` + `-write_tmcd 0` — drops the camera's timecode track; without both, a
-  stray `tmcd` data stream survives into the output.
+- `-c:a aac -b:a 96k` — audio is **kept**, because the carousel has an unmute button.
+  (An earlier pass used `-an`; that has to be undone if sound is ever wanted, since
+  you cannot unmute a track that is not there.)
+- `-map 0:v:0 -map 0:a:0` + `-write_tmcd 0` — takes exactly the video and audio streams
+  and drops the camera's timecode track; without both, a stray `tmcd` data stream
+  survives into the output.
 - `+faststart` — moves the index to the front so playback can begin while downloading.
+
+**Sound.** Clips start muted — no browser autoplays audio unasked, and an unmuted
+`play()` is simply rejected. The speaker button beside the arrows is the opt-in; clicking
+it is itself the user gesture that makes unmuted playback permissible. Only the playing
+slide is ever unmuted, the preference survives auto-advance, and if a browser refuses
+anyway the code falls back to muted and resets the button rather than leaving a clip
+frozen on its poster.
 
 Posters are real first frames (`ffmpeg -ss 1.5 -frames:v 1`), so a phone looks right
 before its clip loads. `.phone` is `aspect-ratio:9/16` to match the footage exactly —

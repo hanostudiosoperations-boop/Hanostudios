@@ -612,6 +612,35 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .arrow:hover{ color:var(--frost); transform:translateX(3px); }
 
+/* Sound toggle. Sits with the arrows and inherits their colour, so the icon
+   fill/stroke follow currentColor and the hover state comes for free. */
+.sound-btn{
+  display:inline-grid;
+  place-items:center;
+  width:24px;
+  height:24px;
+  /* The arrows nudge sideways on hover; a symmetrical icon should not. */
+  transition:color .25s ease;
+}
+.sound-btn:hover{ transform:none; }
+.sound-btn svg{
+  grid-area:1/1;                 /* stack both icons, show one */
+  width:20px;
+  height:20px;
+  fill:currentColor;
+  stroke:none;
+}
+.sound-btn svg .stroke{
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.9;
+  stroke-linecap:round;
+}
+.sound-btn .ico-on{ display:none; }
+.sound-btn.is-on .ico-muted{ display:none; }
+.sound-btn.is-on .ico-on{ display:block; }
+.sound-btn.is-on{ color:var(--frost); }
+
 .showcase-stage{
   display:flex;
   gap:clamp(18px,2.6vw,40px);

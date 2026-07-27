@@ -303,13 +303,59 @@
 
         if (i === index) {
           if (!video.src && video.dataset.src) video.src = video.dataset.src;
-          // Autoplay is refused in some contexts and rejects; the poster stays,
-          // so swallow it rather than throwing.
+          // Sound follows the toggle, and only ever on the slide being played.
+          video.muted = !soundOn;
           const attempt = video.play();
-          if (attempt && attempt.catch) attempt.catch(() => {});
+          if (attempt && attempt.catch) attempt.catch(() => {
+            // Autoplay is refused in some contexts. If sound was the reason,
+            // fall back to muted so the clip still plays rather than freezing
+            // on its poster, and put the toggle back so the UI is not lying
+            // about the state.
+            if (!video.muted) {
+              soundOn = false;
+              video.muted = true;
+              syncSoundBtn();
+              const retry = video.play();
+              if (retry && retry.catch) retry.catch(() => {});
+            }
+          });
         } else {
           video.pause();
+          // Belt and braces: a paused clip is silent anyway, but leaving it
+          // unmuted means any stray play() would blare.
+          video.muted = true;
           if (video.currentTime) video.currentTime = 0;
+        }
+      });
+    }
+
+    /* ---- sound toggle ---- */
+    // Muted is the only state a browser will autoplay in, so that is where this
+    // starts; the button is the visitor's opt-in. Clicking it IS the user
+    // gesture that makes unmuted playback permissible from then on.
+    var soundOn = false;
+    const soundBtn = document.getElementById('showSound');
+
+    var syncSoundBtn = function () {
+      if (!soundBtn) return;
+      soundBtn.classList.toggle('is-on', soundOn);
+      soundBtn.setAttribute('aria-pressed', String(soundOn));
+      soundBtn.setAttribute('aria-label', soundOn ? 'Mute video' : 'Unmute video');
+    };
+
+    if (soundBtn) {
+      soundBtn.addEventListener('click', () => {
+        soundOn = !soundOn;
+        syncSoundBtn();
+        const active = phones[current] && phones[current].querySelector('.phone-video');
+        if (active) {
+          active.muted = !soundOn;
+          // Unmuting a paused clip should also start it — otherwise the button
+          // appears to do nothing when the carousel is sitting still.
+          if (soundOn && active.paused && active.dataset.src) {
+            const a = active.play();
+            if (a && a.catch) a.catch(() => {});
+          }
         }
       });
     }

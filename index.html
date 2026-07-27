@@ -257,6 +257,21 @@
     <div class="showcase-controls">
       <button class="arrow" id="showPrev" aria-label="Previous">&larr;</button>
       <button class="arrow" id="showNext" aria-label="Next">&rarr;</button>
+      <!-- Clips start muted because no browser will autoplay audio unasked;
+           this is the opt-in. aria-pressed carries the state for screen
+           readers, and the two icons are swapped in CSS off .is-on so there is
+           no icon-rebuilding in JS. -->
+      <button class="arrow sound-btn" id="showSound" type="button"
+              aria-pressed="false" aria-label="Unmute video">
+        <svg class="ico-muted" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+          <path d="M16.5 9.5l5 5m0-5l-5 5" class="stroke"/>
+        </svg>
+        <svg class="ico-on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 9v6h4l5 4V5L8 9H4z"/>
+          <path d="M16.5 8.8a4.5 4.5 0 010 6.4M19 6.3a8 8 0 010 11.4" class="stroke"/>
+        </svg>
+      </button>
     </div>
   </div>
 
