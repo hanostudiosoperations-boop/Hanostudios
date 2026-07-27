@@ -75,22 +75,28 @@ overwrite the file at the same path. No code changes needed.**
 | `assets/img/team/` | 2 | 800×1000 (4:5) |
 | `assets/img/og-image.jpg` | 1 | 1200×630 |
 
-**`assets/img/clients/` is real, not placeholder.** Six supplied brand marks, built from
-`Client Logos/` (repo root) by `tools/make-client-logos.py`. Re-run that after changing
-anything in there; don't hand-edit the output. Bybit stays `.svg` (vector); the rest are
-tightly-cropped transparent PNGs — *not* padded to a fixed canvas, because the set mixes
-wide wordmarks with square roundels, and the CSS caps both width and height so the two
-kinds land at the same optical weight.
+**`assets/img/clients/` is real, not placeholder.** All ten marks are the client's own
+artwork. The eight PNGs are built from `Client Logos/` (repo root) by
+`tools/make-client-logos.py` — re-run that after changing anything in there, don't
+hand-edit the output. They are tightly cropped, *not* padded to a fixed canvas: the set
+mixes wide wordmarks with square roundels, and the CSS caps both width and height so the
+two kinds land at the same optical weight.
 
-The grid sits on Void Black, so polarity matters more than format: Algorand arrived as
-pure-black artwork and Abstract as a light mark inside a dark badge on a white page. The
-tool's per-logo modes (`keep` / `whiten` / `dropbg`) handle that — see its docstring
-before adding a logo, and check the result against black rather than assuming.
+**Bybit and Maxy are `.svg` and are NOT rebuilt by the tool.** Both needed a fill edited
+for a dark ground — Bybit's wordmark was `#15182A`, and Maxy's paths declared no `fill`
+at all, which SVG renders as black. Maxy is filled `#F26B21` (client orange, set on its
+`.cls-1` class). Editing either source means redoing that by hand.
 
-Levels Socials, Humanity Protocol, Virtune and Maxy are in neither folder; their tiles
-were removed rather than left as fake wordmarks. Add the artwork, add a line to `JOBS`,
-re-run, and restore the `<li>`. `Client Logos/` also holds a dozen further real client
-marks that are not on the site yet.
+The grid sits on Void Black, so polarity matters more than format. Adding a logo means
+checking it against black, not assuming — the supplied set alone included pure-black
+artwork (Algorand), a light mark inside a dark badge on a white page (Abstract), and a
+wordmark on a near-black square (Levels Socials). The tool's modes are `keep` /
+`whiten` / `dropbg`; its docstring explains which to reach for and why a luminance key
+is the wrong tool for the Abstract case.
+
+`Client Logos/` also holds a dozen further real client marks not currently on the site,
+plus `Pudgy Penguins Wordmark.png` — an alternative to the roundel that is **not** used,
+because its "PENGUINS" half is dark navy and disappears against Void Black.
 
 ## Two deliberate resilience behaviours — don't remove them
 

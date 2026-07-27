@@ -61,13 +61,22 @@ TMP = "/tmp/hano-logo-build"
 BOX_W, BOX_H = 440, 120
 
 JOBS = [
-    # (source file,            output name,          mode)
-    ("Kalshi.png",             "kalshi.png",         "keep"),
-    ("Algorand.png",           "algorand.png",       "whiten"),
-    ("Pudgy Penguins.png",     "pudgy-penguins.png", "keep"),
-    ("onara.png",              "onara.png",          "keep"),
-    ("Abstract.jpg",           "abstract.png",       "dropbg"),
+    # (source file,               output name,             mode)
+    ("Kalshi.png",                "kalshi.png",            "keep"),
+    ("Algorand.png",              "algorand.png",          "whiten"),
+    ("Pudgy Penguins.png",        "pudgy-penguins.png",    "keep"),
+    ("onara.png",                 "onara.png",             "keep"),
+    ("Abstract.jpg",              "abstract.png",          "dropbg"),
+    ("Humanity Protocol.png",     "humanity-protocol.png", "keep"),
+    # Ships on a near-black square (#1E1E1E) that would read as a subtle panel
+    # against Void Black, so the background is flooded away.
+    ("Levels Socials.png",        "levels-socials.png",    "dropbg"),
+    ("Virtune.png",               "virtune.png",           "keep"),
 ]
+
+# Bybit and Maxy stay vector — see the README. Both needed a fill fixed for a
+# dark ground: Bybit's wordmark was #15182A, and Maxy's paths declared no fill
+# at all, which SVG renders as black. Neither is rebuilt by this script.
 
 
 # ---------------------------------------------------------------- PNG decode

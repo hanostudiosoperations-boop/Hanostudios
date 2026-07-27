@@ -44,7 +44,7 @@ with the final filename**, already wired into the page.
 | `showcase/` | 5 | 1080×2340 | vertical phone-screen stills |
 | `services/` | 7 | 800×800 | one still per service, shown on row hover |
 | `team/` | 2 | 800×1000 | Johannes, Hannah |
-| `clients/` | 6 | tightly cropped | **already real** — built by `tools/make-client-logos.py` |
+| `clients/` | 10 | tightly cropped | **already real** — 8 PNG via `tools/make-client-logos.py`, plus `bybit.svg` / `maxy.svg` |
 | `og-image.jpg` | 1 | 1200×630 | link preview for X / LinkedIn / iMessage |
 
 Export photographic work as JPG at ~80% quality, not PNG — PNG screenshots run 5–10×
