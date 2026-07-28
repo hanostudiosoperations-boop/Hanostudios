@@ -13,9 +13,10 @@ Do not introduce a bundler, framework or dependency manager unless explicitly as
 ## Files
 
 ```
-index.html                 single page, all sections
+index.html                 landing page, all sections
+work/bybit.html            case study (Figma frame 181) — the pattern for the rest
 css/styles.css             all styles; tokens in :root at the top
-js/main.js                 menu, reveals, counters, GSAP scroll sequences
+js/main.js                 menu, reveals, counters, galleries, GSAP scroll sequences
 assets/logo/               real brand logos (final, do not replace)
 assets/img/                ALL PLACEHOLDER — see below
 tools/make-placeholders.py regenerates the placeholder set
@@ -97,6 +98,33 @@ is the wrong tool for the Abstract case.
 `Client Logos/` also holds a dozen further real client marks not currently on the site,
 plus `Pudgy Penguins Wordmark.png` — an alternative to the roundel that is **not** used,
 because its "PENGUINS" half is dark navy and disappears against Void Black.
+
+## Case study pages (`work/`)
+
+`work/bybit.html` is the built pattern — copy it for the other five projects.
+It reuses `css/styles.css` and `js/main.js` wholesale; only the CASE STUDY block
+in the CSS and the "Case-study galleries" block in main.js are specific to it.
+Paths are `../` throughout, and the menu's Work/Process/Team/FAQ links point at
+`../index.html#…` so they work from a subdirectory.
+
+Galleries are `[data-gallery]`; main.js wires arrows, dots, swipe and per-slide
+video play/pause for any number of them per page. **Slides are capped on both
+axes** — a height cap alone makes 16:9 stills ~1.8x the phone's width, a width
+cap alone lets the track grow to the tallest slide and strands the arrows
+hundreds of px below a short one. `align-items:flex-start` stops flex equalising
+their heights.
+
+Videos use `preload="none"`, so nothing downloads for slides never reached — but
+that also leaves the element at `readyState 0` with no source selected, and
+`play()` on that rejects without ever fetching. main.js calls `load()` first the
+one time a slide becomes active. **Playwright's bundled Chromium has no
+proprietary codecs** (`canPlayType('video/mp4; codecs="avc1…"')` is empty), so
+playback can only be verified with `chromium.launch({channel:'chrome'})` — it
+fails there for the existing showcase clips too, which is the browser, not the file.
+
+Bybit source masters live in `~/Downloads/bybit` (88MB, outside the repo).
+Re-encoded to 5.4MB with the same settings the showcase clips use: H.264,
+CRF 27, long edge 960, AAC 96k, `+faststart`.
 
 ## Two deliberate resilience behaviours — don't remove them
 

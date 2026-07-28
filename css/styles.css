@@ -329,7 +329,14 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   aspect-ratio:1;
   margin:calc(clamp(90px,17vw,290px) / -2) 0 0 calc(clamp(90px,17vw,290px) / -2);
   border-radius:10px;
-  background:linear-gradient(160deg, #1c1c1c 0%, #101010 55%, var(--void) 100%);
+  /* Flat, not a gradient. A gradient here had to be mirrored by a matching
+     gradient on .statement for the handoff to be seamless, and that put a
+     visible #191919 -> #0d0d0d vertical sweep behind the statement copy that
+     the reference does not have. A solid tone hands off to a solid section.
+     Slightly lighter than Void so the box reads against the hero; main.js
+     settles it to Void once it has covered, so the section it becomes is the
+     same flat black as the rest of the page. */
+  background:#151515;
   opacity:0;
   will-change:transform, border-radius, opacity;
 }
@@ -390,7 +397,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
      below the pinned hero mid-sequence (z-index:3). */
   z-index:2;
   padding:0 var(--pad) var(--gap);
-  background:linear-gradient(172deg, #1c1c1c 0, #141414 44svh, #0f0f0f 88svh, var(--void) 140svh);
+  /* Flat Void, like every other section. This used to be a gradient mirroring
+     .hero-square's own so the cover could hand over without a seam, but that
+     showed as a #191919 -> #0d0d0d sweep behind the copy — not in the
+     reference, which is flat near-black here. The square is now flat too and
+     settles to Void as it finishes covering, so a flat section is what it
+     hands off to. */
+  background:var(--void);
 }
 
 /* Sized by its content, not the viewport. A 100svh box with the copy centred
@@ -524,6 +537,12 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   transition:transform .6s cubic-bezier(.22,1,.36,1);
 }
 .work-card:hover .work-img{ transform:translateY(-8px); }
+/* Wraps the whole card on projects that have a case-study page. display:block
+   so the card keeps its normal box; the h3 gets the aurora on hover as the
+   affordance that this one is clickable. */
+.work-link{ display:block; }
+.work-link:hover h3{ color:var(--aurora); }
+.work-link h3{ transition:color .25s ease; }
 
 .work-meta{
   display:grid;
@@ -921,6 +940,215 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   font-size:clamp(12px,1vw,15px);
   line-height:1.6;
   color:var(--ink-40);
+}
+
+/* ============================================================
+   CASE STUDY (work/*.html)
+   ============================================================ */
+
+/* Frame 181 is one narrow reading column, left-aligned, on flat Void — not the
+   full-bleed layout the landing page uses. Everything below inherits the shared
+   tokens; only the measure and rhythm are specific to these pages. */
+.case{
+  --measure:min(100%, 760px);
+  position:relative;
+  padding:clamp(84px,11vh,132px) var(--pad) clamp(48px,7vw,96px);
+}
+
+/* The logomark sits opposite the menu button and takes you home. */
+.case-home{
+  position:absolute;
+  top:clamp(16px,2.4vw,32px);
+  left:var(--pad);
+  display:block;
+  width:clamp(30px,3vw,42px);
+  opacity:.9;
+  transition:opacity .25s ease;
+}
+.case-home:hover{ opacity:1; }
+
+.case-head{
+  width:var(--measure);
+  margin-bottom:clamp(40px,6vw,86px);
+}
+.case-brand{ margin-bottom:clamp(26px,4vw,52px); }
+/* The client's own mark, at the size the frame sets it. */
+.case-logo{ width:clamp(96px,11vw,150px); height:auto; }
+.case-kicker{
+  margin-top:10px;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--ink-40);
+}
+.case-intro h1{
+  font-size:clamp(28px,3.6vw,48px);
+  font-weight:500;
+  letter-spacing:-.035em;
+  line-height:1.1;
+}
+.case-lead{
+  margin-top:18px;
+  font-size:clamp(13px,1.15vw,16px);
+  line-height:1.62;
+  color:var(--ink-60);
+}
+
+.case-block{
+  width:var(--measure);
+  margin-bottom:clamp(40px,6vw,86px);
+}
+.case-block h2{
+  margin-bottom:16px;
+  font-size:clamp(21px,2.5vw,34px);
+  font-weight:500;
+  letter-spacing:-.03em;
+  line-height:1.15;
+}
+.case-block p{
+  font-size:clamp(13px,1.15vw,16px);
+  line-height:1.62;
+  color:var(--ink-60);
+}
+.case-block p + p{ margin-top:14px; }
+.case-block em{ font-style:italic; color:var(--ink-90); }
+/* The italic standfirst under "Bybit Card Campaign" in the frame. */
+.case-note{
+  font-style:italic;
+  color:var(--ink-90) !important;
+}
+
+/* 2x2 on desktop, matching the frame; stacks to one column on a phone. */
+.case-stats{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:0;
+  margin-top:8px;
+  border-top:1px solid var(--ink-14);
+}
+.case-stats > div{
+  padding:clamp(18px,2.4vw,30px) 0;
+  border-bottom:1px solid var(--ink-14);
+}
+.case-stats > div:nth-child(odd){ padding-right:clamp(16px,3vw,40px); }
+.case-stats > div:nth-child(even){
+  padding-left:clamp(16px,3vw,40px);
+  border-left:1px solid var(--ink-14);
+}
+.case-stats dt{
+  font-size:clamp(30px,3.8vw,52px);
+  font-weight:300;
+  letter-spacing:-.04em;
+  line-height:1;
+}
+.case-stats dd{
+  margin-top:10px;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--ink-40);
+}
+
+/* "Why It Matters": small label left, the closing argument set large beside it. */
+.case-why{
+  width:100%;
+  display:grid;
+  grid-template-columns:minmax(120px,.28fr) minmax(0,var(--measure));
+  gap:clamp(20px,4vw,60px);
+}
+.case-label{
+  font-size:clamp(12px,1.05vw,15px);
+  color:var(--ink-40);
+}
+.case-why-lead{
+  font-size:clamp(17px,2vw,27px) !important;
+  font-weight:400;
+  letter-spacing:-.025em;
+  line-height:1.35 !important;
+  color:var(--frost) !important;
+}
+.case-why-lead + p{ margin-top:20px; }
+
+/* ---------- Gallery carousel ---------- */
+
+/* Full-bleed strip that scrolls horizontally. The slides keep their own aspect
+   ratios — the supplied set mixes 16:9, 4:5, 1:1 and 9:16 — so they are sized
+   by HEIGHT and left to be as wide as they need. Scroll-snap does the paging;
+   main.js only drives scrollLeft, so with no JS this is still a usable strip. */
+.gallery{
+  margin:0 calc(var(--pad) * -1) clamp(40px,6vw,86px);
+  padding:0 var(--pad);
+}
+.gallery-track{
+  display:flex;
+  /* Each slide keeps its own height rather than being stretched to the tallest
+     in the row — flex's default `stretch` gave the 16:9 stills the height of a
+     9:16 one and left a dead band under them on mobile. */
+  align-items:flex-start;
+  gap:clamp(12px,1.6vw,22px);
+  overflow-x:auto;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+}
+.gallery-track::-webkit-scrollbar{ display:none; }
+.slide{
+  flex:none;
+  scroll-snap-align:center;
+  height:clamp(300px,42vw,540px);
+  border-radius:4px;
+  overflow:hidden;
+  background:#141414;
+}
+.slide img,
+.slide video{
+  display:block;
+  width:auto;
+  height:100%;
+  max-width:none;          /* the global img{max-width:100%} would squash these */
+  /* contain, not cover. The slide is already sized to each asset's own aspect
+     (width:auto at a shared height), so cover had nothing to crop toward and
+     only ever shaved edges off — losing type on the campaign stills. */
+  object-fit:contain;
+}
+
+.gallery-foot{
+  display:flex;
+  align-items:center;
+  gap:clamp(16px,3vw,40px);
+  margin-top:20px;
+}
+.gallery-arrows{ display:flex; gap:22px; }
+.gallery-dots{ display:flex; gap:8px; }
+.gallery-dots button{
+  width:22px;
+  height:2px;
+  padding:0;
+  border-radius:2px;
+  background:var(--ink-14);
+  transition:background .3s ease;
+}
+.gallery-dots button.is-on{ background:var(--frost); }
+
+@media (max-width:900px){
+  .case-why{ grid-template-columns:1fr; gap:12px; }
+}
+@media (max-width:600px){
+  .case-stats{ grid-template-columns:1fr; }
+  /* The vertical rule and asymmetric padding only make sense in two columns. */
+  .case-stats > div:nth-child(odd),
+  .case-stats > div:nth-child(even){ padding-left:0; padding-right:0; border-left:0; }
+  /* Phone slides are bounded by BOTH axes. A pure height cap made the 16:9
+     stills ~1.8x the screen width; a pure width cap let every slide keep its
+     own height, which left the track as tall as the tallest one and stranded
+     the arrows ~400px below a short slide. Capping both keeps each aspect
+     ratio intact inside a shared box, exactly as the desktop rule does. */
+  .slide{
+    height:min(52vh,340px);
+    max-width:84vw;
+  }
 }
 
 /* ============================================================

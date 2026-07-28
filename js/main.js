@@ -407,6 +407,94 @@
   // The pin itself is set up later, with the other pins — see that comment
   // for why creating it here, this early, silently broke it.
 
+  /* ---------------- Case-study galleries ---------------- */
+
+  // Used by work/*.html. Each [data-gallery] is self-contained, so a page can
+  // hold any number of them. Nothing here runs on the landing page (no matches),
+  // and with no JS at all the track is still a horizontally scrollable strip
+  // with snap points — the arrows and dots are progressive enhancement.
+  document.querySelectorAll('[data-gallery]').forEach(gallery => {
+    const track = gallery.querySelector('[data-gallery-track]');
+    if (!track) return;
+    const slides = Array.from(track.children);
+    const dotsBox = gallery.querySelector('[data-gallery-dots]');
+    if (!slides.length) return;
+
+    // Centre a slide in the track. Same maths as the showcase carousel: derive
+    // the target from the element's own offset rather than stepping by a guessed
+    // width, because these slides have different widths.
+    const centreOf = i => slides[i].offsetLeft - (track.clientWidth - slides[i].offsetWidth) / 2;
+    const nearest = () => {
+      let best = 0, bestD = Infinity;
+      slides.forEach((s, i) => {
+        const d = Math.abs(track.scrollLeft - centreOf(i));
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      return best;
+    };
+
+    let current = 0;
+
+    // Only the visible slide plays. Videos carry preload="none", so a slide the
+    // visitor never reaches never costs a byte.
+    function sync(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => {
+        const v = slide.querySelector('video');
+        if (!v) return;
+        if (i === current && !reduce) {
+          // preload="none" leaves the element at HAVE_NOTHING with no source
+          // selected, and play() on that rejects without ever fetching. Kick a
+          // load() the first time a slide becomes active; from then on the
+          // buffered data is reused and this is a no-op.
+          if (v.readyState === 0) v.load();
+          const attempt = v.play();
+          if (attempt && attempt.catch) attempt.catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+      if (dotsBox) {
+        Array.from(dotsBox.children).forEach((d, i) => d.classList.toggle('is-on', i === current));
+      }
+    }
+
+    function goTo(index, smooth) {
+      const i = Math.max(0, Math.min(index, slides.length - 1));
+      track.scrollTo({ left: centreOf(i), behavior: smooth && !reduce ? 'smooth' : 'auto' });
+      sync(i);
+    }
+
+    if (dotsBox) {
+      slides.forEach((_, i) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.addEventListener('click', () => goTo(i, true));
+        dotsBox.appendChild(dot);
+      });
+      dotsBox.removeAttribute('aria-hidden');
+    }
+
+    const prevBtn = gallery.querySelector('[data-gallery-prev]');
+    const nextBtn = gallery.querySelector('[data-gallery-next]');
+    if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1, true));
+    if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1, true));
+
+    // A swipe moves scrollLeft without going through goTo(), so re-derive which
+    // slide won once the browser says the scroll has settled.
+    track.addEventListener('scrollend', () => sync(nearest()));
+
+    // Pause everything while the gallery is off screen.
+    const io = new IntersectionObserver(entries => entries.forEach(en => {
+      if (en.isIntersecting) sync(nearest());
+      else slides.forEach(s => { const v = s.querySelector('video'); if (v) v.pause(); });
+    }), { threshold: 0.25 });
+    io.observe(gallery);
+
+    sync(0);
+  });
+
   /* ---------------- FAQ smooth open/close ---------------- */
 
   // <details> snaps open — there is no native way to transition it. Drive the
@@ -693,7 +781,15 @@
       // used to flash the bare hero glow ("blurred screen") before the text.
       .fromTo(heroSquare,
         { scale: 0.22, borderRadius: '10px' },
-        { scale: coverScale, borderRadius: '0px', ease: 'power1.in', duration: 0.76 }, 0.24);
+        { scale: coverScale, borderRadius: '0px', ease: 'power1.in', duration: 0.76 }, 0.24)
+      // ...and its tone settles to the page's black as it finishes covering, so
+      // the flat box literally becomes the flat section behind it. This is what
+      // lets both the square and .statement be solid colours instead of a pair
+      // of matched gradients — that pairing was the only reason .statement
+      // carried a gradient, and it showed as a sweep the reference doesn't have.
+      // Runs while the screen is already fully covered, so all it does is settle
+      // the tone; nothing moves and nothing fades out.
+      .to(heroSquare, { backgroundColor: '#0A0A0A', ease: 'none', duration: 0.14 }, 0.86);
   }
 
   // Statement copy: the block pins, its lines reveal one per scroll step, then it
