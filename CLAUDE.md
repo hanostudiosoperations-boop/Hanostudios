@@ -193,9 +193,13 @@ Both were verified by killing the scripts. Keep them if you refactor.
   `data-src="assets/video/showcase/<slug>.mp4"` to that `<video>` — there is a comment
   beside each one with the exact line. A phone with no `data-src` just shows its poster,
   so no missing file is ever requested.
-- **The Calendly link is a placeholder.** `#calEmbed`'s `data-url` (and the `<noscript>`
-  link beside it) read `CALENDLY_HANDLE`. Replace with the real scheduling URL or the
-  modal opens straight into its "could not load" fallback.
+- **Calendly is live**: `https://calendly.com/hanoanimations/discovery` ("Discovery
+  Call", 30 min). The URL appears twice per page — `#calEmbed`'s `data-url` and the
+  `<noscript>` link beside it — across all five pages; change them together.
+  **The dark theme does not apply.** The colour params are on `data-url` *and*
+  passed as `pageSettings` in main.js, and Calendly puts them on the iframe URL,
+  but the widget still renders white — colour customisation is a paid feature.
+  Don't spend time re-plumbing it; it needs a plan upgrade, not code.
 - Footer social links point at bare domains; needs the real profile URLs.
 - Figma source reads "AD CAMPAINGS" — corrected to "Ad Campaigns" here.
 - Plausible is wired in `<head>` with `data-domain="hano.studios"`. It only starts

@@ -46,19 +46,19 @@
 
 <!-- ============ CALENDLY BOOKING MODAL ============ -->
 <!-- Same modal as the landing page; main.js wires any [data-calendly] trigger.
-     SETUP: replace CALENDLY_HANDLE here AND in index.html — both. -->
+     data-url is the live booking page, same as index.html. -->
 <div class="cal-modal" id="calModal" hidden>
   <div class="cal-backdrop" data-cal-close></div>
   <div class="cal-panel" role="dialog" aria-modal="true" aria-labelledby="calTitle">
     <div class="cal-head">
-      <h2 id="calTitle">Book an intro call</h2>
+      <h2 id="calTitle">Book a discovery call</h2>
       <button class="cal-close" type="button" aria-label="Close booking" data-cal-close>&times;</button>
     </div>
     <div class="cal-embed" id="calEmbed"
-         data-url="https://calendly.com/CALENDLY_HANDLE/intro-call?hide_gdpr_banner=1&background_color=0A0A0A&text_color=FFFFFF&primary_color=8B32F7">
+         data-url="https://calendly.com/hanoanimations/discovery?hide_gdpr_banner=1&background_color=0A0A0A&text_color=FFFFFF&primary_color=8B32F7">
       <noscript>
         <p class="cal-fallback">
-          <a href="https://calendly.com/CALENDLY_HANDLE/intro-call" target="_blank" rel="noopener">
+          <a href="https://calendly.com/hanoanimations/discovery" target="_blank" rel="noopener">
             Open the booking page &rarr;</a>
         </p>
       </noscript>

@@ -582,7 +582,18 @@
         if (window.Calendly && calEmbed.dataset.url) {
           window.Calendly.initInlineWidget({
             url: calEmbed.dataset.url,
-            parentElement: calEmbed
+            parentElement: calEmbed,
+            // The colour params on data-url are honoured by Calendly's own
+            // page but NOT by the inline widget, which reads them here — pass
+            // both and the embed matches the site instead of rendering white.
+            pageSettings: {
+              backgroundColor: '0A0A0A',
+              textColor: 'FFFFFF',
+              primaryColor: '8B32F7',
+              hideGdprBanner: true,
+              hideEventTypeDetails: false,
+              hideLandingPageDetails: false
+            }
           });
         } else {
           calFallback();
