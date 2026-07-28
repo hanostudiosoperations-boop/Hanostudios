@@ -1,16 +1,15 @@
-<!-- Hano Crypto lockup, rebuilt as vector for the case-study header. The only
-     supplied artwork is a raster crop off the mood board, whose dark corners
-     showed against Void Black. The mark sets HA_O over CRYPTO with a bar
-     through the N; each glyph is placed individually so the bar can sit over
-     the N alone without a second text run colliding with the first. -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 153 75" width="153" height="75" role="img" aria-label="Hano Crypto">
-  <rect width="153" height="75" rx="6" fill="#B78BF7"/>
-  <g fill="#0A0A0A" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="20" text-anchor="middle">
-    <text x="47" y="35">H</text>
-    <text x="66" y="35">A</text>
-    <text x="87" y="35">N</text>
-    <text x="107" y="35">O</text>
-    <text x="76.5" y="59" letter-spacing="1.6">CRYPTO</text>
+<!-- Hano Crypto wordmark for the case-study header. Plain Frost White type on
+     the Void ground, matching how the other case studies set their marks —
+     the earlier purple badge sat on the page as a filled block. Each glyph of
+     HA_O is placed individually so the bar can sit over the N alone (a second
+     text run collides with the first). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 62" width="132" height="62" role="img" aria-label="Hano Crypto">
+  <g fill="#FFFFFF" font-family="Helvetica, Arial, sans-serif" font-weight="700" font-size="21" text-anchor="middle">
+    <text x="14" y="24">H</text>
+    <text x="34" y="24">A</text>
+    <text x="55" y="24">N</text>
+    <text x="76" y="24">O</text>
+    <text x="45" y="52" letter-spacing="1.4">CRYPTO</text>
   </g>
-  <rect x="77" y="18" width="20" height="2.6" fill="#0A0A0A"/>
+  <rect x="45" y="7" width="20" height="2.6" fill="#FFFFFF"/>
 </svg>

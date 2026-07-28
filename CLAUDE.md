@@ -72,7 +72,7 @@ overwrite the file at the same path. No code changes needed.**
 |---|---|---|
 | `assets/img/works/` | 6 | 1600×1000 (16:10) |
 | `assets/img/showcase/` | 5 | 1080×2340 (9:19.5) |
-| `assets/img/services/` | 7 | 800×800 (1:1) |
+| `assets/img/services/` | 7 | 800×800 (1:1) — currently unreferenced, see below |
 | `assets/img/team/` | 2 | 800×1000 (4:5) |
 | `assets/img/og-image.jpg` | 1 | 1200×630 |
 
@@ -200,7 +200,14 @@ Both were verified by killing the scripts. Keep them if you refactor.
   passed as `pageSettings` in main.js, and Calendly puts them on the iframe URL,
   but the widget still renders white — colour customisation is a paid feature.
   Don't spend time re-plumbing it; it needs a plan upgrade, not code.
-- Footer social links point at bare domains; needs the real profile URLs.
+- **Instagram and X are real** — `hano.studios` and `HanoStudioss`, in both the
+  footer and the menu overlay on all five pages (10 links). **Tik Tok and
+  LinkedIn still point at bare domains**; no handle has been supplied for either,
+  so don't guess one.
+- The services list no longer shows a hover preview (removed on request). The
+  `<li>`s keep their `data-tone` / `data-img`, so restoring it means the markup
+  plus a handler in main.js — the 7 images in `assets/img/services/` are
+  currently unreferenced but kept for that.
 - Figma source reads "AD CAMPAINGS" — corrected to "Ad Campaigns" here.
 - Plausible is wired in `<head>` with `data-domain="hano.studios"`. It only starts
   recording once the site is added in the Plausible dashboard. Cookieless, so no

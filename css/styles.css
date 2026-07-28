@@ -573,37 +573,31 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 
 /* Placeholder art tones — swap for real project images.
    Scoped to the four elements that actually show art. Unscoped, these matched
-   any [data-tone] and painted gradients across the service list rows, whose
-   data-tone is only there for main.js to copy onto .service-preview. */
+   any [data-tone] and painted gradients across the service list rows, which
+   carry data-tone for a hover preview that no longer exists. */
 .work-img[data-tone="amber"],
 .phone[data-tone="amber"],
-.member-photo[data-tone="amber"],
-.service-preview[data-tone="amber"] { background-image:linear-gradient(135deg,#3a2a10,#0d0906 62%,#241906); }
+.member-photo[data-tone="amber"] { background-image:linear-gradient(135deg,#3a2a10,#0d0906 62%,#241906); }
 
 .work-img[data-tone="green"],
 .phone[data-tone="green"],
-.member-photo[data-tone="green"],
-.service-preview[data-tone="green"] { background-image:linear-gradient(135deg,#0d2a1c,#050d09 62%,#0a1f15); }
+.member-photo[data-tone="green"] { background-image:linear-gradient(135deg,#0d2a1c,#050d09 62%,#0a1f15); }
 
 .work-img[data-tone="orange"],
 .phone[data-tone="orange"],
-.member-photo[data-tone="orange"],
-.service-preview[data-tone="orange"]{ background-image:linear-gradient(135deg,#3a1c08,#0d0704 62%,#2a1406); }
+.member-photo[data-tone="orange"]{ background-image:linear-gradient(135deg,#3a1c08,#0d0704 62%,#2a1406); }
 
 .work-img[data-tone="lilac"],
 .phone[data-tone="lilac"],
-.member-photo[data-tone="lilac"],
-.service-preview[data-tone="lilac"] { background-image:linear-gradient(135deg,#2a2440,#0a0910 62%,#1e1a30); }
+.member-photo[data-tone="lilac"] { background-image:linear-gradient(135deg,#2a2440,#0a0910 62%,#1e1a30); }
 
 .work-img[data-tone="steel"],
 .phone[data-tone="steel"],
-.member-photo[data-tone="steel"],
-.service-preview[data-tone="steel"] { background-image:linear-gradient(135deg,#242424,#0b0b0b 62%,#1a1a1a); }
+.member-photo[data-tone="steel"] { background-image:linear-gradient(135deg,#242424,#0b0b0b 62%,#1a1a1a); }
 
 .work-img[data-tone="purple"],
 .phone[data-tone="purple"],
-.member-photo[data-tone="purple"],
-.service-preview[data-tone="purple"]{ background-image:linear-gradient(135deg,var(--nebula),#120520 62%,#2a0d47); }
+.member-photo[data-tone="purple"]{ background-image:linear-gradient(135deg,var(--nebula),#120520 62%,#2a0d47); }
 
 /* ============================================================
    SHOWCASE
@@ -804,19 +798,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 
 .services-left{ position:relative; }
-
-.service-preview{
-  width:clamp(150px,13vw,200px);
-  aspect-ratio:1;
-  margin-top:38px;
-  border-radius:3px;
-  background:#eee;
-  background-size:cover;
-  opacity:0;
-  transform:scale(.94);
-  transition:opacity .4s ease, transform .4s ease;
-}
-.service-preview.is-on{ opacity:1; transform:scale(1); }
 
 .service-list{ align-self:center; }
 .service-list li{ border-bottom:1px solid var(--dark-14); }
@@ -1072,10 +1053,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   text-transform:uppercase;
   color:var(--ink-40);
 }
-
-/* Frame 208's header mark is a filled purple badge rather than a wordmark on
-   the ground, so it wants the smaller of the two logo sizes. */
-.case-logo-badge{ width:clamp(88px,9vw,120px); border-radius:6px; }
 
 /* The engagement line under a post title in frame 208. */
 .case-post h2 + .case-metrics{ margin-top:8px; }
@@ -1544,10 +1521,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   /* Was 38px, hugely overshooting the reference's tight gap under the
      subtext (~8px). */
   .showcase-controls{ margin-top:14px; }
-  /* Was 1fr (stacked title above description). Frame 196 keeps the title in a
-     narrow left column and the description in a wider right column all the
-     way down to phone width — the stack was never in the reference. */
-  .service-preview{ display:none; }
 }
 
 /* The mobile Figma frames lay the works out as a plain vertical stack of cards,

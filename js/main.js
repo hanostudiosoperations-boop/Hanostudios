@@ -192,21 +192,9 @@
   );
   document.querySelectorAll('.stats dt').forEach(el => statObserver.observe(el));
 
-  /* ---------------- Services hover preview ---------------- */
-
-  const serviceList = document.getElementById('serviceList');
-  const preview = document.getElementById('servicePreview');
-
-  if (serviceList && preview) {
-    serviceList.querySelectorAll('li').forEach(li => {
-      li.addEventListener('mouseenter', () => {
-        preview.setAttribute('data-tone', li.dataset.tone);
-        if (li.dataset.img) preview.style.backgroundImage = "url('" + li.dataset.img + "')";
-        preview.classList.add('is-on');
-      });
-    });
-    serviceList.addEventListener('mouseleave', () => preview.classList.remove('is-on'));
-  }
+  /* The services list used to show a floating image preview on hover. Removed
+     on request. The list items keep their data-tone / data-img attributes, so
+     restoring it is markup + this handler again, not a re-shoot. */
 
   /* ---------------- Showcase carousel + video ---------------- */
 
