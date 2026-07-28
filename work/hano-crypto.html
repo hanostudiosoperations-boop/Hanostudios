@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Hano Crypto — From zero to 135,000 followers | Hano Studios</title>
+<meta name="description" content="Hano Crypto: an edutainment brand built from zero over 18 months. 200+ videos, 135,000 followers, 30M+ views, 100% organic — the longest running project in our portfolio.">
+
+<meta property="og:title" content="Hano Crypto — From zero to 135,000 followers.">
+<meta property="og:description" content="30 million views. One of the largest crypto communities on Instagram, built entirely through organic content.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="../assets/img/work/hano-crypto/mood-board.jpg">
+
+<!-- Paths are ../ because this page sits in work/. Same set as the root page. -->
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#0A0A0A">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Aleo:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/styles.css">
+
+<script defer data-domain="hano.studios" src="https://plausible.io/js/script.js"></script>
+<script>
+  window.plausible = window.plausible || function () {
+    (window.plausible.q = window.plausible.q || []).push(arguments);
+  };
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      document.documentElement.classList.add('no-gsap');
+    }
+  });
+</script>
+</head>
+<body class="case-body">
+
+<!-- ============ CALENDLY BOOKING MODAL ============ -->
+<!-- Same modal as the landing page; main.js wires any [data-calendly] trigger.
+     SETUP: replace CALENDLY_HANDLE here AND in index.html — both. -->
+<div class="cal-modal" id="calModal" hidden>
+  <div class="cal-backdrop" data-cal-close></div>
+  <div class="cal-panel" role="dialog" aria-modal="true" aria-labelledby="calTitle">
+    <div class="cal-head">
+      <h2 id="calTitle">Book an intro call</h2>
+      <button class="cal-close" type="button" aria-label="Close booking" data-cal-close>&times;</button>
+    </div>
+    <div class="cal-embed" id="calEmbed"
+         data-url="https://calendly.com/CALENDLY_HANDLE/intro-call?hide_gdpr_banner=1&background_color=0A0A0A&text_color=FFFFFF&primary_color=8B32F7">
+      <noscript>
+        <p class="cal-fallback">
+          <a href="https://calendly.com/CALENDLY_HANDLE/intro-call" target="_blank" rel="noopener">
+            Open the booking page &rarr;</a>
+        </p>
+      </noscript>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MENU BUTTON + OVERLAY ============ -->
+<button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+  <span></span><span></span>
+</button>
+
+<nav class="menu-overlay" id="menuOverlay" aria-hidden="true" inert>
+  <img class="menu-mark" src="../assets/logo/logomark_white.png" alt="" aria-hidden="true">
+
+  <div class="menu-inner">
+    <ul class="menu-links">
+      <li><a href="../index.html#works">Work</a></li>
+      <li><a href="../index.html#process">Process</a></li>
+      <li><a href="../index.html#team">Team</a></li>
+      <li><a href="../index.html#faq">FAQ</a></li>
+      <li><a href="#contact" data-calendly>Contact</a></li>
+    </ul>
+  </div>
+
+  <div class="menu-foot">
+    <span class="menu-copy">&copy; 2026 Hano Studios</span>
+    <div class="menu-social">
+      <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://tiktok.com" target="_blank" rel="noopener">Tik Tok</a>
+      <a href="https://x.com" target="_blank" rel="noopener">X / Twitter</a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ CASE STUDY ============ -->
+<article class="case">
+
+  <!-- Logomark links home, as the frame draws it top-left -->
+  <a class="case-home" href="../index.html" aria-label="Hano Studios — back to home">
+    <img src="../assets/logo/logomark_white.png" alt="">
+  </a>
+
+  <!-- Only the logo row and "Why It Matters" are two-track grids; every other
+       section is a .case-sec indented to the copy column. See CLAUDE.md. -->
+  <header class="case-row">
+    <div class="case-brand">
+      <img class="case-logo case-logo-badge" src="../assets/img/clients/hano-crypto.svg" alt="Hano Crypto">
+    </div>
+
+    <div class="case-intro">
+      <p class="case-lead">From zero to 135,000 followers. 30 million views. One of the largest crypto communities on Instagram.</p>
+    </div>
+  </header>
+
+  <section class="case-sec">
+    <h2>Overview</h2>
+    <p>Hano Crypto is an edutainment brand focused on making cryptocurrency accessible to a broad audience. The brand was built from zero over the course of 18 months through a content system developed entirely by Hano Animations, making it both the longest running and most comprehensive project in our portfolio.</p>
+    <p>It is also the only case study in our portfolio that is our own brand, which means every technique, formula, and strategy described here was developed, tested, and refined with full creative control and no external limitations.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>The Results In Numbers</h2>
+    <dl class="case-stats">
+      <div><dt>200+</dt><dd>Videos produced</dd></div>
+      <div><dt>135k</dt><dd>Instagram followers</dd></div>
+      <div><dt>30M+</dt><dd>Total views</dd></div>
+      <div><dt>100%</dt><dd>Organic content reach</dd></div>
+    </dl>
+    <p>All of this was achieved through organic content. No paid ads. No giveaway campaigns. No influencer partnerships.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>The Problem With Crypto Content</h2>
+    <p>The majority of crypto content on social media falls into two categories: price speculation and unsupported hype. Accounts either post charts with bold predictions, or they pump tokens with no context, no education, and no real value for the viewer. This type of content attracts a narrow audience of people who already trade and already have opinions. It repels everyone else.</p>
+    <p>The opportunity was clear. There was no major brand on Instagram that could take complex crypto topics and present them in a way that both experienced traders and complete beginners could engage with equally. Content that gives real value to both at the same time. That required a fundamentally different approach to scripting, visuals, and topic selection.</p>
+  </section>
+
+  <section class="case-sec case-post">
+    <h2>War against China</h2>
+    <p class="case-metrics">8 Million views &middot; 354,000 likes &middot; 6,715 comments &middot; 402,000 shares</p>
+  </section>
+
+  <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="War against China">
+    <div class="gallery-track" data-gallery-track>
+      <figure class="slide slide-tall"><video src="../assets/video/work/hano-crypto/war-against-china.mp4" poster="../assets/img/work/hano-crypto/war-against-china-poster.jpg" muted loop playsinline preload="none" aria-label="War against China — the most viral Hano Crypto video"></video></figure>
+    </div>
+  </div>
+
+  <section class="case-sec">
+    <p class="case-ig"><a href="https://www.instagram.com/hanocrypto/" target="_blank" rel="noopener">View on Instagram</a></p>
+  </section>
+
+  <section class="case-sec">
+    <h2>The One Minute Storytelling Format</h2>
+    <p>Most crypto Reels at the time were 15 to 30 seconds. Quick charts, quick opinions, quick speculation. Hano Crypto went the opposite direction and developed a one minute storytelling format that became one of the most replicated content formats in the crypto space on Instagram.</p>
+    <p>The reasoning was simple. In order for viewers to truly understand a crypto project, a market event, or a use case, the content needs enough time to frame the topic into today's relevance, explain what it actually is in plain terms, and show why it matters to the average person and investor. You cannot do that in 15 seconds.</p>
+    <p>One minute Reels were considered risky at the time because conventional wisdom said shorter performs better. But watch time, not view count, is what the Instagram algorithm rewards. A one minute video with high retention outperforms a 15 second video with high views every time. The data proved this consistently across hundreds of videos.</p>
+    <p>This format became the standard approach. It was eventually adopted by dozens of crypto pages across Instagram, many of which explicitly modeled their content after Hano Crypto. The format remains relevant and effective today.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>Topic Selection and Crypto Expertise</h2>
+    <p>Choosing the right topic is as important as the script itself. Hano Crypto operates with over six years of active crypto market experience, which provides a deep understanding of not only what people currently care about, but what they don't know about yet but will care about once it's framed correctly.</p>
+    <p>This is a critical distinction. Reactive content (reporting on what already happened) competes with every other account. Proactive content (identifying emerging topics before they peak) captures attention first and positions the brand as a source, not an echo.</p>
+    <p>Topic selection follows a daily research process that monitors price movements, narrative shifts across crypto Twitter, Reddit, and Telegram, regulatory developments, and on chain data. From this, topics are scored based on two criteria: viral potential on Instagram and educational value for the viewer. A topic must score high on both to make it into production.</p>
+  </section>
+
+  <section class="case-sec case-post">
+    <h2>Trump's Planned Crash</h2>
+    <p class="case-metrics">900k views &middot; 46,500 likes &middot; 1,170 comments</p>
+  </section>
+
+  <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="Trump's Planned Crash">
+    <div class="gallery-track" data-gallery-track>
+      <figure class="slide slide-tall"><video src="../assets/video/work/hano-crypto/trumps-planned-crash.mp4" poster="../assets/img/work/hano-crypto/trumps-planned-crash-poster.jpg" muted loop playsinline preload="none" aria-label="Trump's Planned Crash — Hano Crypto video"></video></figure>
+    </div>
+  </div>
+
+  <section class="case-sec">
+    <p class="case-ig"><a href="https://www.instagram.com/hanocrypto/" target="_blank" rel="noopener">View on Instagram</a></p>
+  </section>
+
+  <section class="case-sec">
+    <h2>The Scripting Formula</h2>
+    <p>The scripting system behind Hano Crypto is the result of hundreds of iterations across 200+ videos. Every script follows a five step structure that was refined continuously based on performance data.</p>
+    <p>The formula is engineered to accomplish three things: make the viewer curious within the first three seconds, deliver information in a way that builds understanding progressively throughout the video, and leave the viewer with a clear takeaway and a high converting CTA that fits the specific content of that video.</p>
+    <p>Each of the five steps serves a specific function in the viewer's psychological journey from curiosity to understanding to action. The structure is rigid enough to be repeatable across any crypto topic, but flexible enough to adapt to news, education, price analysis, or project breakdowns.</p>
+    <p>The specific formula remains proprietary and is exclusively available to clients working with Hano Animations.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>Retention Engineering</h2>
+    <p>Keeping a viewer engaged for a full minute on a Reel is one of the hardest challenges in social media content. Most viewers drop off within the first five seconds. Getting them to stay for 60 seconds requires deliberate, engineered retention techniques placed throughout the video. Hano Crypto developed a set of crypto specific and trading specific retention hooks that are placed at strategic points throughout each video, up to three times per video. These rehooks are designed to reignite curiosity, introduce a new angle, or create a micro cliffhanger that makes the viewer want to see the next sentence.</p>
+    <p>The key to effective retention hooks is subtlety. The viewer should never feel manipulated or notice the technique. When done correctly, the video simply feels engaging from start to finish, and the viewer watches the entire thing without consciously deciding to do so.</p>
+    <p>This is what separates content that gets views from content that gets viral reach. Average watch time is the single most important metric for Instagram's algorithm. A video with high average watch time gets pushed to explore, gets pushed to non followers, and compounds in reach over days and weeks.</p>
+    <p>The most viral Hano Crypto video is the clearest proof of this system working at its peak. 8,000,000 views with an average watch time of nearly one minute. That equals over 15 years of cumulative watch time from a single piece of content. The video combined perfect timing, a topic at peak relevance, a script that followed every step of the formula, and animations that matched the pacing precisely. It resulted in over 50,000 new followers from one video alone.</p>
+  </section>
+
+  <!-- The two Instagram analytics panels the frame sets side by side. -->
+  <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="Instagram analytics for War against China">
+    <div class="gallery-track" data-gallery-track>
+      <figure class="slide slide-tall"><img src="../assets/img/work/hano-crypto/analytics-1.jpg" alt="Instagram insights: 8,277,774 views, 5,539,897 accounts reached, 53s average watch time, 55,778 follows" loading="lazy"></figure>
+      <figure class="slide slide-tall"><img src="../assets/img/work/hano-crypto/analytics-2.jpg" alt="Instagram retention graph and traffic breakdown: 77.5% Reels tab, 6.4% Explore" loading="lazy"></figure>
+    </div>
+  </div>
+
+  <section class="case-sec">
+    <h2>Visual Systems</h2>
+    <p>The visual identity of Hano Crypto was developed to solve a specific problem: how to depict charts, trading data, and technical concepts in a way that everyone can understand, regardless of their experience level.</p>
+    <p>Traditional trading content uses raw chart screenshots, complex indicators, and dense data overlays that alienate casual viewers. Hano Crypto's approach redesigns this information visually, using simplified chart representations, clean data visualizations, and animated transitions that guide the viewer's eye through the information step by step.</p>
+    <p>The color palette is deliberately understated. Low key tones with purple as the primary accent color. Purple was chosen specifically for its psychological associations with trust, authority, wisdom, and wealth. In the context of financial content, purple communicates credibility and premium quality without the aggressive energy of red and green that dominates most trading content. It positions the brand as educational and trustworthy rather than speculative and hype driven.</p>
+    <p>Every visual element follows a consistency system that makes Hano Crypto content instantly recognizable in the feed. A viewer scrolling through explore should be able to identify a Hano Crypto video before reading the caption or seeing the account name. This brand recognition compounds over time and is one of the primary drivers of organic follower growth.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>Hano Crypto Mood Board</h2>
+    <p>Visual style guides, asset palettes, and motion references for the Hano Crypto visual system.</p>
+  </section>
+
+  <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="Hano Crypto mood board">
+    <div class="gallery-track" data-gallery-track>
+      <figure class="slide slide-board"><img src="../assets/img/work/hano-crypto/mood-board.jpg" alt="Hano Crypto mood board: brand overview, typography, data visualization, thumbnail style, signature assets and colour palette" loading="lazy"></figure>
+    </div>
+  </div>
+
+  <section class="case-sec">
+    <h2>Market Impact and Copycats</h2>
+    <p>Since Hano Crypto established its position, the format, style, and approach have been widely replicated across the crypto content space on Instagram. Multiple accounts have launched with explicit intent to copy the one minute storytelling format, the visual style, and the educational framing.</p>
+    <p>The majority of these accounts eventually stalled or failed. The reason is consistent: replicating the surface level format without the underlying crypto expertise, scripting formula, and retention engineering produces content that looks similar but doesn't perform.</p>
+    <p>The accounts and brands that did succeed in this space are, in several cases, direct clients of Hano Animations who worked with the team to build their own version of the system, adapted to their specific niche and audience. These collaborations led to significant growth in both awareness and monetization for the respective brands.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>The Market Opportunity</h2>
+    <p>The market for trading and crypto related video content on Instagram and social media broadly is massive and continues to grow. As crypto adoption increases globally and platforms like Instagram continue to prioritize short form video, the demand for high quality, educational crypto content is accelerating.</p>
+    <p>Hano Crypto's position as one of the largest and most engaged crypto communities on Instagram, built entirely through organic content, demonstrates what is possible when the right system is applied consistently. No account that attempted to replicate this approach has surpassed the original.</p>
+  </section>
+</article>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="contact">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <h2 class="cta-title">Let's bring your<br>vision to life</h2>
+  <a class="cta-bar" href="#contact" data-calendly>Let's talk</a>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-top">
+    <p class="footer-lead">A complete creative<br>partner for brands ready<br>to launch, scale, and lead.</p>
+
+    <div class="footer-cols">
+      <div>
+        <p class="col-head">Socials</p>
+        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener">Tik Tok</a>
+        <a href="https://x.com" target="_blank" rel="noopener">X / Twitter</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div>
+        <p class="col-head">Explore</p>
+        <a href="../index.html#top">Home</a>
+        <a href="../index.html#works">Work</a>
+        <a href="../index.html#process">Process</a>
+      </div>
+      <div>
+        <p class="col-head">About</p>
+        <a href="../index.html#team">Team</a>
+        <a href="../index.html#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-mark" aria-hidden="true">HANO STUDIOS</div>
+
+  <div class="footer-base">
+    <span>&copy; 2026 Hano Animations. All rights reserved.</span>
+    <div>
+      <a href="#">Legal</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Cookie Settings</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

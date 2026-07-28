@@ -1061,6 +1061,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   letter-spacing:-.04em;
   line-height:1;
 }
+/* A paragraph can follow the table (frame 208's organic-reach note); without
+   this it butts straight against the last rule. */
+.case-stats + p{ margin-top:clamp(16px,2vw,26px); }
 .case-stats dd{
   margin-top:8px;
   font-size:10px;
@@ -1069,6 +1072,21 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   text-transform:uppercase;
   color:var(--ink-40);
 }
+
+/* Frame 208's header mark is a filled purple badge rather than a wordmark on
+   the ground, so it wants the smaller of the two logo sizes. */
+.case-logo-badge{ width:clamp(88px,9vw,120px); border-radius:6px; }
+
+/* The engagement line under a post title in frame 208. */
+.case-post h2 + .case-metrics{ margin-top:8px; }
+.case-metrics{
+  font-size:11px !important;
+  letter-spacing:.04em;
+  color:var(--ink-40) !important;
+}
+/* A post title and its metrics introduce the clip directly beneath, so the
+   usual section gap would strand the heading away from its own video. */
+.case-post{ margin-bottom:clamp(16px,2vw,26px); }
 
 /* The small underlined caption under the Kalshi clip (frame 207). */
 .case-ig{ margin-bottom:clamp(22px,3vw,40px); }
@@ -1143,6 +1161,16 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    copy column, not filling it — the shared slide height would blow it up to
    the width of a landscape still. */
 .slide-tall{ height:clamp(360px,32vw,470px); }
+/* The mood board is a wide 1340x712 sheet: capped by width, not height, or a
+   height cap would push it far past the copy column. Both declarations have to
+   out-specify `.slide img{width:auto;height:100%}`, which is a later rule of
+   equal weight — as a single class it lost, and the slide collapsed to 0 high. */
+.slide.slide-board{
+  height:auto;
+  width:min(100%, 860px);
+  max-width:100%;
+}
+.slide.slide-board img{ width:100%; height:auto; }
 .slide img,
 .slide video{
   display:block;

@@ -101,15 +101,30 @@ because its "PENGUINS" half is dark navy and disappears against Void Black.
 
 ## Case study pages (`work/`)
 
-`work/bybit.html` (frame 181) and `work/kalshi.html` (frame 207) are built —
-copy either for the remaining four. They reuse `css/styles.css` and `js/main.js`
-wholesale; only the CASE STUDY block in the CSS and the "Case-study galleries"
-block in main.js are specific to them. Everything outside the `<article class="case">`
-is byte-identical between the two, so keep it that way when adding a page.
+`work/bybit.html` (frame 181), `work/kalshi.html` (frame 207) and
+`work/hano-crypto.html` (frame 208) are built — copy any of them for the
+remaining three. They reuse `css/styles.css` and `js/main.js` wholesale; only
+the CASE STUDY block in the CSS and the "Case-study galleries" block in main.js
+are specific to them. Everything outside the `<article class="case">` is
+byte-identical across all three, so keep it that way when adding a page.
 
 Kalshi differs from Bybit in three ways the frame dictates: no `<h1>` (the lead
 paragraph sits alone beside the logo), a single 9:16 clip on `.slide-tall`
 rather than a multi-slide strip, and a `.case-ig` "View on Instagram" caption.
+
+Hano Crypto is the longest frame and adds three more: `.case-logo-badge` (its
+mark is a filled purple badge, not a wordmark on the ground), `.case-post` +
+`.case-metrics` for a viral-post title with its engagement line above its own
+clip, and `.slide-board` for the wide 1340x712 mood board. **`.slide-board`
+needs `.slide.slide-board` specificity** — as a single class it loses to the
+later `.slide img{width:auto;height:100%}` and the slide collapses to 0 high.
+It also has no "Why It Matters" section; don't add one.
+
+Hano Crypto has no client-grid logo, and the only supplied artwork is a raster
+crop off the mood board whose dark corners showed against Void Black. The mark
+at `assets/img/clients/hano-crypto.svg` is rebuilt as vector — each glyph of
+HA_O is placed individually so the bar can sit over the N alone (a second text
+run collides with the first).
 Paths are `../` throughout, and the menu's Work/Process/Team/FAQ links point at
 `../index.html#…` so they work from a subdirectory.
 
@@ -137,11 +152,13 @@ proprietary codecs** (`canPlayType('video/mp4; codecs="avc1…"')` is empty), so
 playback can only be verified with `chromium.launch({channel:'chrome'})` — it
 fails there for the existing showcase clips too, which is the browser, not the file.
 
-Source masters live outside the repo: `~/Downloads/bybit` (88MB) and
-`~/Downloads/Kalshi` (88MB, one 1080x1920 clip). Re-encoded to 5.4MB and 2.4MB
-with the same settings the showcase clips use: H.264, CRF 27, long edge 960,
-AAC 96k, `+faststart`. Kalshi's poster is grabbed at `-ss 3` — the clip opens
-on near-black, so frame 0 gives a 4.5KB blank.
+Source masters live outside the repo: `~/Downloads/bybit` (88MB),
+`~/Downloads/Kalshi` (88MB, one 1080x1920 clip) and `~/Downloads/Hano Crypto`
+(397MB, two 1080x1920 clips plus the mood board and analytics PNGs). Re-encoded
+to 5.4MB, 2.4MB and 7.2MB with the same settings the showcase clips use: H.264,
+CRF 27, long edge 960, AAC 96k, `+faststart`. Kalshi's poster is grabbed at
+`-ss 3` — the clip opens on near-black, so frame 0 gives a 4.5KB blank; Hano
+Crypto ships its own poster JPEGs.
 
 ## Two deliberate resilience behaviours — don't remove them
 
