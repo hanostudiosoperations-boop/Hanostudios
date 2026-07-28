@@ -101,12 +101,17 @@ because its "PENGUINS" half is dark navy and disappears against Void Black.
 
 ## Case study pages (`work/`)
 
-`work/bybit.html` (frame 181), `work/kalshi.html` (frame 207) and
-`work/hano-crypto.html` (frame 208) are built — copy any of them for the
-remaining three. They reuse `css/styles.css` and `js/main.js` wholesale; only
-the CASE STUDY block in the CSS and the "Case-study galleries" block in main.js
-are specific to them. Everything outside the `<article class="case">` is
-byte-identical across all three, so keep it that way when adding a page.
+`work/bybit.html` (181), `work/kalshi.html` (207), `work/hano-crypto.html` (208)
+and `work/the-crypteum.html` (209) are built — copy any of them for Maxy and
+Levels Socials. They reuse `css/styles.css` and `js/main.js` wholesale; only the
+CASE STUDY block in the CSS and the "Case-study galleries" block in main.js are
+specific to them. Everything outside the `<article class="case">` is
+byte-identical across all four, so keep it that way when adding a page.
+
+The Crypteum needed no new CSS — it is Kalshi's shape plus `.slide-board` and
+`.case-metrics` from Hano Crypto, so the block should now cover a new page as
+supplied. Its wordmark is vector at `assets/img/clients/the-crypteum.svg` (none
+was supplied; frame 209 sets it as plain white type over two lines).
 
 Kalshi differs from Bybit in three ways the frame dictates: no `<h1>` (the lead
 paragraph sits alone beside the logo), a single 9:16 clip on `.slide-tall`
@@ -153,12 +158,15 @@ playback can only be verified with `chromium.launch({channel:'chrome'})` — it
 fails there for the existing showcase clips too, which is the browser, not the file.
 
 Source masters live outside the repo: `~/Downloads/bybit` (88MB),
-`~/Downloads/Kalshi` (88MB, one 1080x1920 clip) and `~/Downloads/Hano Crypto`
-(397MB, two 1080x1920 clips plus the mood board and analytics PNGs). Re-encoded
-to 5.4MB, 2.4MB and 7.2MB with the same settings the showcase clips use: H.264,
-CRF 27, long edge 960, AAC 96k, `+faststart`. Kalshi's poster is grabbed at
-`-ss 3` — the clip opens on near-black, so frame 0 gives a 4.5KB blank; Hano
-Crypto ships its own poster JPEGs.
+`~/Downloads/Kalshi` (88MB), `~/Downloads/Hano Crypto` (397MB) and
+`~/Downloads/Crypteum` (42MB). Re-encoded to 5.4MB, 2.4MB, 7.2MB and 3.8MB with
+the same settings the showcase clips use: H.264, CRF 27, long edge 960, AAC 96k,
+`+faststart`. Kalshi's poster is grabbed at `-ss 3` — the clip opens on
+near-black, so frame 0 gives a 4.5KB blank; Hano Crypto ships its own posters.
+
+**ffprobe reports Crypteum's master as 1920x1080 but it is a 9:16 reel** — that
+is the stored size, read before the rotation metadata. `scale=-2:960` handles it
+and the output is a correct 540x960; don't "fix" the orientation by hand.
 
 ## Two deliberate resilience behaviours — don't remove them
 

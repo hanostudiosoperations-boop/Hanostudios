@@ -1,0 +1,9 @@
+<!-- The Crypteum wordmark, rebuilt as vector for the case-study header. No logo
+     file was supplied; frame 209 sets it as plain white type stacked over two
+     lines, so that is what this is. Frost White on the Void ground. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 62" width="200" height="62" role="img" aria-label="The Crypteum">
+  <g fill="#FFFFFF" font-family="'Instrument Sans', Helvetica, Arial, sans-serif" font-weight="600">
+    <text x="0" y="24" font-size="24" letter-spacing="0.5">THE</text>
+    <text x="0" y="53" font-size="24" letter-spacing="0.5">CRYPTEUM</text>
+  </g>
+</svg>
