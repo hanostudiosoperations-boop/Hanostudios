@@ -951,18 +951,21 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    media. Every row shares the same two tracks, so the headings sit in a single
    vertical line down the left and the copy in a single line down the right. */
 .case{
-  --col:minmax(150px, .34fr);
+  /* Measured off the frame: at 1340 wide with 50px insets the copy column
+     starts a shade under a quarter of the way across, and the heading column
+     is only just wide enough for "The Stakes In Numbers" on one line. */
+  --col:minmax(140px, .26fr);
   position:relative;
   padding:clamp(84px,11vh,132px) var(--pad) clamp(48px,7vw,96px);
 }
 .case-row{
   display:grid;
   grid-template-columns:var(--col) minmax(0, 1fr);
-  gap:clamp(20px,4vw,64px);
-  margin-bottom:clamp(40px,6vw,86px);
+  gap:clamp(18px,2.6vw,40px);
+  margin-bottom:clamp(30px,3.6vw,52px);
 }
 /* The copy column has its own comfortable measure inside the wider track. */
-.case-row > :last-child{ max-width:74ch; }
+.case-row > :last-child{ max-width:70ch; }
 
 /* The logomark sits opposite the menu button and takes you home. */
 .case-home{
@@ -988,25 +991,28 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   color:var(--ink-40);
 }
 .case-intro h1{
-  font-size:clamp(28px,3.6vw,48px);
+  font-size:clamp(26px,2.9vw,40px);
   font-weight:500;
   letter-spacing:-.035em;
-  line-height:1.1;
+  line-height:1.12;
 }
 .case-lead{
-  margin-top:18px;
+  margin-top:14px;
   font-size:clamp(13px,1.15vw,16px);
   line-height:1.62;
   color:var(--ink-60);
 }
 
-/* Headings live in the left column and align to the top of their copy. */
+/* Headings live in the left column and align to the top of their copy. They are
+   set to fit the column on one line — the frame never wraps a section heading,
+   and a wrapped one pushes its own copy out of the shared baseline. */
 .case-row h2{
-  padding-top:2px;
-  font-size:clamp(21px,2.5vw,34px);
+  padding-top:1px;
+  font-size:clamp(17px,1.6vw,23px);
   font-weight:500;
   letter-spacing:-.03em;
-  line-height:1.15;
+  line-height:1.25;
+  text-wrap:balance;
 }
 .case-row p{
   font-size:clamp(13px,1.15vw,16px);
@@ -1030,7 +1036,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   border-top:1px solid var(--ink-14);
 }
 .case-stats > div{
-  padding:clamp(18px,2.4vw,30px) 0;
+  padding:clamp(14px,1.7vw,22px) 0;
   border-bottom:1px solid var(--ink-14);
 }
 .case-stats > div:nth-child(odd){ padding-right:clamp(16px,3vw,40px); }
@@ -1039,13 +1045,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   border-left:1px solid var(--ink-14);
 }
 .case-stats dt{
-  font-size:clamp(30px,3.8vw,52px);
+  font-size:clamp(26px,2.9vw,40px);
   font-weight:300;
   letter-spacing:-.04em;
   line-height:1;
 }
 .case-stats dd{
-  margin-top:10px;
+  margin-top:8px;
   font-size:10px;
   font-weight:500;
   letter-spacing:.12em;
@@ -1072,15 +1078,21 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 
 /* The galleries start at the copy column, not the page edge, so they line up
    with the running text above them — the same left edge the frame uses. They
-   still bleed off the RIGHT so the strip reads as continuing off-screen. */
+   still bleed off the RIGHT so the strip reads as continuing off-screen.
+   The bleed makes this grid box --pad wider than a .case-row's, which would
+   inflate the fractional heading track and start the strip right of its own
+   copy — so the same --pad is added back as padding. The grids then resolve
+   identically, and only the track itself overflows. */
 .gallery{
   display:grid;
   grid-template-columns:var(--col) minmax(0, 1fr);
-  gap:clamp(20px,4vw,64px);
-  margin:0 calc(var(--pad) * -1) clamp(40px,6vw,86px) 0;
-  padding-right:0;
+  gap:clamp(18px,2.6vw,40px);
+  margin:0 calc(var(--pad) * -1) clamp(30px,3.6vw,52px) 0;
+  padding-right:var(--pad);
 }
 .gallery > *{ grid-column:2; }
+/* …and the strip alone reclaims it, so the slides run off the edge. */
+.gallery-track{ margin-right:calc(var(--pad) * -1); }
 .gallery-track{
   display:flex;
   /* Each slide keeps its own height rather than being stretched to the tallest
