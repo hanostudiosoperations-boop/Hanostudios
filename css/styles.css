@@ -946,26 +946,37 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    CASE STUDY (work/*.html)
    ============================================================ */
 
-/* Frame 181 is a two-column grid: the left column carries the client logo and
-   each section's heading, the right column carries all the running copy and the
-   media. Every row shares the same two tracks, so the headings sit in a single
-   vertical line down the left and the copy in a single line down the right. */
+/* Frame 181 indents the whole document: the left column is a margin that holds
+   only the client logo and the "Why It Matters" label, and EVERYTHING else —
+   section headings included — sits in the right-hand column. The headings sit
+   above their own copy there, not out in the left margin. So only the two rows
+   that genuinely have a left-hand item are grids (.case-row); every ordinary
+   section (.case-sec) is a single block indented to the copy column. */
 .case{
-  /* Measured off the frame: at 1340 wide with 50px insets the copy column
-     starts a shade under a quarter of the way across, and the heading column
-     is only just wide enough for "The Stakes In Numbers" on one line. */
   --col:minmax(140px, .26fr);
+  --gap:clamp(18px,2.6vw,40px);
+  /* Where the grid's copy column starts, for the blocks that are not grids.
+     Note .26fr is NOT 26%: with tracks of .26fr and 1fr the fractions sum to
+     1.26, so the left track takes .26/1.26 of the free space (the width less
+     the gap). Getting this wrong put the headings 70px right of the grid. */
+  --indent:calc((.26 / 1.26) * (100% - var(--gap)) + var(--gap));
   position:relative;
   padding:clamp(84px,11vh,132px) var(--pad) clamp(48px,7vw,96px);
 }
 .case-row{
   display:grid;
   grid-template-columns:var(--col) minmax(0, 1fr);
-  gap:clamp(18px,2.6vw,40px);
+  gap:var(--gap);
+  margin-bottom:clamp(30px,3.6vw,52px);
+}
+/* Heading and copy together, indented to line up with the grid rows' copy. */
+.case-sec{
+  margin-left:var(--indent);
   margin-bottom:clamp(30px,3.6vw,52px);
 }
 /* The copy column has its own comfortable measure inside the wider track. */
-.case-row > :last-child{ max-width:70ch; }
+.case-row > :last-child,
+.case-sec{ max-width:70ch; }
 
 /* The logomark sits opposite the menu button and takes you home. */
 .case-home{
@@ -1003,24 +1014,24 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   color:var(--ink-60);
 }
 
-/* Headings live in the left column and align to the top of their copy. They are
-   set to fit the column on one line — the frame never wraps a section heading,
-   and a wrapped one pushes its own copy out of the shared baseline. */
-.case-row h2{
-  padding-top:1px;
-  font-size:clamp(17px,1.6vw,23px);
+/* Section headings sit above their own copy, inside the copy column. */
+.case-sec h2{
+  margin-bottom:12px;
+  font-size:clamp(19px,1.9vw,27px);
   font-weight:500;
   letter-spacing:-.03em;
-  line-height:1.25;
-  text-wrap:balance;
+  line-height:1.2;
 }
-.case-row p{
+.case-row p,
+.case-sec p{
   font-size:clamp(13px,1.15vw,16px);
   line-height:1.62;
   color:var(--ink-60);
 }
-.case-row p + p{ margin-top:14px; }
-.case-row em{ font-style:italic; color:var(--ink-90); }
+.case-row p + p,
+.case-sec p + p{ margin-top:14px; }
+.case-row em,
+.case-sec em{ font-style:italic; color:var(--ink-90); }
 /* The italic standfirst under "Bybit Card Campaign" in the frame. */
 .case-note{
   font-style:italic;
@@ -1145,12 +1156,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .gallery-dots button.is-on{ background:var(--frost); }
 
 /* Below 760 the two tracks leave the copy column ~180px wide — unreadable — so
-   every row stacks: heading above its own content, full width. */
+   the indent is dropped and the remaining grid rows stack to full width. */
 @media (max-width:760px){
   .case-row,
   .gallery{ grid-template-columns:1fr; gap:14px; }
   .gallery > *{ grid-column:1; }
   .case-row > :last-child{ max-width:none; }
+  .case-sec{ margin-left:0; max-width:none; }
   .case-brand{ padding-top:0; }
 }
 @media (max-width:600px){

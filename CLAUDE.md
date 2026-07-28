@@ -107,6 +107,15 @@ in the CSS and the "Case-study galleries" block in main.js are specific to it.
 Paths are `../` throughout, and the menu's Work/Process/Team/FAQ links point at
 `../index.html#…` so they work from a subdirectory.
 
+**Frame 181 indents the whole document; it is not a two-column grid.** The left
+column is a margin holding only the client logo and the "Why It Matters" label —
+section headings sit in the copy column, above their own paragraphs, *not* out
+in the margin. Only those two rows are grids (`.case-row`); every ordinary
+section is a `.case-sec` block pushed across by `--indent`. That variable has to
+reproduce the grid's own maths: `.26fr` against `1fr` is **not** 26%, it is
+`.26/1.26` of the width less the gap. Treating it as 26% puts every heading 70px
+right of the galleries.
+
 Galleries are `[data-gallery]`; main.js wires arrows, dots, swipe and per-slide
 video play/pause for any number of them per page. **Slides are capped on both
 axes** — a height cap alone makes 16:9 stills ~1.8x the phone's width, a width
