@@ -946,14 +946,23 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    CASE STUDY (work/*.html)
    ============================================================ */
 
-/* Frame 181 is one narrow reading column, left-aligned, on flat Void — not the
-   full-bleed layout the landing page uses. Everything below inherits the shared
-   tokens; only the measure and rhythm are specific to these pages. */
+/* Frame 181 is a two-column grid: the left column carries the client logo and
+   each section's heading, the right column carries all the running copy and the
+   media. Every row shares the same two tracks, so the headings sit in a single
+   vertical line down the left and the copy in a single line down the right. */
 .case{
-  --measure:min(100%, 760px);
+  --col:minmax(150px, .34fr);
   position:relative;
   padding:clamp(84px,11vh,132px) var(--pad) clamp(48px,7vw,96px);
 }
+.case-row{
+  display:grid;
+  grid-template-columns:var(--col) minmax(0, 1fr);
+  gap:clamp(20px,4vw,64px);
+  margin-bottom:clamp(40px,6vw,86px);
+}
+/* The copy column has its own comfortable measure inside the wider track. */
+.case-row > :last-child{ max-width:74ch; }
 
 /* The logomark sits opposite the menu button and takes you home. */
 .case-home{
@@ -967,11 +976,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .case-home:hover{ opacity:1; }
 
-.case-head{
-  width:var(--measure);
-  margin-bottom:clamp(40px,6vw,86px);
-}
-.case-brand{ margin-bottom:clamp(26px,4vw,52px); }
+.case-brand{ padding-top:6px; }
 /* The client's own mark, at the size the frame sets it. */
 .case-logo{ width:clamp(96px,11vw,150px); height:auto; }
 .case-kicker{
@@ -995,24 +1000,21 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   color:var(--ink-60);
 }
 
-.case-block{
-  width:var(--measure);
-  margin-bottom:clamp(40px,6vw,86px);
-}
-.case-block h2{
-  margin-bottom:16px;
+/* Headings live in the left column and align to the top of their copy. */
+.case-row h2{
+  padding-top:2px;
   font-size:clamp(21px,2.5vw,34px);
   font-weight:500;
   letter-spacing:-.03em;
   line-height:1.15;
 }
-.case-block p{
+.case-row p{
   font-size:clamp(13px,1.15vw,16px);
   line-height:1.62;
   color:var(--ink-60);
 }
-.case-block p + p{ margin-top:14px; }
-.case-block em{ font-style:italic; color:var(--ink-90); }
+.case-row p + p{ margin-top:14px; }
+.case-row em{ font-style:italic; color:var(--ink-90); }
 /* The italic standfirst under "Bybit Card Campaign" in the frame. */
 .case-note{
   font-style:italic;
@@ -1051,13 +1053,8 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   color:var(--ink-40);
 }
 
-/* "Why It Matters": small label left, the closing argument set large beside it. */
-.case-why{
-  width:100%;
-  display:grid;
-  grid-template-columns:minmax(120px,.28fr) minmax(0,var(--measure));
-  gap:clamp(20px,4vw,60px);
-}
+/* "Why It Matters" uses the same two tracks as every other row; only its right
+   column is set larger. */
 .case-label{
   font-size:clamp(12px,1.05vw,15px);
   color:var(--ink-40);
@@ -1073,14 +1070,17 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 
 /* ---------- Gallery carousel ---------- */
 
-/* Full-bleed strip that scrolls horizontally. The slides keep their own aspect
-   ratios — the supplied set mixes 16:9, 4:5, 1:1 and 9:16 — so they are sized
-   by HEIGHT and left to be as wide as they need. Scroll-snap does the paging;
-   main.js only drives scrollLeft, so with no JS this is still a usable strip. */
+/* The galleries start at the copy column, not the page edge, so they line up
+   with the running text above them — the same left edge the frame uses. They
+   still bleed off the RIGHT so the strip reads as continuing off-screen. */
 .gallery{
-  margin:0 calc(var(--pad) * -1) clamp(40px,6vw,86px);
-  padding:0 var(--pad);
+  display:grid;
+  grid-template-columns:var(--col) minmax(0, 1fr);
+  gap:clamp(20px,4vw,64px);
+  margin:0 calc(var(--pad) * -1) clamp(40px,6vw,86px) 0;
+  padding-right:0;
 }
+.gallery > *{ grid-column:2; }
 .gallery-track{
   display:flex;
   /* Each slide keeps its own height rather than being stretched to the tallest
@@ -1132,8 +1132,14 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .gallery-dots button.is-on{ background:var(--frost); }
 
-@media (max-width:900px){
-  .case-why{ grid-template-columns:1fr; gap:12px; }
+/* Below 760 the two tracks leave the copy column ~180px wide — unreadable — so
+   every row stacks: heading above its own content, full width. */
+@media (max-width:760px){
+  .case-row,
+  .gallery{ grid-template-columns:1fr; gap:14px; }
+  .gallery > *{ grid-column:1; }
+  .case-row > :last-child{ max-width:none; }
+  .case-brand{ padding-top:0; }
 }
 @media (max-width:600px){
   .case-stats{ grid-template-columns:1fr; }

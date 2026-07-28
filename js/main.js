@@ -435,17 +435,24 @@
 
     let current = 0;
 
-    // Only the visible slide plays. Videos carry preload="none", so a slide the
-    // visitor never reaches never costs a byte.
+    // EVERY slide actually on screen plays — not just `current`. Several slides
+    // are visible at once (that is the whole look), and keying playback to the
+    // single "current" index left a fully visible neighbour frozen on its
+    // poster. Videos still carry preload="none", so a slide the visitor never
+    // scrolls to never costs a byte.
     function sync(index) {
       current = Math.max(0, Math.min(index, slides.length - 1));
-      slides.forEach((slide, i) => {
+      const view = track.getBoundingClientRect();
+      slides.forEach(slide => {
         const v = slide.querySelector('video');
         if (!v) return;
-        if (i === current && !reduce) {
+        const r = slide.getBoundingClientRect();
+        // Mostly-visible inside the track's own viewport.
+        const shown = Math.min(r.right, view.right) - Math.max(r.left, view.left);
+        if (shown > r.width * 0.5 && !reduce) {
           // preload="none" leaves the element at HAVE_NOTHING with no source
           // selected, and play() on that rejects without ever fetching. Kick a
-          // load() the first time a slide becomes active; from then on the
+          // load() the first time a slide comes into view; from then on the
           // buffered data is reused and this is a no-op.
           if (v.readyState === 0) v.load();
           const attempt = v.play();
@@ -960,6 +967,23 @@
   // the carousel block above (search "showDistance") — see the comment there
   // for why. This used to be a subtle desktop-only parallax drift; that is
   // gone, because the real motion is now the scrub itself.
+
+  // Case-study galleries slide in from the left as they enter, one slide after
+  // the next, so the strip reads as arriving rather than just being there.
+  // Transform only (no layout properties), so this cannot shift the page.
+  document.querySelectorAll('[data-gallery] .gallery-track').forEach(track => {
+    gsap.fromTo(Array.from(track.children),
+      { xPercent: -14, opacity: 0 },
+      {
+        xPercent: 0,
+        opacity: 1,
+        ease: 'power2.out',
+        duration: 0.7,
+        stagger: 0.09,
+        scrollTrigger: { trigger: track, start: 'top 88%', once: true }
+      }
+    );
+  });
 
   // Footer watermark rises into place. A horizontal parallax was the wrong move
   // once the mark was sized to fit inside the page margins — with no overflow
