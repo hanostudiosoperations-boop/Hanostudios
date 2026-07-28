@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Kalshi — Crypto content, on demand | Hano Studios</title>
+<meta name="description" content="Kalshi made Hano Crypto their official partner for crypto video: content produced in the Hano Crypto style and published to a community of 135,000+ with 30M+ views.">
+
+<meta property="og:title" content="Kalshi — Crypto content, on demand.">
+<meta property="og:description" content="A $22B regulated exchange chose us to create and run its crypto content, in front of an audience we spent years building.">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="../assets/img/work/kalshi/xrp-bank-poster.jpg">
+
+<!-- Paths are ../ because this page sits in work/. Same set as the root page. -->
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="../assets/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="theme-color" content="#0A0A0A">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Aleo:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="../css/styles.css">
+
+<script defer data-domain="hano.studios" src="https://plausible.io/js/script.js"></script>
+<script>
+  window.plausible = window.plausible || function () {
+    (window.plausible.q = window.plausible.q || []).push(arguments);
+  };
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      document.documentElement.classList.add('no-gsap');
+    }
+  });
+</script>
+</head>
+<body class="case-body">
+
+<!-- ============ CALENDLY BOOKING MODAL ============ -->
+<!-- Same modal as the landing page; main.js wires any [data-calendly] trigger.
+     SETUP: replace CALENDLY_HANDLE here AND in index.html — both. -->
+<div class="cal-modal" id="calModal" hidden>
+  <div class="cal-backdrop" data-cal-close></div>
+  <div class="cal-panel" role="dialog" aria-modal="true" aria-labelledby="calTitle">
+    <div class="cal-head">
+      <h2 id="calTitle">Book an intro call</h2>
+      <button class="cal-close" type="button" aria-label="Close booking" data-cal-close>&times;</button>
+    </div>
+    <div class="cal-embed" id="calEmbed"
+         data-url="https://calendly.com/CALENDLY_HANDLE/intro-call?hide_gdpr_banner=1&background_color=0A0A0A&text_color=FFFFFF&primary_color=8B32F7">
+      <noscript>
+        <p class="cal-fallback">
+          <a href="https://calendly.com/CALENDLY_HANDLE/intro-call" target="_blank" rel="noopener">
+            Open the booking page &rarr;</a>
+        </p>
+      </noscript>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MENU BUTTON + OVERLAY ============ -->
+<button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+  <span></span><span></span>
+</button>
+
+<nav class="menu-overlay" id="menuOverlay" aria-hidden="true" inert>
+  <img class="menu-mark" src="../assets/logo/logomark_white.png" alt="" aria-hidden="true">
+
+  <div class="menu-inner">
+    <ul class="menu-links">
+      <li><a href="../index.html#works">Work</a></li>
+      <li><a href="../index.html#process">Process</a></li>
+      <li><a href="../index.html#team">Team</a></li>
+      <li><a href="../index.html#faq">FAQ</a></li>
+      <li><a href="#contact" data-calendly>Contact</a></li>
+    </ul>
+  </div>
+
+  <div class="menu-foot">
+    <span class="menu-copy">&copy; 2026 Hano Studios</span>
+    <div class="menu-social">
+      <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://tiktok.com" target="_blank" rel="noopener">Tik Tok</a>
+      <a href="https://x.com" target="_blank" rel="noopener">X / Twitter</a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ CASE STUDY ============ -->
+<article class="case">
+
+  <!-- Logomark links home, as the frame draws it top-left -->
+  <a class="case-home" href="../index.html" aria-label="Hano Studios — back to home">
+    <img src="../assets/logo/logomark_white.png" alt="">
+  </a>
+
+  <!-- Only the logo row and "Why It Matters" are two-track grids; every other
+       section is a .case-sec indented to the copy column. See CLAUDE.md. -->
+  <header class="case-row">
+    <div class="case-brand">
+      <img class="case-logo" src="../assets/img/clients/kalshi.png" alt="Kalshi">
+      <p class="case-kicker">Ad + Social Campaign</p>
+    </div>
+
+    <div class="case-intro">
+      <p class="case-lead">We create and amplify crypto video content for Kalshi through one of the largest crypto communities on Instagram.</p>
+    </div>
+  </header>
+
+  <section class="case-sec">
+    <h2>Overview</h2>
+    <p>Kalshi is a CFTC-regulated exchange that commands roughly 89% of the entire US prediction market at a $22 billion valuation — one of the biggest names in trading. But scale in one arena means nothing in another: a brand-new, crypto-focused account opens to an empty room, the same as everyone else's.</p>
+    <p>So when Kalshi launched @kalshicrypto to win over crypto audiences, they made us their official partner for it. We create the video content and run it through Hano Crypto — one of the largest crypto communities on Instagram, 135,000+ followers and 30M+ views deep — so Kalshi's content doesn't wait for reach. It lands in front of a real crypto audience from the very first post.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>The Partnership At A Glance</h2>
+    <dl class="case-stats">
+      <div><dt>$22B</dt><dd>Exchange valuation</dd></div>
+      <div><dt>135k</dt><dd>Hano audience reach</dd></div>
+      <div><dt>8</dt><dd>Videos produced</dd></div>
+      <div><dt>200k</dt><dd>Views across videos</dd></div>
+    </dl>
+  </section>
+
+  <section class="case-sec">
+    <h2>The Challenge</h2>
+    <p>A brand can be enormous and still be invisible on a new platform. Kalshi's name carries serious weight in trading, but a fresh crypto account has no audience, no algorithmic trust, and no shortcut to the crypto-native viewers it wants to reach.</p>
+    <p>Building that from scratch takes months. Kalshi wanted reach now.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>The Approach</h2>
+    <p>So we didn't start from zero — we started from 135,000. We produce crypto video content for Kalshi in the Hano Crypto style and post it across our channel, putting the brand in front of an audience we have spent years building.</p>
+    <p>Each video takes a live crypto story and frames it the way our audience already expects: tight, cinematic, and built to be watched to the end.</p>
+  </section>
+
+  <!-- One clip, as the frame draws it: a single 9:16 phone-format video with the
+       Instagram link beneath. data-gallery still wires play/pause on visibility. -->
+  <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="Kalshi crypto video content">
+    <div class="gallery-track" data-gallery-track>
+      <figure class="slide slide-tall"><video src="../assets/video/work/kalshi/xrp-bank.mp4" poster="../assets/img/work/kalshi/xrp-bank-poster.jpg" muted loop playsinline preload="none" aria-label="XRP Bank — Kalshi crypto video produced and published by Hano Crypto"></video></figure>
+    </div>
+  </div>
+
+  <section class="case-sec">
+    <p class="case-ig"><a href="https://www.instagram.com/kalshicrypto/" target="_blank" rel="noopener">View on Instagram</a></p>
+    <p>Cross-posting between Hano Crypto and @kalshicrypto compounds the effect. Our audience drives the initial views and engagement; that signal pushes each video deeper into the algorithm; and the attention flows back toward Kalshi's own account.</p>
+  </section>
+
+  <section class="case-row case-why">
+    <p class="case-label">Why It Matters</p>
+    <div>
+      <p class="case-why-lead">The story here isn't a single viral spike — it's consistency. Across the first eight videos, every one landed in five figures. For a brand-new crypto account, that's reliable reach from the start, and it compounds as the partnership continues and the @kalshicrypto audience grows.</p>
+      <p>One of the most important names in regulated trading, a $22 billion exchange, chose us to create and run its crypto content. We give Kalshi a dependable way to reach crypto audiences on demand, in a consistent style, through a community we've spent years building. The partnership is ongoing, and the reach grows with it.</p>
+    </div>
+  </section>
+</article>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="contact">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <h2 class="cta-title">Let's bring your<br>vision to life</h2>
+  <a class="cta-bar" href="#contact" data-calendly>Let's talk</a>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-top">
+    <p class="footer-lead">A complete creative<br>partner for brands ready<br>to launch, scale, and lead.</p>
+
+    <div class="footer-cols">
+      <div>
+        <p class="col-head">Socials</p>
+        <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://tiktok.com" target="_blank" rel="noopener">Tik Tok</a>
+        <a href="https://x.com" target="_blank" rel="noopener">X / Twitter</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div>
+        <p class="col-head">Explore</p>
+        <a href="../index.html#top">Home</a>
+        <a href="../index.html#works">Work</a>
+        <a href="../index.html#process">Process</a>
+      </div>
+      <div>
+        <p class="col-head">About</p>
+        <a href="../index.html#team">Team</a>
+        <a href="../index.html#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-mark" aria-hidden="true">HANO STUDIOS</div>
+
+  <div class="footer-base">
+    <span>&copy; 2026 Hano Animations. All rights reserved.</span>
+    <div>
+      <a href="#">Legal</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Cookie Settings</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

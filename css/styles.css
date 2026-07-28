@@ -1070,6 +1070,20 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   color:var(--ink-40);
 }
 
+/* The small underlined caption under the Kalshi clip (frame 207). */
+.case-ig{ margin-bottom:clamp(22px,3vw,40px); }
+.case-ig a{
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--ink-60);
+  text-decoration:underline;
+  text-underline-offset:5px;
+  transition:color .25s ease;
+}
+.case-ig a:hover{ color:var(--frost); }
+
 /* "Why It Matters" uses the same two tracks as every other row; only its right
    column is set larger. */
 .case-label{
@@ -1125,6 +1139,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   overflow:hidden;
   background:#141414;
 }
+/* Frame 207 shows its one 9:16 clip standing alone at roughly a third of the
+   copy column, not filling it — the shared slide height would blow it up to
+   the width of a landscape still. */
+.slide-tall{ height:clamp(360px,32vw,470px); }
 .slide img,
 .slide video{
   display:block;

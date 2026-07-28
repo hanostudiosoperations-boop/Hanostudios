@@ -101,9 +101,15 @@ because its "PENGUINS" half is dark navy and disappears against Void Black.
 
 ## Case study pages (`work/`)
 
-`work/bybit.html` is the built pattern — copy it for the other five projects.
-It reuses `css/styles.css` and `js/main.js` wholesale; only the CASE STUDY block
-in the CSS and the "Case-study galleries" block in main.js are specific to it.
+`work/bybit.html` (frame 181) and `work/kalshi.html` (frame 207) are built —
+copy either for the remaining four. They reuse `css/styles.css` and `js/main.js`
+wholesale; only the CASE STUDY block in the CSS and the "Case-study galleries"
+block in main.js are specific to them. Everything outside the `<article class="case">`
+is byte-identical between the two, so keep it that way when adding a page.
+
+Kalshi differs from Bybit in three ways the frame dictates: no `<h1>` (the lead
+paragraph sits alone beside the logo), a single 9:16 clip on `.slide-tall`
+rather than a multi-slide strip, and a `.case-ig` "View on Instagram" caption.
 Paths are `../` throughout, and the menu's Work/Process/Team/FAQ links point at
 `../index.html#…` so they work from a subdirectory.
 
@@ -131,9 +137,11 @@ proprietary codecs** (`canPlayType('video/mp4; codecs="avc1…"')` is empty), so
 playback can only be verified with `chromium.launch({channel:'chrome'})` — it
 fails there for the existing showcase clips too, which is the browser, not the file.
 
-Bybit source masters live in `~/Downloads/bybit` (88MB, outside the repo).
-Re-encoded to 5.4MB with the same settings the showcase clips use: H.264,
-CRF 27, long edge 960, AAC 96k, `+faststart`.
+Source masters live outside the repo: `~/Downloads/bybit` (88MB) and
+`~/Downloads/Kalshi` (88MB, one 1080x1920 clip). Re-encoded to 5.4MB and 2.4MB
+with the same settings the showcase clips use: H.264, CRF 27, long edge 960,
+AAC 96k, `+faststart`. Kalshi's poster is grabbed at `-ss 3` — the clip opens
+on near-black, so frame 0 gives a 4.5KB blank.
 
 ## Two deliberate resilience behaviours — don't remove them
 
