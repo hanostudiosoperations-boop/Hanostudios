@@ -15,14 +15,12 @@ Do not introduce a bundler, framework or dependency manager unless explicitly as
 ```
 index.html                 landing page, all sections
 work/bybit.html            case study (Figma frame 181) — the pattern for the rest
-services/*.html            6 SEO service pages, GENERATED — see tools/make-service-pages.py
 robots.txt sitemap.xml     search + AI crawler directives
 llms.txt                   structured summary for AI answer engines
 css/styles.css             all styles; tokens in :root at the top
 js/main.js                 menu, reveals, counters, galleries, GSAP scroll sequences
 assets/logo/               real brand logos (final, do not replace)
 assets/img/                ALL PLACEHOLDER — see below
-tools/make-service-pages.py regenerates services/ — edit it, not the output
 tools/make-placeholders.py regenerates the placeholder set
 tools/make-favicons.py     regenerates the favicon set from the logomark
 favicon.ico                root — browsers request this path implicitly
@@ -269,9 +267,15 @@ The tool substitutes its JSON-LD with a lambda rather than a replacement string 
 agency does, the verified numbers, and links to every page. Update it whenever a
 headline metric changes — it is the file most likely to be quoted verbatim.
 
-**Case studies and service pages cross-link both ways** (`.svc-links`). Before
-this the four case studies were dead ends with no links between them, so nothing
-passed authority and a crawler arriving on one had nowhere to go.
+**The site is exactly the five pages the product designer drew — do not add
+more.** Six SEO service pages and a "More work" cross-link strip were built and
+then removed on request: the design is owned by the product designer and pages
+that are not in Figma do not ship, regardless of their SEO value. Any future SEO
+work has to fit inside the existing five pages, or happen off-site (directories,
+backlinks, social). This is a standing constraint, not a one-off.
+
+A consequence worth knowing: the four case studies are deliberate dead ends with
+no links between them, so they pass no authority to one another.
 
 Hano Crypto's follower count is **148,000** as of 29 Jul 2026 and appears in copy,
 meta and schema on several pages. The Kalshi case study deliberately still says
