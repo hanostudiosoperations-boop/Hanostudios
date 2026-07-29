@@ -869,6 +869,26 @@
     });
   }
 
+  // "View all" used to point at #contact, which is the CTA at the very bottom —
+  // clicking it scrolled straight past every card. The works strip is a pinned
+  // horizontal tween, so "see all the work" means scrolling to the END of that
+  // pin's range: the cards travel past on the way, and you land with the last
+  // card shown rather than at the footer. Below 701px there is no pin and the
+  // cards are a plain vertical stack, so the anchor's own behaviour is right.
+  const viewAll = document.querySelector('[data-works-all]');
+  if (viewAll) {
+    viewAll.addEventListener('click', e => {
+      const st = ScrollTrigger.getAll().find(t => t.pin && t.pin.classList
+        && t.pin.classList.contains('works-pin'));
+      if (!st) return;                       // mobile, or GSAP unavailable
+      e.preventDefault();
+      window.scrollTo({
+        top: st.end,
+        behavior: reduce ? 'auto' : 'smooth'
+      });
+    });
+  }
+
   // Showcase carousel: pin the section and drive the strip's native
   // scrollLeft with vertical scroll, the same pattern as Works just above —
   // first phone starts centred, continued scrolling pushes the active phone

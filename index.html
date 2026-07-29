@@ -109,7 +109,7 @@
       "contactPoint": {
         "@type": "ContactPoint",
         "contactType": "Sales",
-        "url": "https://calendly.com/hanoanimations/discovery",
+        "url": "https://calendly.com/hanostudios",
         "availableLanguage": ["English"]
       },
       "areaServed": "Worldwide",
@@ -172,10 +172,10 @@
       <button class="cal-close" type="button" aria-label="Close booking" data-cal-close>&times;</button>
     </div>
     <div class="cal-embed" id="calEmbed"
-         data-url="https://calendly.com/hanoanimations/discovery?hide_gdpr_banner=1&background_color=0A0A0A&text_color=FFFFFF&primary_color=8B32F7">
+         data-url="https://calendly.com/hanostudios?hide_gdpr_banner=1&background_color=0A0A0A&text_color=FFFFFF&primary_color=8B32F7">
       <noscript>
         <p class="cal-fallback">
-          <a href="https://calendly.com/hanoanimations/discovery" target="_blank" rel="noopener">
+          <a href="https://calendly.com/hanostudios" target="_blank" rel="noopener">
             Open the booking page &rarr;</a>
         </p>
       </noscript>
@@ -296,7 +296,10 @@
       <div class="works-intro">
         <h2 class="h-split"><strong>Our curated</strong> works</h2>
         <p class="sub"><strong>Real client stories,</strong> measurable outcomes, and the creative thinking behind every project.</p>
-        <a class="link-arrow" href="#contact">View all <span>&rarr;</span></a>
+        <!-- Points at the works section itself, not #contact. #contact is the
+             CTA at the very bottom, so clicking this used to scroll straight
+             past every card to the end of the page. -->
+        <a class="link-arrow" href="#works" data-works-all>View all <span>&rarr;</span></a>
       </div>
 
       <!-- Maxy and Levels Socials are the two case studies still to build; they

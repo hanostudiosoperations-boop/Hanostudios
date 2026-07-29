@@ -194,9 +194,12 @@ Both were verified by killing the scripts. Keep them if you refactor.
   `data-src="assets/video/showcase/<slug>.mp4"` to that `<video>` — there is a comment
   beside each one with the exact line. A phone with no `data-src` just shows its poster,
   so no missing file is ever requested.
-- **Calendly is live**: `https://calendly.com/hanoanimations/discovery` ("Discovery
-  Call", 30 min). The URL appears twice per page — `#calEmbed`'s `data-url` and the
-  `<noscript>` link beside it — across all five pages; change them together.
+- **Calendly is live**: `https://calendly.com/hanostudios` — the account landing
+  page, which lists the "Discovery Call" event (30 min). The older
+  `/hanoanimations/discovery` URL now 404s, which is what made the modal show
+  Calendly's own error page. The URL appears twice per page — `#calEmbed`'s
+  `data-url` and the `<noscript>` link beside it — across all five pages plus
+  `llms.txt`; change them together.
   **The dark theme does not apply.** The colour params are on `data-url` *and*
   passed as `pageSettings` in main.js, and Calendly puts them on the iframe URL,
   but the widget still renders white — colour customisation is a paid feature.

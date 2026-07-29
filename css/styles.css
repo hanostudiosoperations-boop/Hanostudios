@@ -688,7 +688,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .phone{
   position:relative;
   flex:none;
-  width:clamp(150px,15vw,232px);
+  /* Sized from viewport HEIGHT, not width. A 9:16 card driven by a width cap
+     could only ever be ~412px tall inside a ~500px stage, so the clips read as
+     small squat rectangles with most of the section sitting empty. Driving the
+     width off the height the section actually has fills that space, and
+     aspect-ratio keeps 9:16 exact. 33.75svh is 60svh x 9/16 — the width a
+     60svh-tall phone needs. The vw and px terms cap it on short/wide windows. */
+  width:min(33.75svh, 26vw, 340px);
   /* Matches the clips (540x960). At the 9/19.5 of a modern handset, cover
      cropped ~11% off each side — enough to lose the client logo in the corner
      and clip the captions, which sit close to the edge in every one of these.
