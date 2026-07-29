@@ -1081,6 +1081,28 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .case-post{ margin-bottom:clamp(16px,2vw,26px); }
 
 /* The small underlined caption under the Kalshi clip (frame 207). */
+/* ---------- Service pages + cross-links ---------- */
+
+/* "Related work" on a service page and "More work" under a case study. Plain
+   list of real links: this is the internal linking that lets a crawler see the
+   case studies as a connected set rather than four dead ends. */
+.svc-links{ margin-top:4px; }
+.svc-links li{ border-top:1px solid var(--ink-14); }
+.svc-links li:last-child{ border-bottom:1px solid var(--ink-14); }
+.svc-links a{
+  display:block;
+  padding:clamp(13px,1.5vw,18px) 0;
+  font-size:clamp(13px,1.15vw,16px);
+  line-height:1.4;
+  color:var(--ink-60);
+  transition:color .25s ease, padding-left .25s ease;
+}
+.svc-links a:hover{ color:var(--frost); padding-left:8px; }
+
+/* The FAQ block reuses the landing page's <details> styling; it only needs its
+   own top margin inside a .case-sec. */
+.svc-faq{ margin-top:4px; }
+
 .case-ig{ margin-bottom:clamp(22px,3vw,40px); }
 .case-ig a{
   font-size:10px;

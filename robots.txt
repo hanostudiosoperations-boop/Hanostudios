@@ -59,4 +59,7 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
+# Structured summary for AI answer engines (llmstxt.org).
+# https://www.hanostudios.xyz/llms.txt
+
 Sitemap: https://www.hanostudios.xyz/sitemap.xml

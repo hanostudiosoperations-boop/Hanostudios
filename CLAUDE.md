@@ -15,10 +15,14 @@ Do not introduce a bundler, framework or dependency manager unless explicitly as
 ```
 index.html                 landing page, all sections
 work/bybit.html            case study (Figma frame 181) — the pattern for the rest
+services/*.html            3 SEO service pages, GENERATED — see tools/make-service-pages.py
+robots.txt sitemap.xml     search + AI crawler directives
+llms.txt                   structured summary for AI answer engines
 css/styles.css             all styles; tokens in :root at the top
 js/main.js                 menu, reveals, counters, galleries, GSAP scroll sequences
 assets/logo/               real brand logos (final, do not replace)
 assets/img/                ALL PLACEHOLDER — see below
+tools/make-service-pages.py regenerates services/ — edit it, not the output
 tools/make-placeholders.py regenerates the placeholder set
 tools/make-favicons.py     regenerates the favicon set from the logomark
 favicon.ico                root — browsers request this path implicitly
@@ -242,6 +246,26 @@ it from the accessibility tree as well as from search.
 
 Titles are kept under ~70 characters and descriptions ~150–170, or they get
 truncated in results.
+
+**`services/` is generated — never hand-edit those three files.** They exist
+because the landing page is a portfolio and a portfolio cannot answer "what does
+a Web3 motion design agency do". `tools/make-service-pages.py` lifts the head and
+tail verbatim from `work/kalshi.html`, so the menu, Calendly modal, CTA and
+footer stay identical across all eight content pages; re-run it after touching
+that shell. Each page carries `Service` + `FAQPage` + `BreadcrumbList` schema.
+
+`llms.txt` (llmstxt.org) is the plain-text brief for AI answer engines: what the
+agency does, the verified numbers, and links to every page. Update it whenever a
+headline metric changes — it is the file most likely to be quoted verbatim.
+
+**Case studies and service pages cross-link both ways** (`.svc-links`). Before
+this the four case studies were dead ends with no links between them, so nothing
+passed authority and a crawler arriving on one had nowhere to go.
+
+Hano Crypto's follower count is **148,000** as of 29 Jul 2026 and appears in copy,
+meta and schema on several pages. The Kalshi case study deliberately still says
+135,000+ — that describes the audience size *at the time of that partnership*, so
+don't "fix" it to today's number.
 
 ## Conventions
 
