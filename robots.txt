@@ -1,0 +1,62 @@
+# hano.studios — Hano Studios / Hano Animations
+# Search crawlers and AI answer engines are both welcome: the case studies are
+# the credibility, so they are the pages we most want quoted.
+
+User-agent: *
+Allow: /
+
+# AI answer engines / LLM crawlers. Named explicitly rather than relying on the
+# wildcard because several of these read robots.txt for their own token and
+# ignore inherited rules.
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+Sitemap: https://www.hanostudios.xyz/sitemap.xml

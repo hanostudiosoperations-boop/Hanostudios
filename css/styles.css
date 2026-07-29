@@ -988,6 +988,21 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   letter-spacing:-.035em;
   line-height:1.12;
 }
+/* Frames 207/208/209 show no headline — the lead paragraph stands alone beside
+   the logo. A page still needs one <h1> naming its subject for search and for
+   screen readers, so it is present and hidden rather than absent. Clipped, not
+   display:none, which would drop it from the accessibility tree too. */
+.sr-only{
+  position:absolute;
+  width:1px; height:1px;
+  padding:0; margin:-1px;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  clip-path:inset(50%);
+  white-space:nowrap;
+  border:0;
+}
+
 .case-lead{
   margin-top:14px;
   font-size:clamp(13px,1.15vw,16px);
@@ -1129,7 +1144,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .slide{
   flex:none;
   scroll-snap-align:center;
-  height:clamp(300px,42vw,540px);
+  height:clamp(340px,46vw,620px);
   border-radius:4px;
   overflow:hidden;
   background:#141414;
@@ -1137,7 +1152,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 /* Frame 207 shows its one 9:16 clip standing alone at roughly a third of the
    copy column, not filling it — the shared slide height would blow it up to
    the width of a landscape still. */
-.slide-tall{ height:clamp(360px,32vw,470px); }
+/* A 9:16 clip is only ~0.56x as wide as it is tall, so at the shared height it
+   reads far smaller than a landscape still beside it. It gets its own, taller
+   cap to land at comparable visual weight rather than a stamp in the column. */
+.slide-tall{ height:clamp(460px,44vw,680px); }
 /* The mood board is a wide 1340x712 sheet: capped by width, not height, or a
    height cap would push it far past the copy column. Both declarations have to
    out-specify `.slide img{width:auto;height:100%}`, which is a later rule of
@@ -1199,9 +1217,19 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
      the arrows ~400px below a short slide. Capping both keeps each aspect
      ratio intact inside a shared box, exactly as the desktop rule does. */
   .slide{
-    height:min(52vh,340px);
+    height:min(56vh,400px);
     max-width:84vw;
   }
+  /* At the shared cap a 9:16 clip came out ~190px wide — a stamp next to the
+     text. Width is the binding axis for these, so drive it from vw and let the
+     height follow, which is what makes them read at phone scale. */
+  .slide.slide-tall{
+    height:auto;
+    width:min(78vw, 340px);
+    max-width:78vw;
+  }
+  .slide.slide-tall video,
+  .slide.slide-tall img{ width:100%; height:auto; }
 }
 
 /* ============================================================

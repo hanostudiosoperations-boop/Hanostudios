@@ -117,8 +117,7 @@ Kalshi differs from Bybit in three ways the frame dictates: no `<h1>` (the lead
 paragraph sits alone beside the logo), a single 9:16 clip on `.slide-tall`
 rather than a multi-slide strip, and a `.case-ig` "View on Instagram" caption.
 
-Hano Crypto is the longest frame and adds three more: `.case-logo-badge` (its
-mark is a filled purple badge, not a wordmark on the ground), `.case-post` +
+Hano Crypto is the longest frame and adds two more: `.case-post` +
 `.case-metrics` for a viral-post title with its engagement line above its own
 clip, and `.slide-board` for the wide 1340x712 mood board. **`.slide-board`
 needs `.slide.slide-board` specificity** — as a single class it loses to the
@@ -209,10 +208,40 @@ Both were verified by killing the scripts. Keep them if you refactor.
   plus a handler in main.js — the 7 images in `assets/img/services/` are
   currently unreferenced but kept for that.
 - Figma source reads "AD CAMPAINGS" — corrected to "Ad Campaigns" here.
-- Plausible is wired in `<head>` with `data-domain="hano.studios"`. It only starts
+- Plausible is wired in `<head>` with `data-domain="hanostudios.xyz"`. It only starts
   recording once the site is added in the Plausible dashboard. Cookieless, so no
   consent banner. A `Booking opened` goal fires from `main.js` when the Calendly
   modal opens — add it as a goal in Plausible to see conversions.
+
+## SEO / AEO
+
+**Canonical host is `https://www.hanostudios.xyz`** — the apex 301s to it, so every
+canonical, sitemap `<loc>`, `og:url` and schema `@id` must use `www`. Mixing the two
+splits the ranking signal.
+
+`robots.txt` allows the AI answer engines by name (GPTBot, OAI-SearchBot,
+PerplexityBot, ClaudeBot, Google-Extended, Applebot-Extended and others) — several
+read robots.txt for their own token and ignore rules inherited from `*`. Serving them
+is deliberate: the case studies with real numbers are exactly what we want quoted.
+
+`sitemap.xml` lists all five pages; regenerate `lastmod` from git when adding one.
+
+Structured data is one `application/ld+json` block per page:
+- `index.html` — `Organization`/`ProfessionalService` (+ `knowsAbout`, `makesOffer`,
+  `sameAs`), `WebSite`, and `FAQPage` built from the real `<details>` copy.
+- each `work/*.html` — `CreativeWork` naming the client and its metrics, plus
+  `BreadcrumbList`, both referencing the org by `@id`.
+
+**Every number in the schema also appears in the visible copy.** Schema that claims
+more than the page says is a manual-action risk, not a shortcut — if you change a
+metric, change both.
+
+Frames 207/208/209 draw no headline, so those pages carry a visually-hidden
+`<h1 class="sr-only">`. `.sr-only` clips rather than `display:none`, which would drop
+it from the accessibility tree as well as from search.
+
+Titles are kept under ~70 characters and descriptions ~150–170, or they get
+truncated in results.
 
 ## Conventions
 
