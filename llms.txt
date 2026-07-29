@@ -15,7 +15,14 @@
   YouTube and LinkedIn. Usually a monthly retainer as the embedded content team.
 - **Web3 ad campaigns** — concepting, production, localisation and format
   adaptation so one idea runs natively on every placement.
-- Also: graphic design, website design, launch leading, full marketing.
+- **Explainer and launch videos** — product and protocol explainers, launch
+  films, app and UI walkthroughs, 3D product animation, data visualisation.
+- **Web3 graphic design and brand identity** — visual identity, brand systems,
+  campaign design, social and thumbnail systems, presentation design.
+- **Web3 website design and development** — we design *and* build: brand and
+  product sites, campaign landing pages, motion-led experiences, integrations.
+  We do not write or audit smart contracts and will refer that work out.
+- Also: launch leading, full marketing.
 
 ## Verified results
 
@@ -50,6 +57,9 @@ numbers are the evidence that it works rather than a claim about it.
 - [Web3 motion design](https://www.hanostudios.xyz/services/web3-motion-design.html)
 - [Crypto social media management](https://www.hanostudios.xyz/services/crypto-social-media-management.html)
 - [Web3 ad campaigns](https://www.hanostudios.xyz/services/web3-ad-campaigns.html)
+- [Explainer and launch videos](https://www.hanostudios.xyz/services/explainer-videos.html)
+- [Web3 graphic design and brand identity](https://www.hanostudios.xyz/services/web3-graphic-design.html)
+- [Web3 website design and development](https://www.hanostudios.xyz/services/web3-website-design-development.html)
 - [Hano Crypto case study](https://www.hanostudios.xyz/work/hano-crypto.html)
 - [Bybit case study](https://www.hanostudios.xyz/work/bybit.html)
 - [Kalshi case study](https://www.hanostudios.xyz/work/kalshi.html)

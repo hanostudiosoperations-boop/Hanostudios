@@ -46,6 +46,7 @@ def shell():
 SERVICES = [
     dict(
         slug="web3-motion-design",
+        nav="Web3 motion design",
         title="Web3 Motion Design Agency | Hano Studios",
         h1="Web3 motion design that makes complex products obvious",
         desc=("Web3 motion design agency for crypto, trading and fintech brands. "
@@ -119,6 +120,7 @@ SERVICES = [
     ),
     dict(
         slug="crypto-social-media-management",
+        nav="Crypto social media management",
         title="Crypto & Web3 Social Media Management Agency | Hano Studios",
         h1="Web3 social media management, run by people who grew their own audience",
         desc=("Crypto social media management agency. We grew Hano Crypto to 148,000 "
@@ -193,6 +195,7 @@ SERVICES = [
     ),
     dict(
         slug="web3-ad-campaigns",
+        nav="Web3 ad campaigns",
         title="Web3 & Crypto Ad Campaign Agency | Hano Studios",
         h1="Ad campaigns for crypto brands, built to hold up at global scale",
         desc=("Web3 ad campaign agency. We produced two campaigns for Bybit EU, the "
@@ -259,6 +262,207 @@ SERVICES = [
              "recognisable rather than a set of unrelated assets."),
         ],
     ),
+    dict(
+        slug="explainer-videos",
+        nav="Explainer &amp; launch videos",
+        title="Crypto & Web3 Explainer Video Agency | Hano Studios",
+        h1="Explainer and launch videos for products people find hard to understand",
+        desc=("Web3 explainer video agency. We animate protocols, exchanges and token "
+              "mechanics so newcomers understand them and experienced traders still "
+              "take them seriously."),
+        kicker="Service",
+        lead=("An explainer earns its budget when a stranger watches it and decides "
+              "your product makes sense. That is a harder test than looking good, and "
+              "it is the one we build for."),
+        keywords=["explainer video", "crypto explainer video", "launch video",
+                  "product video", "animated explainer", "protocol explainer"],
+        sections=[
+            ("What an explainer video has to do",
+             ["Most explainers fail in the first five seconds, not the last thirty. "
+              "They open by introducing the company instead of the problem, and the "
+              "viewer leaves before the useful part arrives.",
+              "In Web3 the difficulty doubles, because the audience splits. Half have "
+              "never used a wallet; half trade daily and will close the tab the moment "
+              "something is inaccurate. A good explainer serves both without patronising "
+              "either, which means the script matters more than the render."]),
+            ("Launch videos",
+             ["A launch video is a different job from an explainer. It is not teaching, "
+              "it is creating a reason to pay attention on a specific day.",
+              "Those work when they are built around one clear idea and cut for the "
+              "platform they will actually run on, rather than a two-minute film "
+              "trimmed down afterwards. We produce the hero cut and the platform-native "
+              "versions together, so the launch lands everywhere at once."]),
+            ("What we produce",
+             ["Product and protocol explainers. Launch and announcement films. App and "
+              "UI walkthroughs that show a first-time user exactly what happens when "
+              "they tap. 3D product animation. Data and chart visualisation. Scripts, "
+              "storyboards, voiceover direction and sound design as part of the work, "
+              "not as extras."]),
+            ("Proof this works",
+             ["Our own channel is the clearest evidence: %s videos explaining crypto "
+              "topics to a mixed audience, %s followers and %s views, all organic. The "
+              "most viral reached %s views with an average watch time near a full "
+              "minute — on educational content, not a stunt."
+              % ("200+", PROOF["followers"], PROOF["views"], PROOF["viral"]),
+              "For Bybit EU we animated the Bybit Card as the hero of every frame "
+              "across a Europe-wide campaign, and built UI animation of the Bybit app "
+              "so a new user understands the product before downloading it."]),
+        ],
+        faqs=[
+            ("How much does an explainer video cost?",
+             "It depends on length, animation complexity and how many cuts you need. A "
+             "single 60-second animated explainer and a launch package with platform "
+             "variants are different budgets, so we quote per project after a short "
+             "call about scope."),
+            ("How long should an explainer video be?",
+             "Long enough to be understood and no longer. For social placement, 45 to "
+             "75 seconds is usually right; our own one-minute format outperformed the "
+             "15-second content that dominated when we started, because watch time "
+             "matters more to the algorithm than view count."),
+            ("Do you write the script?",
+             "Yes. Scripting is where an explainer is won or lost, so it is part of the "
+             "work rather than something we ask you to supply. You review and approve "
+             "direction before any animation starts."),
+            ("Can you explain a technical protocol accurately?",
+             "That is the specific thing we are built for. We work in crypto and "
+             "trading every day, so the conversation starts at mechanics rather than "
+             "definitions, and the output survives scrutiny from people who know the "
+             "space."),
+        ],
+    ),
+    dict(
+        slug="web3-graphic-design",
+        nav="Web3 graphic design &amp; brand identity",
+        title="Web3 Graphic Design & Crypto Brand Identity | Hano Studios",
+        h1="Graphic design and brand identity for crypto and Web3",
+        desc=("Web3 graphic design agency. Brand identity, visual systems and campaign "
+              "design for crypto, trading and fintech — built to be recognisable in a "
+              "feed, not just in a brand book."),
+        kicker="Service",
+        lead=("A crypto brand is judged in a feed, at speed, next to competitors. We "
+              "design identities that stay recognisable there, and the systems that "
+              "keep them consistent across everything you ship."),
+        keywords=["Web3 graphic design", "crypto brand identity", "visual identity",
+                  "brand system", "campaign design", "social media design"],
+        sections=[
+            ("Identity that survives contact with a feed",
+             ["Most brand guidelines are written for a website and a business card. In "
+              "Web3 the primary surface is a 9:16 video on a phone, seen for a second "
+              "and a half while someone scrolls.",
+              "That changes what an identity needs to be. Colour has to hold at "
+              "thumbnail size, type has to read at speed, and the system has to survive "
+              "being animated. We design for that surface first and let the static "
+              "applications follow."]),
+            ("What we design",
+             ["Full visual identity: logo, type system, colour, iconography and motion "
+              "principles. Campaign design and key visuals. Social templates and "
+              "thumbnail systems. Presentation and pitch design. Data and chart design "
+              "systems for products where numbers are the story."]),
+            ("Why the system matters more than the logo",
+             ["Recognition compounds. A viewer scrolling their explore feed should be "
+              "able to identify your brand before reading the account name, and that "
+              "only happens when every asset follows the same rules.",
+              "We build the rules and the components together, so consistency does not "
+              "depend on someone remembering the guidelines every time."]),
+            ("Proof this works",
+             ["We built The Crypteum's entire visual identity from the ground up: a "
+              "deliberate black-and-silver film language, high contrast and restrained, "
+              "with every video playing as a sequence of designed frames rather than "
+              "text over a static post. That account went from 400 followers to %s in "
+              "three months." % PROOF["crypteum"],
+              "Hano Crypto's own system uses a low-key palette with purple as the "
+              "single accent, chosen because it reads as credible rather than "
+              "speculative in a category full of red and green. It is now one of the "
+              "most copied looks in crypto content on Instagram."]),
+        ],
+        faqs=[
+            ("What does Web3 graphic design include?",
+             "Visual identity, campaign design, social and thumbnail systems, "
+             "presentation design and data visualisation. The Web3-specific part is "
+             "designing for short-form video and feed placement first, because that is "
+             "where crypto brands are actually seen."),
+            ("Do you do full brand identity or only individual assets?",
+             "Both. We have built identities from nothing, including The Crypteum's, "
+             "and we also work inside existing brand systems where a client already has "
+             "one they are happy with."),
+            ("How is this different from a general design studio?",
+             "Domain knowledge and format. We know what a chart, an order book or a "
+             "tokenomics diagram needs to communicate, and we design assuming the work "
+             "will be animated and watched on a phone rather than printed."),
+            ("Do you deliver source files and guidelines?",
+             "Yes. You get the working files and a system your team can apply without "
+             "us, which is the point of a system rather than a set of one-off assets."),
+        ],
+    ),
+    dict(
+        slug="web3-website-design-development",
+        nav="Web3 website design &amp; development",
+        title="Web3 Website Design & Development | Hano Studios",
+        h1="Web3 websites, designed and built",
+        desc=("Web3 website design and development. We design and ship fast, "
+              "motion-led sites for crypto, trading and fintech brands — design "
+              "through launch, not a handoff."),
+        kicker="Service",
+        lead=("We design and build the site, rather than designing it and handing you "
+              "a file. What you approve is what goes live, at the speed it was "
+              "designed to run."),
+        keywords=["Web3 website design", "crypto website development",
+                  "website development", "landing page", "web design agency"],
+        sections=[
+            ("Design and build, one team",
+             ["The usual failure in agency web work is the handoff. A studio designs "
+              "something beautiful, a separate developer builds an approximation, and "
+              "the motion that made the design work is the first thing dropped.",
+              "We do both, so what gets approved is what ships. Animation is planned as "
+              "part of the design rather than requested afterwards, which is why it "
+              "survives to production and still performs."]),
+            ("What we build",
+             ["Brand and product sites. Campaign and launch landing pages. Documentation "
+              "and content sites. Motion-led experiences where scroll and transition "
+              "carry the story. Integrations with the tools you already run: analytics, "
+              "booking, CRM, CMS and email.",
+              "Note on scope: we design and build front-end experiences. We do not write "
+              "or audit smart contracts, and we will say so rather than take work we "
+              "should not."]),
+            ("Fast by construction",
+             ["A crypto audience arrives on mobile, often on a poor connection, and "
+              "leaves if the page stalls. Performance is a design constraint from the "
+              "start, not an optimisation pass at the end.",
+              "That means restraint about what loads, media encoded properly, and "
+              "animation that degrades gracefully when a script fails or a visitor "
+              "prefers reduced motion — this site does exactly that, and stays fully "
+              "readable with its animation library blocked."]),
+            ("Proof this works",
+             ["The site you are reading is ours: a static, no-framework build with "
+              "scroll-driven animation, video case studies, structured data and a "
+              "booking flow, and it stays usable if the animation library never loads.",
+              "The same team produces the motion work behind Bybit EU's campaigns and "
+              "the content that took Hano Crypto to %s followers, so the site and the "
+              "campaign speak the same visual language rather than being commissioned "
+              "separately." % PROOF["followers"]]),
+        ],
+        faqs=[
+            ("Do you build the website or just design it?",
+             "Both. We design and build, then launch. You are not left holding a design "
+             "file and a quote from a separate developer."),
+            ("Do you do blockchain or smart contract development?",
+             "No. We design and build front-end websites and experiences, including "
+             "connecting to services you already use. Smart contract development and "
+             "auditing is specialist security work and we would refer you to a firm "
+             "that does it properly."),
+            ("How long does a website take?",
+             "A focused landing page can be weeks; a full brand site depends on scope "
+             "and content readiness. We agree direction before build starts, which is "
+             "where most timeline overruns actually come from."),
+            ("Can you work with our existing brand?",
+             "Yes. We work inside an existing identity, or build one first if you do "
+             "not have a system that survives being animated."),
+            ("Will the site be fast on mobile?",
+             "That is a requirement, not an aspiration. Performance is treated as a "
+             "design constraint from the first conversation, because a crypto audience "
+             "is mobile-first and impatient."),
+        ],
+    ),
 ]
 
 
@@ -307,9 +511,13 @@ def build_page(svc, head, tail):
                   "item": BASE + "/#services"},
                  {"@type": "ListItem", "position": 3, "name": svc["h1"], "item": url}]},
         ]}
+    # Passed as a lambda, not a string: re.sub interprets backslashes in the
+    # replacement, and JSON containing a \u escape (an em dash, say) raises
+    # "bad escape \u". A callable is substituted literally.
+    ld = ('<script type="application/ld+json">\n%s\n</script>\n'
+          % json.dumps(graph, indent=2))
     h = re.sub(r'<!-- Case-study structured data.*?</script>\n',
-               '<script type="application/ld+json">\n%s\n</script>\n'
-               % json.dumps(graph, indent=2), h, flags=re.S)
+               lambda _m: ld, h, flags=re.S)
 
     # Body.
     secs = []
@@ -317,6 +525,13 @@ def build_page(svc, head, tail):
         body = "\n".join("    <p>%s</p>" % p for p in paras)
         secs.append('  <section class="case-sec">\n    <h2>%s</h2>\n%s\n  </section>'
                     % (heading, body))
+
+    # Sibling services, so the six pages form a connected cluster rather than
+    # six spokes off the homepage. Built from SERVICES so adding a page here
+    # automatically appears on all the others.
+    siblings = "\n".join(
+        '      <li><a href="%s.html">%s</a></li>' % (o["slug"], o["nav"])
+        for o in SERVICES if o["slug"] != svc["slug"])
 
     faq_items = "\n".join(
         "      <details%s>\n        <summary>%s</summary>\n        <p>%s</p>\n      </details>"
@@ -359,9 +574,16 @@ def build_page(svc, head, tail):
       <li><a href="../work/the-crypteum.html">The Crypteum &mdash; 400 to %s in three months</a></li>
     </ul>
   </section>
+
+  <section class="case-sec">
+    <h2>Other services</h2>
+    <ul class="svc-links">
+%s
+    </ul>
+  </section>
 </article>
 """ % (svc["kicker"], svc["h1"], svc["lead"], "\n\n".join(secs), faq_items,
-       PROOF["followers"], PROOF["views"], PROOF["crypteum"])
+       PROOF["followers"], PROOF["views"], PROOF["crypteum"], siblings)
 
     return h + main + tail
 

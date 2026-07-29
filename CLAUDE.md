@@ -15,7 +15,7 @@ Do not introduce a bundler, framework or dependency manager unless explicitly as
 ```
 index.html                 landing page, all sections
 work/bybit.html            case study (Figma frame 181) — the pattern for the rest
-services/*.html            3 SEO service pages, GENERATED — see tools/make-service-pages.py
+services/*.html            6 SEO service pages, GENERATED — see tools/make-service-pages.py
 robots.txt sitemap.xml     search + AI crawler directives
 llms.txt                   structured summary for AI answer engines
 css/styles.css             all styles; tokens in :root at the top
@@ -247,12 +247,23 @@ it from the accessibility tree as well as from search.
 Titles are kept under ~70 characters and descriptions ~150–170, or they get
 truncated in results.
 
-**`services/` is generated — never hand-edit those three files.** They exist
+**`services/` is generated — never hand-edit those six files.** They exist
 because the landing page is a portfolio and a portfolio cannot answer "what does
 a Web3 motion design agency do". `tools/make-service-pages.py` lifts the head and
 tail verbatim from `work/kalshi.html`, so the menu, Calendly modal, CTA and
 footer stay identical across all eight content pages; re-run it after touching
-that shell. Each page carries `Service` + `FAQPage` + `BreadcrumbList` schema.
+that shell. Each page carries `Service` + `FAQPage` + `BreadcrumbList` schema, and links to
+all four case studies plus its five siblings — adding a service to `SERVICES` in
+the tool propagates the cross-links automatically.
+
+**Scope boundary, stated on the website-development page and in `llms.txt`: we
+design and build front-end sites, we do NOT write or audit smart contracts.**
+That was the user's answer when asked directly; don't add blockchain-engineering
+claims without checking again.
+
+The tool substitutes its JSON-LD with a lambda rather than a replacement string —
+`re.sub` interprets backslashes in a string replacement, and JSON containing a
+`\u` escape raises `bad escape \u`.
 
 `llms.txt` (llmstxt.org) is the plain-text brief for AI answer engines: what the
 agency does, the verified numbers, and links to every page. Update it whenever a
