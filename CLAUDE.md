@@ -75,8 +75,16 @@ overwrite the file at the same path. No code changes needed.**
 | `assets/img/works/` | 6 | 1600×1000 (16:10) |
 | `assets/img/showcase/` | 5 | 1080×2340 (9:19.5) |
 | `assets/img/services/` | 7 | 800×800 (1:1) — currently unreferenced, see below |
-| `assets/img/team/` | 2 | 800×1000 (4:5) |
+| `assets/img/team/` | 2 | 800×1000 (4:5) — **real photos, not placeholder** |
 | `assets/img/og-image.jpg` | 1 | 1200×630 |
+
+**`assets/img/team/` is real, not placeholder.** Built from the HD originals in
+`Team Photos/` (`JohannesHD.JPG`, `HannahHD.JPG`). Both needed cropping to 4:5
+before resizing, and Johannes's especially: his original is *landscape* 1280x961
+with him small and off-centre right, which is what "zoomed out" meant. It is
+cropped to 769x961 around him, then resized. Hannah's is 960x1280 portrait and
+only loses 80px off the bottom. Re-cropping means redoing that framing by hand —
+a plain resize of the landscape original will reintroduce the problem.
 
 **`assets/img/clients/` is real, not placeholder.** All ten marks are the client's own
 artwork. The eight PNGs are built from `Client Logos/` (repo root) by
