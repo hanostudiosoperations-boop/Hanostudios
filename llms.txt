@@ -54,6 +54,7 @@ numbers are the evidence that it works rather than a claim about it.
 ## Pages
 
 - [Home](https://www.hanostudios.xyz/): overview, services, work, FAQ.
+- [All works](https://www.hanostudios.xyz/work/index.html): every project in one grid.
 - [Hano Crypto case study](https://www.hanostudios.xyz/work/hano-crypto.html)
 - [Bybit case study](https://www.hanostudios.xyz/work/bybit.html)
 - [Kalshi case study](https://www.hanostudios.xyz/work/kalshi.html)

@@ -73,7 +73,7 @@ overwrite the file at the same path. No code changes needed.**
 | Path | Count | Dimensions |
 |---|---|---|
 | `assets/img/works/` | 6 | 1600×1000 (16:10) |
-| `assets/img/showcase/` | 5 | 1080×2340 (9:19.5) |
+| `assets/img/showcase/` | 5 | posters, real frames of the clips |
 | `assets/img/services/` | 7 | 800×800 (1:1) — currently unreferenced, see below |
 | `assets/img/team/` | 2 | 800×1000 (4:5) — **real photos, not placeholder** |
 | `assets/img/og-image.jpg` | 1 | 1200×630 |
@@ -195,7 +195,14 @@ Both were verified by killing the scripts. Keep them if you refactor.
   lists REVIEWS in both the menu overlay and the footer, so both links are currently
   left out — restore the section and both links together once there are real,
   client-approved quotes.
-- **Showcase videos are not supplied yet.** Each `.phone` holds a `<video>` with the
+- **The showcase clips are real.** Five, in this order: Trump's Planned Crash,
+  Bybit, Direct Signals, War Against Iran, Algorand RWA. Two are copies of case
+  study clips (`work/hano-crypto/trumps-planned-crash.mp4` and
+  `war-against-china.mp4` — the same file; the reel covers Iran later on, which
+  is why the showcase copy is named `war-against-iran.mp4`). The other three are
+  re-encoded from `Showcase Videos (source)/`, which is gitignored. Posters are
+  grabbed at `-ss 3`.
+- ~~**Showcase videos are not supplied yet.**~~ Each `.phone` holds a `<video>` with the
   existing still as its `poster`. The playback controller in `main.js` is finished and
   verified: it plays the active slide, auto-advances on `ended`, wraps around, pauses
   off-screen, and the arrows work. It activates per phone the moment you add
