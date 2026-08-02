@@ -72,7 +72,7 @@ overwrite the file at the same path. No code changes needed.**
 
 | Path | Count | Dimensions |
 |---|---|---|
-| `assets/img/works/` | 6 | 1600×1000 (16:10) |
+| `assets/img/works/` | 5 | 1600×1000 (16:10) |
 | `assets/img/showcase/` | 5 | posters, real frames of the clips |
 | `assets/img/services/` | 7 | 800×800 (1:1) — currently unreferenced, see below |
 | `assets/img/team/` | 2 | 800×1000 (4:5) — **real photos, not placeholder** |
@@ -86,8 +86,9 @@ cropped to 769x961 around him, then resized. Hannah's is 960x1280 portrait and
 only loses 80px off the bottom. Re-cropping means redoing that framing by hand —
 a plain resize of the landscape original will reintroduce the problem.
 
-**`assets/img/clients/` is real, not placeholder.** All ten marks are the client's own
-artwork. The eight PNGs are built from `Client Logos/` (repo root) by
+**`assets/img/clients/` is real, not placeholder.** Every mark is the client's own
+artwork, and the same files are reused as the works-card titles (`.work-logo`),
+with a visually-hidden `<h3>` kept beside each so the cards still have headings. The eight PNGs are built from `Client Logos/` (repo root) by
 `tools/make-client-logos.py` — re-run that after changing anything in there, don't
 hand-edit the output. They are tightly cropped, *not* padded to a fixed canvas: the set
 mixes wide wordmarks with square roundels, and the CSS caps both width and height so the
@@ -111,17 +112,15 @@ because its "PENGUINS" half is dark navy and disappears against Void Black.
 
 ## Case study pages (`work/`)
 
-`work/bybit.html` (181), `work/kalshi.html` (207), `work/hano-crypto.html` (208)
-and `work/the-crypteum.html` (209) are built — copy any of them for Maxy and
-Levels Socials. They reuse `css/styles.css` and `js/main.js` wholesale; only the
+`work/bybit.html` (181), `work/kalshi.html` (207) and `work/hano-crypto.html`
+(208) are built — copy any of them for Maxy and Levels Socials. **The Crypteum
+case study was built (frame 209) and then deleted on request**, along with its
+card, artwork, clips and every reference; don't resurrect it from git without
+asking. They reuse `css/styles.css` and `js/main.js` wholesale; only the
 CASE STUDY block in the CSS and the "Case-study galleries" block in main.js are
 specific to them. Everything outside the `<article class="case">` is
-byte-identical across all four, so keep it that way when adding a page.
+byte-identical across all three, so keep it that way when adding a page.
 
-The Crypteum needed no new CSS — it is Kalshi's shape plus `.slide-board` and
-`.case-metrics` from Hano Crypto, so the block should now cover a new page as
-supplied. Its wordmark is vector at `assets/img/clients/the-crypteum.svg` (none
-was supplied; frame 209 sets it as plain white type over two lines).
 
 Kalshi differs from Bybit in three ways the frame dictates: no `<h1>` (the lead
 paragraph sits alone beside the logo), a single 9:16 clip on `.slide-tall`
@@ -134,11 +133,13 @@ needs `.slide.slide-board` specificity** — as a single class it loses to the
 later `.slide img{width:auto;height:100%}` and the slide collapses to 0 high.
 It also has no "Why It Matters" section; don't add one.
 
-Hano Crypto has no client-grid logo, and the only supplied artwork is a raster
-crop off the mood board whose dark corners showed against Void Black. The mark
-at `assets/img/clients/hano-crypto.svg` is rebuilt as vector — each glyph of
-HA_O is placed individually so the bar can sit over the N alone (a second text
-run collides with the first).
+Hano Crypto's mark is the client's own artwork at
+`assets/img/clients/hano-crypto.png`, built from `Logowhite.PNG` in the repo
+root — a purple roundel with black type. Two earlier attempts (a raster crop off
+the mood board, then a hand-built vector) were both wrong and are gone. It is
+circular, so it carries `.case-logo-round` on the case study and a taller
+`.work-logo` cap on the cards: at the wordmark height a circle reads as a stray
+dot next to Bybit's or Levels Socials' wide marks.
 Paths are `../` throughout, and the menu's Work/Process/Team/FAQ links point at
 `../index.html#…` so they work from a subdirectory.
 
@@ -260,7 +261,7 @@ Structured data is one `application/ld+json` block per page:
 more than the page says is a manual-action risk, not a shortcut — if you change a
 metric, change both.
 
-Frames 207/208/209 draw no headline, so those pages carry a visually-hidden
+Frames 207/208 draw no headline, so those pages carry a visually-hidden
 `<h1 class="sr-only">`. `.sr-only` clips rather than `display:none`, which would drop
 it from the accessibility tree as well as from search.
 

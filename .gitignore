@@ -20,3 +20,9 @@ Showcase Videos (source)/
 # Oversized design originals kept locally to re-export from. The OG source is
 # 7200x3780 / 20MB for an image that ships at 1200x630 / 28KB.
 Brand Assets (source)/
+
+# Raw video masters dropped in the repo root. These are hundreds of MB each and
+# the encoded versions under assets/video/ are what ships — committing a master
+# bloats the repo permanently, since git keeps every version forever.
+/*.mp4
+/*.MP4

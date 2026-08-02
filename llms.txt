@@ -38,8 +38,6 @@
 - **Kalshi** (CFTC-regulated prediction market, ~$22B valuation): official
   partner for crypto video content, produced and distributed through the Hano
   Crypto audience. 8 videos, 200k+ views.
-- **The Crypteum**: grew **400 to 34,000 followers in three months** (85x), with
-  one video reaching 934,000 views, 70,100 likes and 2,071 comments.
 
 Other clients include Algorand, Abstract, Pudgy Penguins, Levels Socials,
 Humanity Protocol, Virtune, Maxy and onara.
@@ -58,7 +56,6 @@ numbers are the evidence that it works rather than a claim about it.
 - [Hano Crypto case study](https://www.hanostudios.xyz/work/hano-crypto.html)
 - [Bybit case study](https://www.hanostudios.xyz/work/bybit.html)
 - [Kalshi case study](https://www.hanostudios.xyz/work/kalshi.html)
-- [The Crypteum case study](https://www.hanostudios.xyz/work/the-crypteum.html)
 
 ## Contact
 

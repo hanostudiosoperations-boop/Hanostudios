@@ -555,6 +555,22 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   font-weight:500;
   letter-spacing:-.03em;
 }
+/* The client's own mark stands in for the card title. Capped on BOTH axes and
+   left-aligned in a fixed-height box: the set mixes wide wordmarks (Bybit,
+   Levels Socials) with tall roundels (Hano Crypto), so a width cap alone would
+   make the circular marks tower over the rows beside them. object-position
+   keeps every mark on the same left edge as the copy under it. */
+.work-logo{
+  height:clamp(22px,2.1vw,30px);
+  width:auto;
+  max-width:min(70%, 190px);
+  object-fit:contain;
+  object-position:left center;
+}
+/* A circular mark is as wide as it is tall, so at the wordmark height it reads
+   as a fraction of their area and looks like a stray dot. Squared up and given
+   its own height so it carries comparable weight in the row. */
+.work-logo[src$="hano-crypto.png"]{ height:clamp(40px,3.6vw,52px); }
 .work-meta p{
   font-size:clamp(12px,.95vw,14px);
   font-weight:400;
@@ -1009,6 +1025,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .case-brand{ padding-top:6px; }
 /* The client's own mark, at the size the frame sets it. */
 .case-logo{ width:clamp(96px,11vw,150px); height:auto; }
+/* Hano Crypto's real mark is a circular badge rather than a wordmark, so it
+   needs less width to carry the same optical weight as the others. */
+.case-logo-round{ width:clamp(84px,8.5vw,116px); }
 .case-kicker{
   margin-top:10px;
   font-size:10px;
