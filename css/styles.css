@@ -535,8 +535,36 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   background-size:cover;
   background-position:center;
   transition:transform .6s cubic-bezier(.22,1,.36,1);
+  position:relative;
+  overflow:hidden;
 }
 .work-card:hover .work-img{ transform:translateY(-8px); }
+
+/* Motion mockup layered OVER the still, which stays as the background image.
+   The still is therefore the poster: it is already painted before a single byte
+   of video is fetched, and it is what remains if the clip fails, if the file is
+   missing, or if the visitor has reduced motion on. The clips are 16:9 inside a
+   16:10 box, so object-fit:cover crops the way background-size:cover already
+   did. */
+.work-video{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  /* Faded in by main.js once the clip is genuinely playing, so a stalled or
+     blocked video never shows a black rectangle over the still. */
+  opacity:0;
+  transition:opacity .5s ease;
+}
+.work-video.is-playing{ opacity:1; }
+
+@media (prefers-reduced-motion:reduce){
+  /* Never autoplay looping motion for these visitors — the still says the
+     same thing. main.js also skips loading the file entirely. */
+  .work-video{ display:none; }
+}
 /* Wraps the whole card on projects that have a case-study page. display:block
    so the card keeps its normal box; the h3 gets the aurora on hover as the
    affordance that this one is clickable. */

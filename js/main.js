@@ -229,7 +229,7 @@
 
     // Which phone the strip is HEADING for. Re-derived from position at every
     // resync point rather than trusting whatever `current` last was, because a
-    // nav link (href="#process") arrives via the browser's own native
+    // deep link to #process arrives via the browser's own native
     // smooth-scroll, outside GSAP's ticker, and can leave `current` stale.
     //
     // Crucially this reads the trigger's progress, not stage.scrollLeft. The
@@ -394,6 +394,55 @@
   }
   // The pin itself is set up later, with the other pins — see that comment
   // for why creating it here, this early, silently broke it.
+
+  /* ---------------- Work-card mockup clips ---------------- */
+
+  // The case-study cards on the landing page and on work/index.html show their
+  // mockup animation instead of a still. Same deal as the showcase phones: the
+  // file is only fetched once the card is actually near the viewport, so five
+  // cards do not cost five downloads on first paint, and the still underneath
+  // stays visible the whole time — it is the poster, so a card that never
+  // reaches the viewport, or whose clip fails, looks exactly as it did before.
+  //
+  // Deliberately outside the GSAP block: these have to work on .no-gsap too.
+  (function workCardVideos () {
+    const videos = document.querySelectorAll('.work-video[data-src]');
+    // Reduced motion gets the still and nothing else — no request is made at
+    // all, rather than downloading a clip that CSS then hides.
+    if (!videos.length || reduce) return;
+
+    const start = video => {
+      if (!video.src) video.src = video.dataset.src;
+      // preload="none" leaves readyState at 0 with no source selected, and
+      // play() on that rejects without ever fetching. load() first.
+      if (video.readyState === 0) video.load();
+      const attempt = video.play();
+      if (attempt && attempt.catch) attempt.catch(() => {});
+    };
+
+    // Only reveal the clip once it is genuinely rendering frames, so a stalled
+    // or codec-refused video never paints a black box over the still.
+    videos.forEach(video => {
+      video.addEventListener('playing', () => video.classList.add('is-playing'));
+    });
+
+    if (!('IntersectionObserver' in window)) {
+      videos.forEach(start);
+      return;
+    }
+
+    // Cards leave the viewport constantly in a horizontal strip; pausing the
+    // ones that are gone keeps this to one or two decoding at a time.
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const video = entry.target;
+        if (entry.isIntersecting) start(video);
+        else if (!video.paused) video.pause();
+      });
+    }, { rootMargin: '200px' });
+
+    videos.forEach(video => io.observe(video));
+  })();
 
   /* ---------------- Case-study galleries ---------------- */
 
@@ -911,7 +960,7 @@
     // centreOn() needs this to translate a phone into a page-scroll offset.
     showST = showTween.scrollTrigger;
     // Belt-and-braces final resync once the browser reports scrolling has
-    // genuinely stopped. A nav link (href="#process") lands here via native
+    // genuinely stopped. A deep link to #process lands here via native
     // smooth-scroll, which can cross this section's intersection threshold
     // (triggering the IntersectionObserver's resync, set up earlier) well
     // before the animation is actually done travelling — so that resync can

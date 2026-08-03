@@ -104,7 +104,8 @@
       ],
       "sameAs": [
         "https://www.instagram.com/hano.studios/",
-        "https://x.com/HanoStudioss"
+        "https://x.com/HanoStudioss",
+        "https://www.linkedin.com/company/hano-studios/"
       ],
       "contactPoint": {
         "@type": "ContactPoint",
@@ -115,12 +116,11 @@
       "areaServed": "Worldwide",
       "makesOffer": [
         { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Motion Design", "serviceType": "Motion design and animation for Web3 and fintech brands" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Social Media Management", "serviceType": "Web3 and crypto social media management" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ad Campaigns", "serviceType": "Performance and brand ad campaigns" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Graphic Design", "serviceType": "Brand and campaign graphic design" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Design and Development", "serviceType": "Web3 website design and development" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Explainer and Launch Videos", "serviceType": "Explainer video and launch film production" } },
-        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Full Marketing", "serviceType": "End-to-end marketing strategy and execution" } }
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Branding", "serviceType": "Brand identity and campaign design" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Web Design", "serviceType": "Web3 website design and development" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Social Media Marketing", "serviceType": "Web3 and crypto social media management" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "UX/UI", "serviceType": "Product and marketing site UX/UI design" } },
+        { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Ad Funnels", "serviceType": "Performance ad funnels and campaign creative" } }
       ]
     },
     {
@@ -196,7 +196,6 @@
   <div class="menu-inner">
     <ul class="menu-links">
       <li><a href="#works">Work</a></li>
-      <li><a href="#process">Process</a></li>
       <li><a href="#team">Team</a></li>
       <!-- Figma frame 183 also lists REVIEWS here. Left out for now because the
            testimonials section was removed — a link to a section that does not
@@ -211,9 +210,8 @@
     <span class="menu-copy">&copy; 2026 Hano Studios</span>
     <div class="menu-social">
       <a href="https://www.instagram.com/hano.studios/" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://tiktok.com" target="_blank" rel="noopener">Tik Tok</a>
       <a href="https://x.com/HanoStudioss" target="_blank" rel="noopener">X / Twitter</a>
-      <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://www.linkedin.com/company/hano-studios/" target="_blank" rel="noopener">LinkedIn</a>
     </div>
   </div>
 </nav>
@@ -242,7 +240,6 @@
     <nav class="hero-nav">
       <ul>
         <li><a href="#about">About</a></li>
-        <li><a href="#process">Process</a></li>
         <li><a href="#works">Works</a></li>
         <li><a href="#services">Services</a></li>
       </ul>
@@ -306,7 +303,10 @@
            link but goes nowhere is worse than one that plainly doesn't. -->
       <article class="work-card">
         <a class="work-link" href="work/bybit.html">
-          <div class="work-img" data-tone="amber" style="background-image:url('assets/img/works/bybit.svg')"></div>
+          <div class="work-img" data-tone="amber" style="background-image:url('assets/img/works/bybit.jpg')">
+            <video class="work-video" playsinline muted loop preload="none"
+                   data-src="assets/video/works/bybit.mp4" aria-hidden="true"></video>
+          </div>
           <div class="work-meta">
             <h3 class="sr-only">Bybit</h3>
             <img class="work-logo" src="assets/img/clients/bybit.svg" alt="Bybit" loading="lazy">
@@ -318,7 +318,10 @@
 
       <article class="work-card">
         <a class="work-link" href="work/kalshi.html">
-          <div class="work-img" data-tone="green" style="background-image:url('assets/img/works/kalshi.svg')"></div>
+          <div class="work-img" data-tone="green" style="background-image:url('assets/img/works/kalshi.jpg')">
+            <video class="work-video" playsinline muted loop preload="none"
+                   data-src="assets/video/works/kalshi.mp4" aria-hidden="true"></video>
+          </div>
           <div class="work-meta">
             <h3 class="sr-only">Kalshi</h3>
             <img class="work-logo" src="assets/img/clients/kalshi.png" alt="Kalshi" loading="lazy">
@@ -351,7 +354,10 @@
 
       <article class="work-card">
         <a class="work-link" href="work/hano-crypto.html">
-          <div class="work-img" data-tone="purple" style="background-image:url('assets/img/works/hano-crypto.svg')"></div>
+          <div class="work-img" data-tone="purple" style="background-image:url('assets/img/works/hano-crypto.jpg')">
+            <video class="work-video" playsinline muted loop preload="none"
+                   data-src="assets/video/works/hano-crypto.mp4" aria-hidden="true"></video>
+          </div>
           <div class="work-meta">
             <h3 class="sr-only">Hano Crypto</h3>
             <img class="work-logo" src="assets/img/clients/hano-crypto.png" alt="Hano Crypto" loading="lazy">
@@ -371,7 +377,7 @@
     <!-- No hard break: the head's max-width wraps it to two lines on desktop,
          and the mobile frame (196) shows it on a single line. -->
     <h2 class="h-split"><strong>Shaping Ideas</strong> Into Growth</h2>
-    <p class="sub"><strong>Explore the visual stories</strong> that helped brands launch, grow, and lead their markets.</p>
+    <p class="sub"><strong>Explore the visual stories</strong> that helped brands launch, grow, and reach millions on social media.</p>
     <div class="showcase-controls">
       <button class="arrow" id="showPrev" aria-label="Previous">&larr;</button>
       <button class="arrow" id="showNext" aria-label="Next">&rarr;</button>
@@ -454,12 +460,11 @@
 
   <ul class="service-list" id="serviceList">
     <li data-tone="purple" data-img="assets/img/services/motion-design.jpg"><a href="#contact">Motion Design</a></li>
-    <li data-tone="orange" data-img="assets/img/services/graphic-design.jpg"><a href="#contact">Graphic Design</a></li>
-    <li data-tone="green" data-img="assets/img/services/website-design.jpg"><a href="#contact">Website Design</a></li>
-    <li data-tone="steel" data-img="assets/img/services/launch-leading.jpg"><a href="#contact">Launch Leading</a></li>
+    <li data-tone="orange" data-img="assets/img/services/branding.jpg"><a href="#contact">Branding</a></li>
+    <li data-tone="green" data-img="assets/img/services/web-design.jpg"><a href="#contact">Web Design</a></li>
     <li data-tone="lilac" data-img="assets/img/services/social-media.jpg"><a href="#contact">Social Media Marketing</a></li>
-    <li data-tone="amber" data-img="assets/img/services/full-marketing.jpg"><a href="#contact">Full Marketing</a></li>
-    <li data-tone="purple" data-img="assets/img/services/ad-campaigns.jpg"><a href="#contact">Ad Campaigns</a></li>
+    <li data-tone="steel" data-img="assets/img/services/ux-ui.jpg"><a href="#contact">UX/UI</a></li>
+    <li data-tone="amber" data-img="assets/img/services/ad-funnels.jpg"><a href="#contact">Ad Funnels</a></li>
   </ul>
 </section>
 
@@ -550,15 +555,13 @@
       <div>
         <p class="col-head">Socials</p>
         <a href="https://www.instagram.com/hano.studios/" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://tiktok.com" target="_blank" rel="noopener">Tik Tok</a>
         <a href="https://x.com/HanoStudioss" target="_blank" rel="noopener">X / Twitter</a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://www.linkedin.com/company/hano-studios/" target="_blank" rel="noopener">LinkedIn</a>
       </div>
       <div>
         <p class="col-head">Explore</p>
         <a href="#top">Home</a>
         <a href="#works">Work</a>
-        <a href="#process">Process</a>
       </div>
       <div>
         <p class="col-head">About</p>

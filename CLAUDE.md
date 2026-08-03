@@ -72,11 +72,36 @@ overwrite the file at the same path. No code changes needed.**
 
 | Path | Count | Dimensions |
 |---|---|---|
-| `assets/img/works/` | 5 | 1600×1000 (16:10) |
+| `assets/img/works/` | 5 | 3 real posters (`.jpg`) + 2 placeholders (`.svg`) — see below |
 | `assets/img/showcase/` | 5 | posters, real frames of the clips |
-| `assets/img/services/` | 7 | 800×800 (1:1) — currently unreferenced, see below |
+| `assets/img/services/` | 6 | 800×800 (1:1) — currently unreferenced, see below |
 | `assets/img/team/` | 2 | 800×1000 (4:5) — **real photos, not placeholder** |
 | `assets/img/og-image.jpg` | 1 | 1200×630 |
+
+**The three case-study cards play their mockup clip, not a still.** Bybit,
+Kalshi and Hano Crypto each hold a `<video class="work-video" data-src="...">`
+inside `.work-img`, on both `index.html` and `work/index.html`. Encoded from
+`Bybit mockup.mp4`, `Kalshi Mochup Video.mp4` and `Hano Crypto Mock Up.mp4` in
+the repo root (gitignored) — all genuinely 16:9, no rotation trap this time —
+at the usual CRF 27 / long edge 960, but `-an`: they are ambient card visuals
+and carry no audio. Maxy and Levels Socials keep their placeholder `.svg`
+because no clip was supplied.
+
+The still stays as the `.work-img` background and is never replaced: it is the
+poster, painted before a byte of video is fetched and left in place if the clip
+fails, if the visitor has reduced motion, or if the card is never reached. The
+clip fades in only on the `playing` event, so a stalled video never shows a
+black rectangle. `assets/img/works/{bybit,kalshi,hano-crypto}.jpg` are frames
+grabbed from those clips at `-ss 1`; the `.svg` versions they replaced are gone.
+
+The controller lives in main.js **outside the GSAP block** — these have to work
+under `.no-gsap`, where the Works strip degrades to a plain `overflow-x:auto`
+container. Testing that path means scrolling the section into view vertically
+*first* and then panning the container sideways; panning while it is still
+off-screen gives the IntersectionObserver nothing to fire on and looks like a
+bug in working code. On the landing page proper, `scrollIntoView` on a card is
+also the wrong move: the strip is pinned and travels horizontally with *page*
+scroll, so a card's own scroll position never brings it into view.
 
 **`assets/img/team/` is real, not placeholder.** Built from the HD originals in
 `Team Photos/` (`JohannesHD.JPG`, `HannahHD.JPG`). Both needed cropping to 4:5
@@ -224,15 +249,26 @@ Both were verified by killing the scripts. Keep them if you refactor.
   passed as `pageSettings` in main.js, and Calendly puts them on the iframe URL,
   but the widget still renders white — colour customisation is a paid feature.
   Don't spend time re-plumbing it; it needs a plan upgrade, not code.
-- **Instagram and X are real** — `hano.studios` and `HanoStudioss`, in both the
-  footer and the menu overlay on all five pages (10 links). **Tik Tok and
-  LinkedIn still point at bare domains**; no handle has been supplied for either,
-  so don't guess one.
+- **Instagram, X and LinkedIn are real** — `hano.studios`, `HanoStudioss` and
+  `linkedin.com/company/hano-studios/`, in both the footer and the menu overlay
+  on all five pages (15 links). LinkedIn is also in the homepage schema's
+  `sameAs`. **Tik Tok was removed on request** — there is no Tik Tok link
+  anywhere now, so don't reintroduce one without a supplied handle. The FAQ copy
+  still names TikTok as a platform we deliver *for*; that is prose, not a link.
+- **"Process" was removed from the nav on request.** The showcase section keeps
+  `id="process"` so any link already shared as `/#process` still resolves, but
+  nothing in the site points at it. Two comments in main.js explain a resync that
+  a deep link to that anchor can still trigger — the behaviour is still needed.
 - The services list no longer shows a hover preview (removed on request). The
   `<li>`s keep their `data-tone` / `data-img`, so restoring it means the markup
-  plus a handler in main.js — the 7 images in `assets/img/services/` are
-  currently unreferenced but kept for that.
-- Figma source reads "AD CAMPAINGS" — corrected to "Ad Campaigns" here.
+  plus a handler in main.js — the 6 images in `assets/img/services/` are
+  currently unreferenced but kept for that, and their filenames track the
+  labels.
+- **The services list is the six the client named**: Motion Design, Branding, Web
+  Design, Social Media Marketing, UX/UI, Ad Funnels. This replaced an earlier
+  seven that included Graphic Design, Website Design, Launch Leading, Full
+  Marketing and Ad Campaigns. The `makesOffer` block in the homepage schema
+  mirrors it — change both together.
 - Plausible is wired in `<head>` with `data-domain="hanostudios.xyz"`. It only starts
   recording once the site is added in the Plausible dashboard. Cookieless, so no
   consent banner. A `Booking opened` goal fires from `main.js` when the Calendly
