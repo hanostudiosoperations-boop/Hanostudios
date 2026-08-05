@@ -1028,7 +1028,33 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   grid-template-columns:var(--col) minmax(0, 1fr);
   gap:var(--gap);
   margin-bottom:clamp(30px,3.6vw,52px);
+  align-items:start;
 }
+/* The header row is sized by its COPY, not by its logo.
+   A grid row is as tall as its tallest cell, and in the header that is usually
+   the client mark — so the margin below was measured from the bottom of the
+   logo rather than from the last line of text. Hano Crypto showed it worst: a
+   116px round badge beside a single 26px line left 134px of dead space above
+   "Overview", against 52px on Bybit, whose 50px wordmark is shorter than its
+   two-line intro. The gap tracked logo height instead of being consistent.
+
+   The brand column is therefore taken out of flow, so it no longer feeds the
+   row's height while still painting in the left margin. It keeps its own
+   internal stacking (logo above kicker) because only the column is positioned,
+   not its children. The grid still reserves the track, so the copy column's
+   width and the --indent maths are untouched. */
+.case-row{ position:relative; }
+.case-row > .case-brand{
+  position:absolute;
+  top:0;
+  left:0;
+  /* The track's own width, so the mark sizes exactly as it did in flow. */
+  width:calc(var(--indent) - var(--gap));
+}
+/* Taking .case-brand out of flow also takes it out of the grid, so the copy
+   would otherwise fall back into column 1 and be laid out at the narrow logo
+   track's width. Pin it to column 2 explicitly. */
+.case-row > .case-brand + *{ grid-column:2; }
 /* Heading and copy together, indented to line up with the grid rows' copy. */
 .case-sec{
   margin-left:var(--indent);
@@ -1287,6 +1313,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   .case-row > :last-child{ max-width:none; }
   .case-sec{ margin-left:0; max-width:none; }
   .case-brand{ padding-top:0; }
+  /* Single column, so the brand goes back into flow above the copy. Left
+     absolute it would sit on top of the intro text: there is no margin column
+     left to paint in at this width. */
+  .case-row > .case-brand{ position:static; width:auto; }
+  .case-row > .case-brand + *{ grid-column:1; }
 }
 @media (max-width:600px){
   .case-stats{ grid-template-columns:1fr; }
