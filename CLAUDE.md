@@ -72,26 +72,31 @@ overwrite the file at the same path. No code changes needed.**
 
 | Path | Count | Dimensions |
 |---|---|---|
-| `assets/img/works/` | 5 | 3 real posters (`.jpg`) + 2 placeholders (`.svg`) — see below |
+| `assets/img/works/` | 5 | 4 real posters (`.jpg`) + 1 placeholder (`.svg`) — see below |
 | `assets/img/showcase/` | 5 | posters, real frames of the clips |
 | `assets/img/services/` | 6 | 800×800 (1:1) — currently unreferenced, see below |
 | `assets/img/team/` | 2 | 800×1000 (4:5) — **real photos, not placeholder** |
 | `assets/img/og-image.jpg` | 1 | 1200×630 |
 
-**The three case-study cards play their mockup clip, not a still.** Bybit,
-Kalshi and Hano Crypto each hold a `<video class="work-video" data-src="...">`
+**Four of the five work cards play their mockup clip, not a still.** Bybit,
+Kalshi, Hano Crypto and Maxy each hold a `<video class="work-video" data-src="...">`
 inside `.work-img`, on both `index.html` and `work/index.html`. Encoded from
-`Bybit mockup.mp4`, `Kalshi Mochup Video.mp4` and `Hano Crypto Mock Up.mp4` in
-the repo root (gitignored) — all genuinely 16:9, no rotation trap this time —
-at the usual CRF 27 / long edge 960, but `-an`: they are ambient card visuals
-and carry no audio. Maxy and Levels Socials keep their placeholder `.svg`
-because no clip was supplied.
+`Bybit mockup.mp4`, `Kalshi Mochup Video.mp4`, `Hano Crypto Mock Up.mp4` and
+`Maxy Render Video.mp4` in the repo root (gitignored) — all genuinely 16:9, no
+rotation trap on any of them — at the usual CRF 27 / long edge 960, but `-an`:
+they are ambient card visuals and carry no audio. Only Levels Socials keeps its
+placeholder `.svg`, because no clip was supplied for it.
+
+Maxy's card has no `<a class="work-link">` wrapper — its case study does not
+exist yet — so the `<video>` nests straight inside `.work-img`. The controller
+selects on `.work-video[data-src]`, not on the link, so this works unchanged;
+don't add a wrapper to "match" the others until the page is built.
 
 The still stays as the `.work-img` background and is never replaced: it is the
 poster, painted before a byte of video is fetched and left in place if the clip
 fails, if the visitor has reduced motion, or if the card is never reached. The
 clip fades in only on the `playing` event, so a stalled video never shows a
-black rectangle. `assets/img/works/{bybit,kalshi,hano-crypto}.jpg` are frames
+black rectangle. `assets/img/works/{bybit,kalshi,hano-crypto,maxy}.jpg` are frames
 grabbed from those clips at `-ss 1`; the `.svg` versions they replaced are gone.
 
 The controller lives in main.js **outside the GSAP block** — these have to work
@@ -176,6 +181,23 @@ section is a `.case-sec` block pushed across by `--indent`. That variable has to
 reproduce the grid's own maths: `.26fr` against `1fr` is **not** 26%, it is
 `.26/1.26` of the width less the gap. Treating it as 26% puts every heading 70px
 right of the galleries.
+
+**`.case-brand` is absolutely positioned inside the header `.case-row`, and that
+is load-bearing.** A grid row is as tall as its tallest cell, and in the header
+that is usually the client mark — so `margin-bottom` was being measured from the
+bottom of the *logo* rather than from the last line of copy, and the gap above
+"Overview" tracked logo height instead of being consistent: 134px on Hano Crypto
+(116px round badge beside one line of lead), 67px on Kalshi, 52px on Bybit.
+`align-items:start` does **not** fix this — it changes how items stretch within
+a row, not the row's height. Taking the column out of flow removes it from the
+height calculation while it still paints in the left margin, and the grid still
+reserves the track, so `--indent` is untouched. Two consequences to keep:
+`.case-row > .case-brand + *{ grid-column:2 }`, because an out-of-flow child is
+also out of auto-placement and the copy would otherwise land in column 1 at the
+narrow logo track's width; and both rules are reverted at `max-width:760px`,
+where the layout is single-column and an absolute brand would sit on top of the
+intro text. Verified at 1470/1200/900/761/760/600/390 on all three pages: a
+uniform gap, no overlap, heading left edge == copy left edge.
 
 Galleries are `[data-gallery]`; main.js wires arrows, dots, swipe and per-slide
 video play/pause for any number of them per page. **Slides are capped on both
