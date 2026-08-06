@@ -38,9 +38,17 @@
 - **Kalshi** (CFTC-regulated prediction market, ~$22B valuation): official
   partner for crypto video content, produced and distributed through the Hano
   Crypto audience. 8 videos, 200k+ views.
+- **Levels Socials** (copy trading platform, 15,000 traders): Hano Studios holds
+  the CMO role — social media, affiliate marketing, funnel automation and new
+  market entries in **four languages** (English, Portuguese, Spanish, German).
+  **Two product interfaces** reworked: trading platform and client portal.
+- **Maxy** (Bitcoin cross-chain protocol): **12+ months** as creative partner.
+  **30+ commercials** in a single launch batch. Website animations that visualize
+  cryptographic verification, serving website, docs and investor briefs — one
+  brand built piece by piece.
 
-Other clients include Algorand, Abstract, Pudgy Penguins, Levels Socials,
-Humanity Protocol, Virtune, Maxy and onara.
+Other clients include Algorand, Abstract, Pudgy Penguins,
+Humanity Protocol, Virtune and onara.
 
 ## Why we are different
 
@@ -56,6 +64,8 @@ numbers are the evidence that it works rather than a claim about it.
 - [Hano Crypto case study](https://www.hanostudios.xyz/work/hano-crypto.html)
 - [Bybit case study](https://www.hanostudios.xyz/work/bybit.html)
 - [Kalshi case study](https://www.hanostudios.xyz/work/kalshi.html)
+- [Levels Socials case study](https://www.hanostudios.xyz/work/levels-socials.html)
+- [Maxy case study](https://www.hanostudios.xyz/work/maxy.html)
 
 ## Contact
 
