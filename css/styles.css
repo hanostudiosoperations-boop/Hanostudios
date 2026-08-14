@@ -1908,7 +1908,11 @@ body.cc-locked{ overflow:hidden; }
   background:var(--frost);
   color:var(--void);
 }
-.cc-btn-primary:hover{ background:var(--aurora); color:var(--frost); }
+/* Stays monochrome on hover. .cta-bar goes Aurora here, but that is a
+   full-bleed bar on its own section; on this small sheet the flash of purple
+   landed exactly as the visitor clicked Accept — the one moment the control
+   should not draw attention to itself. The letter-spacing carries the hover. */
+.cc-btn-primary:hover{ background:var(--ink-90); color:var(--void); }
 
 /* "Manage Preferences" is a quiet text link under the copy, not a button. */
 .cc-link{
@@ -2019,13 +2023,17 @@ body.cc-locked{ overflow:hidden; }
   background:var(--ink-40);
   transition:transform .3s cubic-bezier(.22,1,.36,1), background .3s ease;
 }
+/* On reads as Frost, not Aurora: the switches are what a visitor turns on
+   just before accepting, so purple here was most of the colour they saw. The
+   knob inverts to Void against the filled track, which is the same
+   figure/ground flip the primary button uses. */
 .cc-switch input:checked + .cc-track{
-  background:var(--aurora);
-  border-color:var(--aurora);
+  background:var(--frost);
+  border-color:var(--frost);
 }
 .cc-switch input:checked + .cc-track::after{
   transform:translateX(16px);
-  background:var(--frost);
+  background:var(--void);
 }
 .cc-switch input:focus-visible + .cc-track{ outline:2px solid var(--aurora); outline-offset:3px; }
 
