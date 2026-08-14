@@ -1785,15 +1785,18 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    on hover. Purple is the accent here, never the resting state.
    ============================================================ */
 /* Consent is a decision the visitor has to make, not a notice they can
-   scroll past: the dialog sits centred over a scrim, above everything
-   including the menu (110) and the booking modal (200), and there is no
-   dismiss affordance — only Reject or Accept close it. */
+   scroll past — so it still blocks, with a scrim over everything including
+   the menu (110) and the booking modal (200), and no dismiss affordance:
+   only Reject or Accept close it. It rises from the bottom edge rather than
+   appearing dead centre, which is gentler and matches how the rest of the
+   site introduces things — from off-screen, on a long ease. */
 .cc{
   position:fixed;
   inset:0;
   z-index:300;
-  display:grid;
-  place-items:center;
+  display:flex;
+  align-items:flex-end;              /* the sheet sits at the bottom */
+  justify-content:center;
   padding:clamp(12px,3vw,40px);
 }
 .cc[hidden]{ display:none; }
@@ -1806,24 +1809,44 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   backdrop-filter:blur(6px);
   -webkit-backdrop-filter:blur(6px);
   opacity:0;
-  transition:opacity .4s ease;
+  transition:opacity .5s ease;
 }
 .cc.is-open::before{ opacity:1; }
+
 .cc-card{
-  position:relative;          /* above the scrim */
+  position:relative;                 /* above the scrim */
   z-index:1;
   display:flex;
   flex-direction:column;
   width:min(100%,460px);
   max-height:min(86svh,700px);
+  /* Properly rounded, in the register of the site's larger radii (10/26px)
+     rather than the 4px used on flush-edged panels. A sheet that rises from
+     the edge reads as an object; sharp corners made it read as a cut-out. */
+  border-radius:18px;
   border:1px solid var(--ink-14);
-  border-radius:4px;          /* the site's radius, not a pill */
   background:var(--void);
+  overflow:hidden;                   /* so the action bar clips to the curve */
   opacity:0;
-  transform:translateY(10px) scale(.99);
-  transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
+  /* Rises from below the fold. Cleared by .is-open, so the sheet slides up
+     into place instead of fading in on the spot. */
+  transform:translateY(28px);
+  transition:opacity .5s ease, transform .55s cubic-bezier(.22,1,.36,1);
 }
 .cc.is-open .cc-card{ opacity:1; transform:none; }
+
+/* An Aurora bloom under the sheet — the same device the CTA uses to lift a
+   surface off flat black. A shadow rather than a positioned element, because
+   the card clips its own overflow to keep the action bar on the curve, and a
+   child glow would be clipped with it. */
+.cc-card{
+  box-shadow:
+    0 -2px 60px rgba(139,50,247,.22),
+    0 24px 70px rgba(0,0,0,.55);
+}
+
+/* The dialog is modal, so the page behind must not scroll while it is up. */
+body.cc-locked{ overflow:hidden; }
 
 /* The dialog is modal, so the page behind must not scroll while it is up. */
 body.cc-locked{ overflow:hidden; }
@@ -1880,12 +1903,14 @@ body.cc-locked{ overflow:hidden; }
 }
 .cc-btn + .cc-btn{ border-left:1px solid var(--ink-14); }
 .cc-btn:hover{ color:var(--frost); letter-spacing:.14em; }
-/* Primary reads as the site's CTA: white ground, Void type, Aurora on hover. */
+/* Primary carries the brand colour outright — Aurora ground, Frost type —
+   and deepens to Nebula on hover, so the accept action is the one saturated
+   thing on an otherwise monochrome sheet. */
 .cc-btn-primary{
-  background:var(--frost);
-  color:var(--void);
+  background:var(--aurora);
+  color:var(--frost);
 }
-.cc-btn-primary:hover{ background:var(--aurora); color:var(--frost); }
+.cc-btn-primary:hover{ background:var(--nebula); color:var(--frost); }
 
 /* "Manage Preferences" is a quiet text link under the copy, not a button. */
 .cc-link{
