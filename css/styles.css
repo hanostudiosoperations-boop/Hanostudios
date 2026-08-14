@@ -1835,14 +1835,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .cc.is-open .cc-card{ opacity:1; transform:none; }
 
-/* An Aurora bloom under the sheet — the same device the CTA uses to lift a
-   surface off flat black. A shadow rather than a positioned element, because
-   the card clips its own overflow to keep the action bar on the curve, and a
-   child glow would be clipped with it. */
+/* Depth only — no colour. The page behind is near-black and already blurred,
+   so the sheet needs separation, not a tint; a purple bloom sat on the grey
+   hero as a stain rather than as light. */
 .cc-card{
-  box-shadow:
-    0 -2px 60px rgba(139,50,247,.22),
-    0 24px 70px rgba(0,0,0,.55);
+  box-shadow:0 24px 70px rgba(0,0,0,.6);
 }
 
 /* The dialog is modal, so the page behind must not scroll while it is up. */
@@ -1903,14 +1900,15 @@ body.cc-locked{ overflow:hidden; }
 }
 .cc-btn + .cc-btn{ border-left:1px solid var(--ink-14); }
 .cc-btn:hover{ color:var(--frost); letter-spacing:.14em; }
-/* Primary carries the brand colour outright — Aurora ground, Frost type —
-   and deepens to Nebula on hover, so the accept action is the one saturated
-   thing on an otherwise monochrome sheet. */
+/* Exactly the .cta-bar idiom: Frost ground, Void type, going Aurora only on
+   hover. Aurora is an accent on this site — the footer aside, it appears on
+   hover and focus, not as a resting fill. A saturated purple button on a
+   small sheet over the black hero read as someone else's UI. */
 .cc-btn-primary{
-  background:var(--aurora);
-  color:var(--frost);
+  background:var(--frost);
+  color:var(--void);
 }
-.cc-btn-primary:hover{ background:var(--nebula); color:var(--frost); }
+.cc-btn-primary:hover{ background:var(--aurora); color:var(--frost); }
 
 /* "Manage Preferences" is a quiet text link under the copy, not a button. */
 .cc-link{
