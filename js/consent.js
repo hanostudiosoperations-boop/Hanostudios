@@ -46,7 +46,10 @@
      from Meta Events Manager; with no ID the marketing loader is a no-op,
      so the switch is honest either way. -------------------------------- */
 
-  var META_PIXEL_ID = null;   /* e.g. '1234567890123456' */
+  /* "HanoAnimations Pixel", from the Hano Animations ad account's Events
+     Manager. Not the test_event_code shown on that page — that one is a
+     temporary debugging token and does not belong in the site. */
+  var META_PIXEL_ID = '1282102860523144';
 
   var loaded = { analytics: false, marketing: false };
 
