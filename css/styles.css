@@ -1784,28 +1784,49 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    idiom — white on Void, uppercase and letter-spaced, going Aurora only
    on hover. Purple is the accent here, never the resting state.
    ============================================================ */
+/* Consent is a decision the visitor has to make, not a notice they can
+   scroll past: the dialog sits centred over a scrim, above everything
+   including the menu (110) and the booking modal (200), and there is no
+   dismiss affordance — only Reject or Accept close it. */
 .cc{
   position:fixed;
-  z-index:80;                 /* over the page, under the menu overlay (110) */
-  left:var(--pad);
-  bottom:var(--pad);
-  width:min(calc(100vw - var(--pad) * 2), 420px);
-  pointer-events:none;
+  inset:0;
+  z-index:300;
+  display:grid;
+  place-items:center;
+  padding:clamp(12px,3vw,40px);
 }
 .cc[hidden]{ display:none; }
+/* Dims and blurs the page behind, so the choice reads as blocking. */
+.cc::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:rgba(10,10,10,.72);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  opacity:0;
+  transition:opacity .4s ease;
+}
+.cc.is-open::before{ opacity:1; }
 .cc-card{
-  pointer-events:auto;
+  position:relative;          /* above the scrim */
+  z-index:1;
   display:flex;
   flex-direction:column;
-  max-height:min(80svh,700px);
+  width:min(100%,460px);
+  max-height:min(86svh,700px);
   border:1px solid var(--ink-14);
   border-radius:4px;          /* the site's radius, not a pill */
   background:var(--void);
   opacity:0;
-  transform:translateY(10px);
+  transform:translateY(10px) scale(.99);
   transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
 }
 .cc.is-open .cc-card{ opacity:1; transform:none; }
+
+/* The dialog is modal, so the page behind must not scroll while it is up. */
+body.cc-locked{ overflow:hidden; }
 
 /* ---- Notice ----
    Padded on three sides; the action bar below cancels the sides itself so
@@ -1986,9 +2007,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .cc-switch input:focus-visible + .cc-track{ outline:2px solid var(--aurora); outline-offset:3px; }
 
 @media (max-width:600px){
-  .cc{ left:12px; bottom:12px; width:calc(100vw - 24px); }
-  .cc-notice{ padding:20px 20px 0; }
+  .cc{ padding:12px; }
+  .cc-card{ width:100%; max-height:88svh; }
+  .cc-notice{ padding:20px 20px 18px; }
   .cc-head, .cc-groups{ padding-left:20px; padding-right:20px; }
+  /* Two full-width bars stack rather than squeezing side by side. */
+  .cc-actions{ flex-direction:column; }
+  .cc-btn + .cc-btn{ border-left:0; border-top:1px solid var(--ink-14); }
 }
 
 @media (prefers-reduced-motion:reduce){
