@@ -260,6 +260,25 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    Only when GSAP is actually driving the pin — otherwise it is a real gap. */
 .js:not(.no-gsap) .hero{ margin-bottom:62svh; }
 
+/* The background plate. Sits under the glow and under all content (z-index 2),
+   and is revealed only on `playing` — until then the poster and the CSS glow
+   carry the section, so a blocked or slow video is never a black hole. */
+.hero-video{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition:opacity .9s ease;
+  pointer-events:none;
+}
+.hero-video.is-playing{ opacity:1; }
+/* Once the footage is up the CSS glow would double the wash and lift the black
+   behind the wordmark, so it yields to the real thing. */
+.hero.has-video .hero-glow{ opacity:0; transition:opacity .9s ease; }
+
 .hero-glow{
   position:absolute;
   inset:-10%;

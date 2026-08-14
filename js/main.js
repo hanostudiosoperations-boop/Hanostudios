@@ -405,6 +405,27 @@
   // reaches the viewport, or whose clip fails, looks exactly as it did before.
   //
   // Deliberately outside the GSAP block: these have to work on .no-gsap too.
+  // The hero background plate. Same contract as the work cards: the poster and
+  // the CSS glow hold the section until the clip is genuinely playing, and
+  // reduced motion never requests the file at all.
+  (function heroVideo () {
+    const video = document.querySelector('.hero-video[data-src]');
+    if (!video || reduce) return;
+
+    const hero = video.closest('.hero');
+    video.addEventListener('playing', () => {
+      video.classList.add('is-playing');
+      if (hero) hero.classList.add('has-video');
+    }, { once: true });
+
+    video.src = video.dataset.src;
+    if (video.readyState === 0) video.load();
+    const p = video.play();
+    // Autoplay can still be refused (low-power mode, strict settings). The
+    // poster and glow are already correct, so there is nothing to undo.
+    if (p && p.catch) p.catch(() => {});
+  })();
+
   (function workCardVideos () {
     const videos = document.querySelectorAll('.work-video[data-src]');
     // Reduced motion gets the still and nothing else — no request is made at
@@ -592,7 +613,8 @@
     const calEmbed = document.getElementById('calEmbed');
     const calPanel = calModal.querySelector('.cal-panel');
     let lastFocus = null;
-    let requested = false;
+    let requested = false;      // widget assets fetched
+    let wantsWidget = false;    // intent seen, so the iframe may be built
 
     function calFallback() {
       const url = (calEmbed.dataset.url || '').split('?')[0];
@@ -602,7 +624,40 @@
         '<a href="mailto:hello@hano.studios">Or email hello@hano.studios</a></div>';
     }
 
-    // Fetched on first open only — visitors who never book pay nothing for it.
+    // Split in two so the cost can be paid before the click rather than during
+    // it. Opening used to run serially at click time: DNS, CSS, widget.js, then
+    // the iframe — seconds on a phone, on the one path that ads pay for.
+    // preconnect in <head> covers DNS/TLS; these cover the rest.
+    let inited = false;
+
+    // Warm: fetch the widget's own assets. No iframe, no Calendly cookie, so
+    // this is safe to do speculatively for everyone.
+    function warmCalendly() { loadCalendly(); }
+
+    // Build the widget into the (still hidden) modal, so the click only has to
+    // reveal it. Called on first intent — hover, focus or touch of any trigger.
+    function initCalendly() {
+      if (inited || !window.Calendly || !calEmbed.dataset.url) return;
+      inited = true;
+      window.Calendly.initInlineWidget({
+        url: calEmbed.dataset.url,
+        parentElement: calEmbed,
+        pageSettings: CAL_PAGE_SETTINGS
+      });
+    }
+
+    // The colour params on data-url are honoured by Calendly's own page but NOT
+    // by the inline widget, which reads them here — pass both and the embed
+    // matches the site instead of rendering white.
+    const CAL_PAGE_SETTINGS = {
+      backgroundColor: '0A0A0A',
+      textColor: 'FFFFFF',
+      primaryColor: '8B32F7',
+      hideGdprBanner: true,
+      hideEventTypeDetails: false,
+      hideLandingPageDetails: false
+    };
+
     function loadCalendly() {
       if (requested) return;
       requested = true;
@@ -617,21 +672,10 @@
       script.async = true;
       script.onload = () => {
         if (window.Calendly && calEmbed.dataset.url) {
-          window.Calendly.initInlineWidget({
-            url: calEmbed.dataset.url,
-            parentElement: calEmbed,
-            // The colour params on data-url are honoured by Calendly's own
-            // page but NOT by the inline widget, which reads them here — pass
-            // both and the embed matches the site instead of rendering white.
-            pageSettings: {
-              backgroundColor: '0A0A0A',
-              textColor: 'FFFFFF',
-              primaryColor: '8B32F7',
-              hideGdprBanner: true,
-              hideEventTypeDetails: false,
-              hideLandingPageDetails: false
-            }
-          });
+          // If intent already fired while the script was in flight, build now;
+          // otherwise wait, so a visitor who never approaches the CTA never
+          // loads a third-party iframe.
+          if (wantsWidget) initCalendly();
         } else {
           calFallback();
         }
@@ -640,13 +684,40 @@
       document.head.appendChild(script);
     }
 
+    // ---- Warm-up ----------------------------------------------------------
+    // Intent runs ahead of the click: hovering, focusing or touching any
+    // trigger builds the widget, so by the time the modal opens the iframe is
+    // usually already there. Falls back gracefully — if intent never fires
+    // (a straight tap on mobile), openCal still does the work itself.
+    function intent() {
+      wantsWidget = true;
+      loadCalendly();
+      initCalendly();          // no-op until the script has landed
+    }
+
+    document.querySelectorAll('[data-calendly]').forEach(el => {
+      el.addEventListener('pointerenter', intent, { once: true, passive: true });
+      el.addEventListener('focus', intent, { once: true });
+      el.addEventListener('touchstart', intent, { once: true, passive: true });
+    });
+
+    // Nothing is competing for bandwidth once the page is idle, so fetch the
+    // widget's assets then. Still no iframe — that waits for intent.
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(warmCalendly, { timeout: 4000 });
+    } else {
+      window.addEventListener('load', () => setTimeout(warmCalendly, 1800));
+    }
+
     function openCal(returnTo) {
       lastFocus = returnTo;
       calModal.hidden = false;
       requestAnimationFrame(() => calModal.classList.add('is-open'));
       document.body.style.overflow = 'hidden';
       setPageInert(true, [calModal]);
+      wantsWidget = true;
       loadCalendly();
+      initCalendly();          // usually already done by intent
       const close = calModal.querySelector('.cal-close');
       if (close) close.focus();
       if (window.plausible) window.plausible('Booking opened');

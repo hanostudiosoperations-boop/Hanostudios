@@ -34,6 +34,12 @@
 <link rel="manifest" href="site.webmanifest">
 <meta name="theme-color" content="#0A0A0A">
 
+<!-- The booking widget is a paid conversion path; warming DNS/TLS here
+     removes ~200-300ms from the first open. -->
+<link rel="preconnect" href="https://assets.calendly.com" crossorigin>
+<link rel="preconnect" href="https://calendly.com" crossorigin>
+<link rel="dns-prefetch" href="https://assets.calendly.com">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Aleo:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
@@ -220,6 +226,16 @@
 
 <!-- ============ HERO ============ -->
 <header class="hero" id="top">
+  <!-- The supplied background plate. It does in footage what .hero-glow below
+       fakes in CSS, so the glow stays as the fallback and fades out only once
+       the clip is genuinely playing — same contract as the work cards: a
+       stalled or blocked video never leaves a black rectangle, and a visitor
+       who prefers reduced motion keeps the static poster. -->
+  <video class="hero-video" aria-hidden="true"
+         poster="assets/img/hero-bg-poster.jpg"
+         muted loop playsinline preload="metadata"
+         data-src="assets/video/hero/hero-bg.mp4"></video>
+
   <div class="hero-glow" aria-hidden="true"></div>
 
   <p class="hero-tagline">
