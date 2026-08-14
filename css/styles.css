@@ -1775,3 +1775,191 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
      gates that pin on !reduce) — same reasoning as .no-gsap above. */
   .showcase-stage{ scroll-snap-type:x mandatory; }
 }
+
+/* ============================================================
+   COOKIE CONSENT
+   Two surfaces sharing one shell: the small notice that appears on a
+   first visit, and the preferences panel behind "Manage Preferences".
+   Consent has to be opt-in per GDPR, so nothing non-essential loads
+   until a choice is stored — see js/main.js.
+   ============================================================ */
+.cc{
+  position:fixed;
+  z-index:80;                 /* over the page, under the menu overlay (100) */
+  left:var(--pad);
+  right:var(--pad);
+  bottom:var(--pad);
+  display:flex;
+  justify-content:flex-start;
+  pointer-events:none;        /* only the card itself is clickable */
+}
+.cc[hidden]{ display:none; }
+.cc-card{
+  pointer-events:auto;
+  width:min(100%,460px);
+  max-height:min(78svh,680px);
+  display:flex;
+  flex-direction:column;
+  padding:22px;
+  border:1px solid var(--ink-14);
+  border-radius:6px;
+  background:var(--void);
+  /* Lifts the card off a busy hero without a heavy drop shadow. */
+  box-shadow:0 18px 60px rgba(0,0,0,.55);
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity .35s ease, transform .35s cubic-bezier(.22,1,.36,1);
+}
+.cc.is-open .cc-card{ opacity:1; transform:none; }
+
+.cc-title{
+  margin-bottom:8px;
+  font-size:15px;
+  font-weight:500;
+  letter-spacing:-.02em;
+}
+.cc-text{
+  font-size:13px;
+  line-height:1.6;
+  color:var(--ink-60);
+}
+.cc-text a{
+  text-decoration:underline;
+  text-underline-offset:3px;
+  text-decoration-color:var(--ink-40);
+  transition:color .25s ease;
+}
+.cc-text a:hover{ color:var(--frost); }
+
+/* Actions stack on the narrow card rather than cramming three to a row. */
+.cc-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:16px;
+}
+.cc-btn{
+  flex:1 1 auto;
+  padding:10px 14px;
+  border:1px solid var(--ink-14);
+  border-radius:4px;
+  font-size:13px;
+  letter-spacing:-.01em;
+  color:var(--ink-90);
+  white-space:nowrap;
+  transition:border-color .25s ease, background .25s ease, color .25s ease;
+}
+.cc-btn:hover{ border-color:var(--ink-40); color:var(--frost); }
+.cc-btn-primary{
+  background:var(--aurora);
+  border-color:var(--aurora);
+  color:var(--frost);
+}
+.cc-btn-primary:hover{ background:#7a26e0; border-color:#7a26e0; }
+/* "Manage Preferences" is a text link, not a third competing button. */
+.cc-link{
+  margin-top:12px;
+  align-self:flex-start;
+  font-size:12px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--ink-40);
+  text-decoration:underline;
+  text-underline-offset:4px;
+  transition:color .25s ease;
+}
+.cc-link:hover{ color:var(--frost); }
+
+/* ---- Preferences view ---- */
+.cc-panel{ display:none; min-height:0; flex-direction:column; }
+.cc.is-managing .cc-panel{ display:flex; }
+.cc.is-managing .cc-notice{ display:none; }
+.cc-back{
+  align-self:flex-start;
+  margin-bottom:14px;
+  font-size:12px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  color:var(--ink-40);
+  transition:color .25s ease;
+}
+.cc-back:hover{ color:var(--frost); }
+/* The list is the only part that scrolls, so the buttons stay reachable. */
+.cc-groups{
+  min-height:0;
+  overflow-y:auto;
+  margin:4px 0 0;
+  padding-right:4px;
+}
+.cc-group{ padding:14px 0; border-top:1px solid var(--ink-08); }
+.cc-group:first-child{ border-top:0; padding-top:0; }
+.cc-group-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:6px;
+}
+.cc-group-name{ font-size:14px; font-weight:500; letter-spacing:-.02em; }
+.cc-group-desc{ font-size:12.5px; line-height:1.6; color:var(--ink-60); }
+.cc-always{
+  font-size:11px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--ink-40);
+  white-space:nowrap;
+}
+
+/* Switch: a styled checkbox, so it stays keyboard-operable and announces
+   its state to assistive tech without any ARIA of our own. */
+.cc-switch{ position:relative; flex:none; width:38px; height:22px; }
+.cc-switch input{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  margin:0;
+  opacity:0;
+  cursor:pointer;
+}
+.cc-track{
+  display:block;
+  width:100%;
+  height:100%;
+  border:1px solid var(--ink-14);
+  border-radius:999px;
+  background:var(--ink-08);
+  transition:background .25s ease, border-color .25s ease;
+  pointer-events:none;
+}
+.cc-track::after{
+  content:"";
+  position:absolute;
+  top:4px;
+  left:4px;
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:var(--ink-40);
+  transition:transform .25s cubic-bezier(.22,1,.36,1), background .25s ease;
+}
+.cc-switch input:checked + .cc-track{
+  background:var(--aurora);
+  border-color:var(--aurora);
+}
+.cc-switch input:checked + .cc-track::after{
+  transform:translateX(16px);
+  background:var(--frost);
+}
+.cc-switch input:focus-visible + .cc-track{ outline:2px solid var(--aurora); outline-offset:2px; }
+
+@media (max-width:600px){
+  .cc{ left:12px; right:12px; bottom:12px; }
+  .cc-card{ width:100%; padding:18px; }
+  .cc-btn{ flex:1 1 100%; }
+}
+
+/* The card animates in; honour a reduced-motion preference. */
+@media (prefers-reduced-motion:reduce){
+  .cc-card{ transition:none; transform:none; }
+}
