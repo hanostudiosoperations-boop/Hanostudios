@@ -1202,6 +1202,51 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .case-ig a:hover{ color:var(--frost); }
 
+/* The global rule is `a{color:inherit;text-decoration:none}`, which is right for
+   nav and cards but leaves the imprint's email, phone and ODR links looking like
+   plain text — on a legal page those have to be visibly actionable. Same
+   underline idiom as .case-ig, scoped to the legal page so nothing else moves. */
+.legal-copy a{
+  text-decoration:underline;
+  text-underline-offset:3px;
+  text-decoration-color:var(--ink-40, rgba(255,255,255,.4));
+  transition:color .25s ease, text-decoration-color .25s ease;
+}
+.legal-copy a:hover,
+.legal-copy a:focus-visible{
+  color:var(--frost);
+  text-decoration-color:currentColor;
+}
+/* The ODR URL is printed in full as the statute expects, and it must not spill
+   out of the copy column on a phone. */
+.legal-copy{ overflow-wrap:break-word; }
+
+/* The privacy policy is the only page with sub-headings (3.1, 5.1) and lists.
+   h3 sits a step below the h2 in the same type scale, and the list matches the
+   body copy so an enumerated right reads as prose, not as UI. */
+.case-sec h3{
+  margin-top:22px;
+  margin-bottom:8px;
+  font-size:clamp(15px,1.35vw,18px);
+  font-weight:500;
+  letter-spacing:-.02em;
+  line-height:1.3;
+  color:var(--ink-90);
+}
+.legal-list{
+  margin:12px 0 0;
+  padding-left:1.15em;
+  list-style:disc;
+  font-size:clamp(13px,1.15vw,16px);
+  line-height:1.62;
+  color:var(--ink-60);
+}
+.legal-list li{ margin-bottom:8px; }
+.legal-list li::marker{ color:var(--ink-40, rgba(255,255,255,.4)); }
+/* The GDPR rights list leads each item with the article name; it carries the
+   emphasis the plain body copy does not. */
+.legal-list strong{ font-weight:500; color:var(--ink-90); }
+
 /* "Why It Matters" uses the same two tracks as every other row; only its right
    column is set larger. */
 .case-label{

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Privacy Policy | Hano Studios</title>
+<meta name="description" content="Privacy policy for Hano Studios — a brand of Hano Animations GbR. How we collect, use and protect your personal data under the GDPR and the German BDSG.">
+
+<meta property="og:title" content="Privacy Policy — Hano Studios">
+<meta property="og:description" content="How Hano Studios collects, uses and protects your personal data, in compliance with the GDPR and the German Federal Data Protection Act (BDSG).">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://www.hanostudios.xyz/privacy.html">
+<!-- Same reasoning as legal.html: no search value, but must stay reachable. -->
+<meta name="robots" content="noindex, follow">
+<meta property="og:url" content="https://www.hanostudios.xyz/privacy.html">
+<meta property="og:site_name" content="Hano Studios">
+<meta name="twitter:site" content="@HanoStudioss">
+<meta property="og:image" content="https://www.hanostudios.xyz/assets/img/og-image.jpg">
+
+<!-- Root-level page, so paths are bare — no ../ as in work/. -->
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="assets/favicon/favicon-48x48.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="theme-color" content="#0A0A0A">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Aleo:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/styles.css">
+
+<script defer data-domain="hanostudios.xyz" src="https://plausible.io/js/script.js"></script>
+<script>
+  window.plausible = window.plausible || function () {
+    (window.plausible.q = window.plausible.q || []).push(arguments);
+  };
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', function () {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+      document.documentElement.classList.add('no-gsap');
+    }
+  });
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "PrivacyPolicy",
+      "@id": "https://www.hanostudios.xyz/privacy.html#page",
+      "name": "Privacy Policy",
+      "url": "https://www.hanostudios.xyz/privacy.html",
+      "inLanguage": "en",
+      "dateModified": "2026-02-01",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Hano Animations GbR",
+        "legalName": "Hano Animations GbR",
+        "email": "hannah@hanoanimations.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Lortzingstraße 32",
+          "postalCode": "66125",
+          "addressLocality": "Saarbrücken",
+          "addressCountry": "DE"
+        }
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.hanostudios.xyz/privacy.html#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.hanostudios.xyz/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Privacy Policy",
+          "item": "https://www.hanostudios.xyz/privacy.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body class="case-body">
+
+<!-- ============ CALENDLY BOOKING MODAL ============ -->
+<!-- Same modal as every content page; main.js wires any [data-calendly] trigger. -->
+<div class="cal-modal" id="calModal" hidden>
+  <div class="cal-backdrop" data-cal-close></div>
+  <div class="cal-panel" role="dialog" aria-modal="true" aria-labelledby="calTitle">
+    <div class="cal-head">
+      <h2 id="calTitle">Book a discovery call</h2>
+      <button class="cal-close" type="button" aria-label="Close booking" data-cal-close>&times;</button>
+    </div>
+    <div class="cal-embed" id="calEmbed"
+         data-url="https://calendly.com/hanostudios/discovery?hide_gdpr_banner=1&background_color=0A0A0A&text_color=FFFFFF&primary_color=8B32F7">
+      <noscript>
+        <p class="cal-fallback">
+          <a href="https://calendly.com/hanostudios/discovery" target="_blank" rel="noopener">
+            Open the booking page &rarr;</a>
+        </p>
+      </noscript>
+    </div>
+  </div>
+</div>
+
+<!-- ============ MENU BUTTON + OVERLAY ============ -->
+<button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">
+  <span></span><span></span>
+</button>
+
+<nav class="menu-overlay" id="menuOverlay" aria-hidden="true" inert>
+  <img class="menu-mark" src="assets/logo/logomark_white.png" alt="" aria-hidden="true">
+
+  <div class="menu-inner">
+    <ul class="menu-links">
+      <li><a href="index.html#works">Work</a></li>
+      <li><a href="index.html#team">Team</a></li>
+      <li><a href="index.html#faq">FAQ</a></li>
+      <li><a href="#contact" data-calendly>Contact</a></li>
+    </ul>
+  </div>
+
+  <div class="menu-foot">
+    <span class="menu-copy">&copy; 2026 Hano Studios</span>
+    <div class="menu-social">
+      <a href="https://www.instagram.com/hano.studios/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://x.com/HanoStudioss" target="_blank" rel="noopener">X / Twitter</a>
+      <a href="https://www.linkedin.com/company/hano-studios/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ PRIVACY POLICY ============ -->
+<!-- Same document shell as legal.html: .case indents the page, each block is a
+     .case-sec, and the header is the one .case-row grid. -->
+<article class="case">
+
+  <a class="case-home" href="index.html" aria-label="Hano Studios — back to home">
+    <img src="assets/logo/logomark_white.png" alt="">
+  </a>
+
+  <header class="case-row">
+    <div class="case-brand">
+      <p class="case-kicker">Privacy</p>
+    </div>
+
+    <div class="case-intro">
+      <h1>Privacy Policy</h1>
+      <p class="case-lead">Last updated: February 2026</p>
+    </div>
+  </header>
+
+  <section class="case-sec legal-copy">
+    <h2>1. Introduction</h2>
+    <p>Hano Studios &mdash; eine Marke der Hano Animations GbR, Johannes Naaber &amp; Hannah He&szlig;, Lortzingstra&szlig;e 32, Saarbr&uuml;cken (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) &mdash; is committed to protecting your personal data. This privacy policy explains how we collect, use, and protect your information when you visit our website (<a href="https://www.hanostudios.xyz">www.hanostudios.xyz</a>) or use our services, in compliance with the General Data Protection Regulation (GDPR) and the German Federal Data Protection Act (BDSG).</p>
+  </section>
+
+  <section class="case-sec legal-copy">
+    <h2>2. Data Controller</h2>
+    <p>The data controller responsible for data processing on this website is:</p>
+    <p>
+      Hano Studios &mdash; eine Marke der Hano Animations GbR<br>
+      Johannes Naaber &amp; Hannah He&szlig;<br>
+      Lortzingstra&szlig;e 32, 66125 Saarbr&uuml;cken, Germany<br>
+      Email: <a href="mailto:hannah@hanoanimations.com">hannah@hanoanimations.com</a>
+    </p>
+  </section>
+
+  <section class="case-sec">
+    <h2>3. Information We Collect</h2>
+    <h3>3.1 Information You Provide Voluntarily</h3>
+    <p>When you use our contact form or reach out to us, we may collect: your name, email address, Telegram handle, company/project name, project details, and budget information.</p>
+    <h3>3.2 Automatically Collected Information</h3>
+    <p>When you visit our website, our hosting provider (GitHub Pages) may automatically collect: IP address (anonymized where possible), browser type and version, operating system, referring URL, pages visited and time spent, and date and time of access. This data is collected based on our legitimate interest in ensuring the security and optimization of our website (Art. 6(1)(f) GDPR).</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>4. How We Use Your Information</h2>
+    <p>We use your data for the following purposes:</p>
+    <ul class="legal-list">
+      <li>To respond to your inquiries and project requests (Art. 6(1)(b) GDPR &ndash; pre-contractual measures).</li>
+      <li>To provide our animation and content creation services (Art. 6(1)(b) GDPR &ndash; contract performance).</li>
+      <li>To improve our website and user experience (Art. 6(1)(f) GDPR &ndash; legitimate interest).</li>
+      <li>To comply with legal obligations (Art. 6(1)(c) GDPR).</li>
+    </ul>
+  </section>
+
+  <section class="case-sec">
+    <h2>5. Cookies and Tracking</h2>
+    <h3>5.1 Essential Cookies</h3>
+    <p>Our website uses technically necessary cookies that are required for the website to function properly. These cookies do not require your consent (Art. 6(1)(f) GDPR).</p>
+    <h3>5.2 Analytics and Marketing Cookies</h3>
+    <p>We may use the following third-party services, but only with your explicit consent (Art. 6(1)(a) GDPR):</p>
+    <ul class="legal-list">
+      <li>Meta Pixel (Facebook) &ndash; for advertising measurement</li>
+    </ul>
+    <p>You can manage your cookie preferences at any time through the cookie settings banner on our website. You may also disable cookies in your browser settings. Note that disabling essential cookies may affect website functionality.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>6. Data Sharing</h2>
+    <p>We do not sell, trade, or rent your personal information. We may share your data with: hosting and website providers (GitHub Pages) for website operation; Google (Google Sheets) for contact form data processing; email service providers for communication; and authorities when required by law. All service providers are contractually bound to process your data only on our behalf and in compliance with GDPR (Art. 28 GDPR).</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>7. Data Retention</h2>
+    <p>We retain your data only as long as necessary: contact form submissions are kept for 2 years unless a business relationship is established; client data is kept for the duration of the business relationship plus 10 years (German tax retention requirements, &sect;&nbsp;147 AO); and website log data is kept for a maximum of 30 days.</p>
+  </section>
+
+  <section class="case-sec legal-copy">
+    <h2>8. Your Rights Under GDPR</h2>
+    <p>You have the following rights regarding your personal data:</p>
+    <ul class="legal-list">
+      <li><strong>Right of access (Art. 15 GDPR)</strong> &ndash; Request a copy of your stored data</li>
+      <li><strong>Right to rectification (Art. 16 GDPR)</strong> &ndash; Correct inaccurate data</li>
+      <li><strong>Right to erasure (Art. 17 GDPR)</strong> &ndash; Request deletion of your data</li>
+      <li><strong>Right to restriction (Art. 18 GDPR)</strong> &ndash; Limit how we process your data</li>
+      <li><strong>Right to data portability (Art. 20 GDPR)</strong> &ndash; Receive your data in a machine-readable format</li>
+      <li><strong>Right to object (Art. 21 GDPR)</strong> &ndash; Object to processing based on legitimate interest</li>
+      <li><strong>Right to object to direct marketing (Art. 21(2) GDPR)</strong> &ndash; You have the right to object at any time to processing of your personal data for direct marketing purposes, including profiling related to such direct marketing.</li>
+      <li><strong>Right to withdraw consent (Art. 7(3) GDPR)</strong> &ndash; Withdraw consent at any time without affecting prior processing</li>
+    </ul>
+    <p>To exercise any of these rights, please contact us at: <a href="mailto:hannah@hanoanimations.com">hannah@hanoanimations.com</a></p>
+    <p>You also have the right to lodge a complaint with a supervisory authority. The competent authority for us is: Unabh&auml;ngiges Datenschutzzentrum Saarland, Fritz-Dobisch-Stra&szlig;e 12, 66111 Saarbr&uuml;cken, Germany (<a href="https://www.datenschutz.saarland.de" target="_blank" rel="noopener">https://www.datenschutz.saarland.de</a>).</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>9. Data Security</h2>
+    <p>We use industry-standard technical and organizational measures to protect your personal data against unauthorized access, loss, or misuse. Our website uses SSL/TLS encryption for secure data transmission.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>10. Third-Party Links</h2>
+    <p>Our website may contain links to third-party websites (e.g., social media platforms). We are not responsible for the privacy practices of these external sites and encourage you to review their respective privacy policies.</p>
+  </section>
+
+  <section class="case-sec">
+    <h2>11. Changes to This Policy</h2>
+    <p>We may update this privacy policy from time to time. The latest version will always be available on this page with the updated date.</p>
+  </section>
+
+  <section class="case-sec legal-copy">
+    <h2>12. Contact</h2>
+    <p>For questions about this privacy policy or your personal data, please contact us at:</p>
+    <p>
+      Hano Studios &mdash; eine Marke der Hano Animations GbR<br>
+      Email: <a href="mailto:hannah@hanoanimations.com">hannah@hanoanimations.com</a><br>
+      Lortzingstra&szlig;e 32, 66125 Saarbr&uuml;cken, Germany
+    </p>
+  </section>
+
+</article>
+
+<!-- ============ CTA ============ -->
+<section class="cta" id="contact">
+  <div class="cta-glow" aria-hidden="true"></div>
+  <h2 class="cta-title">Let's bring your<br>vision to life</h2>
+  <a class="cta-bar" href="#contact" data-calendly>Let's talk</a>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="footer">
+  <div class="footer-top">
+    <p class="footer-lead">A complete creative<br>partner for brands ready<br>to launch, scale, and lead.</p>
+
+    <div class="footer-cols">
+      <div>
+        <p class="col-head">Socials</p>
+        <a href="https://www.instagram.com/hano.studios/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://x.com/HanoStudioss" target="_blank" rel="noopener">X / Twitter</a>
+        <a href="https://www.linkedin.com/company/hano-studios/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <div>
+        <p class="col-head">Explore</p>
+        <a href="index.html#top">Home</a>
+        <a href="index.html#works">Work</a>
+      </div>
+      <div>
+        <p class="col-head">About</p>
+        <a href="index.html#team">Team</a>
+        <a href="index.html#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-mark" aria-hidden="true">HANO STUDIOS</div>
+
+  <div class="footer-base">
+    <span>&copy; 2026 Hano Animations. All rights reserved.</span>
+    <div>
+      <a href="legal.html">Legal</a>
+      <a href="privacy.html">Privacy Policy</a>
+      <a href="#">Cookie Settings</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
