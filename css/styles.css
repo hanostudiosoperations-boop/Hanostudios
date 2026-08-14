@@ -1778,141 +1778,173 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 
 /* ============================================================
    COOKIE CONSENT
-   Two surfaces sharing one shell: the small notice that appears on a
-   first visit, and the preferences panel behind "Manage Preferences".
-   Consent has to be opt-in per GDPR, so nothing non-essential loads
-   until a choice is stored — see js/main.js.
+   Built from the site's own vocabulary rather than a generic banner:
+   square 4px corners, a flat Void panel with a hairline border, the
+   .case-kicker label treatment for the title, and the .cta-bar button
+   idiom — white on Void, uppercase and letter-spaced, going Aurora only
+   on hover. Purple is the accent here, never the resting state.
    ============================================================ */
 .cc{
   position:fixed;
-  z-index:80;                 /* over the page, under the menu overlay (100) */
+  z-index:80;                 /* over the page, under the menu overlay (110) */
   left:var(--pad);
-  right:var(--pad);
   bottom:var(--pad);
-  display:flex;
-  justify-content:flex-start;
-  pointer-events:none;        /* only the card itself is clickable */
+  width:min(calc(100vw - var(--pad) * 2), 420px);
+  pointer-events:none;
 }
 .cc[hidden]{ display:none; }
 .cc-card{
   pointer-events:auto;
-  width:min(100%,460px);
-  max-height:min(78svh,680px);
   display:flex;
   flex-direction:column;
-  padding:22px;
+  max-height:min(80svh,700px);
   border:1px solid var(--ink-14);
-  border-radius:6px;
+  border-radius:4px;          /* the site's radius, not a pill */
   background:var(--void);
-  /* Lifts the card off a busy hero without a heavy drop shadow. */
-  box-shadow:0 18px 60px rgba(0,0,0,.55);
   opacity:0;
-  transform:translateY(12px);
-  transition:opacity .35s ease, transform .35s cubic-bezier(.22,1,.36,1);
+  transform:translateY(10px);
+  transition:opacity .4s ease, transform .4s cubic-bezier(.22,1,.36,1);
 }
 .cc.is-open .cc-card{ opacity:1; transform:none; }
 
+/* ---- Notice ----
+   Padded on three sides; the action bar below cancels the sides itself so
+   it can run edge to edge, and the Manage link sits under it with its own
+   breathing room. */
+.cc-notice{ padding:24px 24px 20px; }
+/* The label idiom used across the site (.case-kicker, .work-kicker): tiny,
+   uppercase, wide-tracked, dim. Not a bold 15px "Cookies". */
 .cc-title{
-  margin-bottom:8px;
-  font-size:15px;
+  margin-bottom:12px;
+  font-size:10px;
   font-weight:500;
-  letter-spacing:-.02em;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--ink-40);
 }
 .cc-text{
   font-size:13px;
   line-height:1.6;
   color:var(--ink-60);
+  letter-spacing:-.01em;
 }
 .cc-text a{
+  color:var(--ink-90);
   text-decoration:underline;
   text-underline-offset:3px;
   text-decoration-color:var(--ink-40);
-  transition:color .25s ease;
+  transition:color .25s ease, text-decoration-color .25s ease;
 }
-.cc-text a:hover{ color:var(--frost); }
+.cc-text a:hover{ color:var(--frost); text-decoration-color:currentColor; }
 
-/* Actions stack on the narrow card rather than cramming three to a row. */
+/* ---- Actions ----
+   The .cta-bar idiom: full-bleed bars stacked flush to the card's foot,
+   divided by hairlines rather than floated as rounded pills. */
+/* A direct child of the card in both views, so the bars already span its
+   full width — the hairline above them is the card's own divider. */
 .cc-actions{
   display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:16px;
+  border-top:1px solid var(--ink-14);
 }
 .cc-btn{
-  flex:1 1 auto;
-  padding:10px 14px;
-  border:1px solid var(--ink-14);
-  border-radius:4px;
-  font-size:13px;
-  letter-spacing:-.01em;
-  color:var(--ink-90);
-  white-space:nowrap;
-  transition:border-color .25s ease, background .25s ease, color .25s ease;
+  flex:1 1 0;
+  padding:15px 12px;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  text-align:center;
+  color:var(--ink-60);
+  transition:background .3s ease, color .3s ease, letter-spacing .3s ease;
 }
-.cc-btn:hover{ border-color:var(--ink-40); color:var(--frost); }
+.cc-btn + .cc-btn{ border-left:1px solid var(--ink-14); }
+.cc-btn:hover{ color:var(--frost); letter-spacing:.14em; }
+/* Primary reads as the site's CTA: white ground, Void type, Aurora on hover. */
 .cc-btn-primary{
-  background:var(--aurora);
-  border-color:var(--aurora);
-  color:var(--frost);
+  background:var(--frost);
+  color:var(--void);
 }
-.cc-btn-primary:hover{ background:#7a26e0; border-color:#7a26e0; }
-/* "Manage Preferences" is a text link, not a third competing button. */
+.cc-btn-primary:hover{ background:var(--aurora); color:var(--frost); }
+
+/* "Manage Preferences" is a quiet text link under the copy, not a button. */
 .cc-link{
-  margin-top:12px;
   align-self:flex-start;
-  font-size:12px;
-  letter-spacing:.04em;
+  margin:16px 0 0;
+  padding:0 0 2px;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.14em;
   text-transform:uppercase;
   color:var(--ink-40);
-  text-decoration:underline;
-  text-underline-offset:4px;
-  transition:color .25s ease;
+  border-bottom:1px solid var(--ink-14);
+  transition:color .25s ease, border-color .25s ease;
 }
-.cc-link:hover{ color:var(--frost); }
+.cc-link:hover{ color:var(--frost); border-color:var(--frost); }
 
 /* ---- Preferences view ---- */
 .cc-panel{ display:none; min-height:0; flex-direction:column; }
 .cc.is-managing .cc-panel{ display:flex; }
-.cc.is-managing .cc-notice{ display:none; }
+/* The notice and its action bar are siblings of the panel now, so both have
+   to be hidden in the managing view — the panel carries its own pair. */
+.cc.is-managing .cc-notice,
+.cc.is-managing > .cc-card > .cc-actions{ display:none; }
+
+.cc-head{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:18px 24px;
+  border-bottom:1px solid var(--ink-14);
+}
 .cc-back{
-  align-self:flex-start;
-  margin-bottom:14px;
-  font-size:12px;
-  letter-spacing:.04em;
+  font-size:10px;
+  font-weight:500;
+  letter-spacing:.14em;
   text-transform:uppercase;
   color:var(--ink-40);
   transition:color .25s ease;
 }
 .cc-back:hover{ color:var(--frost); }
-/* The list is the only part that scrolls, so the buttons stay reachable. */
+
+/* Only the list scrolls, so the buttons stay pinned and reachable. */
 .cc-groups{
   min-height:0;
   overflow-y:auto;
-  margin:4px 0 0;
-  padding-right:4px;
+  padding:0 24px;
 }
-.cc-group{ padding:14px 0; border-top:1px solid var(--ink-08); }
-.cc-group:first-child{ border-top:0; padding-top:0; }
+.cc-group{ padding:18px 0; border-bottom:1px solid var(--ink-08); }
+.cc-group:last-child{ border-bottom:0; }
 .cc-group-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
-  margin-bottom:6px;
+  gap:14px;
+  margin-bottom:7px;
 }
-.cc-group-name{ font-size:14px; font-weight:500; letter-spacing:-.02em; }
-.cc-group-desc{ font-size:12.5px; line-height:1.6; color:var(--ink-60); }
+/* Group names match the body scale, not a heavier UI weight. */
+.cc-group-name{
+  font-size:13px;
+  font-weight:500;
+  letter-spacing:-.02em;
+  color:var(--frost);
+}
+.cc-group-desc{
+  font-size:12px;
+  line-height:1.6;
+  color:var(--ink-60);
+  letter-spacing:-.01em;
+}
 .cc-always{
-  font-size:11px;
-  letter-spacing:.06em;
+  font-size:9px;
+  font-weight:500;
+  letter-spacing:.14em;
   text-transform:uppercase;
   color:var(--ink-40);
   white-space:nowrap;
 }
 
-/* Switch: a styled checkbox, so it stays keyboard-operable and announces
-   its state to assistive tech without any ARIA of our own. */
-.cc-switch{ position:relative; flex:none; width:38px; height:22px; }
+/* Switch: square-ish like the rest of the UI, Aurora only when on. */
+.cc-switch{ position:relative; flex:none; width:34px; height:18px; }
 .cc-switch input{
   position:absolute;
   inset:0;
@@ -1928,8 +1960,8 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   height:100%;
   border:1px solid var(--ink-14);
   border-radius:999px;
-  background:var(--ink-08);
-  transition:background .25s ease, border-color .25s ease;
+  background:transparent;
+  transition:background .3s ease, border-color .3s ease;
   pointer-events:none;
 }
 .cc-track::after{
@@ -1937,11 +1969,11 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   position:absolute;
   top:4px;
   left:4px;
-  width:14px;
-  height:14px;
+  width:10px;
+  height:10px;
   border-radius:50%;
   background:var(--ink-40);
-  transition:transform .25s cubic-bezier(.22,1,.36,1), background .25s ease;
+  transition:transform .3s cubic-bezier(.22,1,.36,1), background .3s ease;
 }
 .cc-switch input:checked + .cc-track{
   background:var(--aurora);
@@ -1951,17 +1983,17 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   transform:translateX(16px);
   background:var(--frost);
 }
-.cc-switch input:focus-visible + .cc-track{ outline:2px solid var(--aurora); outline-offset:2px; }
+.cc-switch input:focus-visible + .cc-track{ outline:2px solid var(--aurora); outline-offset:3px; }
 
 @media (max-width:600px){
-  .cc{ left:12px; right:12px; bottom:12px; }
-  .cc-card{ width:100%; padding:18px; }
-  .cc-btn{ flex:1 1 100%; }
+  .cc{ left:12px; bottom:12px; width:calc(100vw - 24px); }
+  .cc-notice{ padding:20px 20px 0; }
+  .cc-head, .cc-groups{ padding-left:20px; padding-right:20px; }
 }
 
-/* The card animates in; honour a reduced-motion preference. */
 @media (prefers-reduced-motion:reduce){
   .cc-card{ transition:none; transform:none; }
+  .cc-btn:hover{ letter-spacing:.1em; }
 }
 
 /* ============================================================
