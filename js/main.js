@@ -652,6 +652,18 @@
     function initCalendly() {
       if (inited || !window.Calendly || !calEmbed.dataset.url) return;
       inited = true;
+
+      // Give the modal its real layout box BEFORE building the widget. Inside
+      // a display:none parent the iframe is 0x0, and Calendly sizes its
+      // calendar from its own viewport — at zero it renders nothing and defers
+      // the actual work to the moment it is shown, which is the delay we are
+      // trying to remove. Warm keeps it laid out, invisible and inert.
+      if (calModal.hidden) {
+        calModal.hidden = false;
+        calModal.classList.add('is-warm');
+        calModal.setAttribute('inert', '');
+      }
+
       window.Calendly.initInlineWidget({
         url: calEmbed.dataset.url,
         parentElement: calEmbed,
@@ -740,6 +752,10 @@
     function openCal(returnTo) {
       lastFocus = returnTo;
       calModal.hidden = false;
+      // Leaving the warm state is all an open has to do when the widget was
+      // pre-built: the calendar is already rendered behind the zero opacity.
+      calModal.removeAttribute('inert');
+      calModal.classList.remove('is-warm');
       requestAnimationFrame(() => calModal.classList.add('is-open'));
       document.body.style.overflow = 'hidden';
       setPageInert(true, [calModal]);
@@ -756,7 +772,17 @@
       document.body.style.overflow = '';
       setPageInert(false, []);
       if (lastFocus) lastFocus.focus();
-      window.setTimeout(() => { calModal.hidden = true; }, reduce ? 0 : 300);
+      window.setTimeout(() => {
+        // Back to warm rather than hidden when the widget exists, so a second
+        // open is instant too. display:none would tear the calendar's layout
+        // down and it would have to render again on the next open.
+        if (inited) {
+          calModal.classList.add('is-warm');
+          calModal.setAttribute('inert', '');
+        } else {
+          calModal.hidden = true;
+        }
+      }, reduce ? 0 : 300);
     }
 
     document.querySelectorAll('[data-calendly]').forEach(trigger => {

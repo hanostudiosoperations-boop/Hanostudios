@@ -1544,6 +1544,20 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 /* The hidden attribute must win over display:grid */
 .cal-modal[hidden]{ display:none; }
 
+/* Warming state. The widget is built ahead of the click, but an iframe inside
+   a display:none parent is laid out at 0x0 — and Calendly's app sizes its
+   calendar from its own viewport, so at zero it renders nothing and does the
+   real work only once the modal opens. That is why preloading alone still felt
+   slow. Here the modal keeps its full layout box, so the embed measures itself
+   properly and finishes rendering the calendar, slots and timezones while the
+   visitor is still reading. Invisible and unclickable; `inert` in the markup
+   keeps it out of focus order and off the accessibility tree. */
+.cal-modal.is-warm{
+  opacity:0;
+  pointer-events:none;
+}
+.cal-modal.is-warm .cal-backdrop{ opacity:0; }
+
 /* No backdrop-filter here either. This one lands at the worst possible moment:
    the blur of the whole page has to composite on the same frame the Calendly
    iframe is painting, which is exactly the click that felt slow. A flat tint
