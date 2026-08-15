@@ -124,10 +124,24 @@
   /* Calendly is embedded inline (Calendly.initInlineWidget in main.js), so
      the booking completes inside our own page and its iframe posts up to us.
      A link out to calendly.com could never report this. */
+  /* Origin check by parsed hostname, not by substring. `indexOf('calendly.com')`
+     also accepts https://calendly.com.attacker.net, https://evil-calendly.com
+     and plain http://calendly.com — any page can window.open() this site, keep
+     the handle and postMessage to it, so a lookalike origin could have minted
+     fake Lead conversions and skewed the ad optimisation this pixel feeds. */
+  function fromCalendly(origin) {
+    if (typeof origin !== 'string' || !origin) return false;
+    var url;
+    try { url = new URL(origin); } catch (err) { return false; }   /* "null" etc */
+    if (url.protocol !== 'https:') return false;
+    return url.hostname === 'calendly.com' ||
+           url.hostname.slice(-13) === '.calendly.com';
+  }
+
   var leadSent = false;
   window.addEventListener('message', function (e) {
     /* Only trust Calendly's own frames. */
-    if (typeof e.origin !== 'string' || e.origin.indexOf('calendly.com') === -1) return;
+    if (!fromCalendly(e.origin)) return;
     if (!e.data || e.data.event !== 'calendly.event_scheduled') return;
     /* Calendly can emit the event more than once for a single booking;
        Lead must count once per visit. */
