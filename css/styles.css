@@ -1544,11 +1544,14 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 /* The hidden attribute must win over display:grid */
 .cal-modal[hidden]{ display:none; }
 
+/* No backdrop-filter here either. This one lands at the worst possible moment:
+   the blur of the whole page has to composite on the same frame the Calendly
+   iframe is painting, which is exactly the click that felt slow. A flat tint
+   over a near-black page is visually indistinguishable and free. */
 .cal-backdrop{
   position:absolute;
   inset:0;
-  background:rgba(10,10,10,.82);
-  backdrop-filter:blur(6px);
+  background:rgba(10,10,10,.88);
   opacity:0;
   transition:opacity .3s ease;
 }
