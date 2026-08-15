@@ -161,13 +161,15 @@
       });
       /* Focus after the card is painted and laid out. Inside the rAF pair the
          element is still mid-reveal and the call is dropped, which left focus
-         on <body> — the dialog would then swallow the first Tab. */
+         on <body> — the dialog would then swallow the first Tab.
+
+         The CARD, not the accept button. Focus has to enter the dialog so
+         screen readers announce it and Tab is trapped, but a programmatic
+         focus on a button paints the global :focus-visible ring — so every
+         visitor, mouse or not, was greeted by a purple outline around Accept.
+         The card is tabindex="-1", so it takes focus without drawing one. */
       window.setTimeout(function () {
-        /* The accept action, not the policy link that precedes it in the DOM:
-           the dialog is here to be answered. */
-        var target = card.querySelector('[data-cc="accept"]') ||
-                     card.querySelector(FOCUSABLE);
-        if (target) target.focus();
+        card.focus();
       }, reduce ? 0 : 60);
     }
 

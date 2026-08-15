@@ -699,6 +699,9 @@
       el.addEventListener('pointerenter', intent, { once: true, passive: true });
       el.addEventListener('focus', intent, { once: true });
       el.addEventListener('touchstart', intent, { once: true, passive: true });
+      // pointerdown fires before click, so even a straight tap with no hover
+      // starts the widget a beat early rather than at open time.
+      el.addEventListener('pointerdown', intent, { once: true, passive: true });
     });
 
     // Nothing is competing for bandwidth once the page is idle, so fetch the

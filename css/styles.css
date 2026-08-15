@@ -276,8 +276,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .hero-video.is-playing{ opacity:1; }
 /* Once the footage is up the CSS glow would double the wash and lift the black
-   behind the wordmark, so it yields to the real thing. */
-.hero.has-video .hero-glow{ opacity:0; transition:opacity .9s ease; }
+   behind the wordmark, so it yields to the real thing.
+
+   display:none, not opacity:0 — and this is a performance fix, not a cosmetic
+   one. .hero-glow is a full-viewport element under a 38px blur running a 26s
+   animation; at opacity:0 it keeps compositing that blur every frame forever,
+   on top of the video decode. Taking it out of the box tree stops the work. */
+.hero.has-video .hero-glow{ display:none; }
 
 .hero-glow{
   position:absolute;
@@ -1820,13 +1825,15 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 .cc[hidden]{ display:none; }
 /* Dims and blurs the page behind, so the choice reads as blocking. */
+/* Flat dim, no backdrop-filter. Blurring the whole viewport is one of the most
+   expensive things a page can ask for, and this scrim is up at first paint —
+   over the hero video, on the visitor's very first frame. A heavier tint reads
+   the same and costs nothing. */
 .cc::before{
   content:"";
   position:absolute;
   inset:0;
-  background:rgba(10,10,10,.72);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
+  background:rgba(10,10,10,.82);
   opacity:0;
   transition:opacity .5s ease;
 }
@@ -1853,6 +1860,10 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   transition:opacity .5s ease, transform .55s cubic-bezier(.22,1,.36,1);
 }
 .cc.is-open .cc-card{ opacity:1; transform:none; }
+/* Takes focus so the dialog is announced and Tab is trapped, but it is a
+   container, not a control — it must not draw the global focus ring. */
+.cc-card:focus{ outline:none; }
+.cc-card:focus-visible{ outline:none; }
 
 /* Depth only — no colour. The page behind is near-black and already blurred,
    so the sheet needs separation, not a tint; a purple bloom sat on the grey
