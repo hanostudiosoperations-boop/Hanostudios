@@ -424,6 +424,23 @@
     // Autoplay can still be refused (low-power mode, strict settings). The
     // poster and glow are already correct, so there is nothing to undo.
     if (p && p.catch) p.catch(() => {});
+
+    // Decoding a full-screen clip while the visitor is somewhere else on the
+    // page is work for nothing, and it is paid on every scrolled frame. The
+    // hero is pinned, so it stays on screen for its whole sequence and only
+    // leaves once the page has genuinely moved past it.
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const r = video.play();
+            if (r && r.catch) r.catch(() => {});
+          } else if (!video.paused) {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.01 }).observe(hero || video);
+    }
   })();
 
   (function workCardVideos () {
@@ -630,10 +647,6 @@
     // preconnect in <head> covers DNS/TLS; these cover the rest.
     let inited = false;
 
-    // Warm: fetch the widget's own assets. No iframe, no Calendly cookie, so
-    // this is safe to do speculatively for everyone.
-    function warmCalendly() { loadCalendly(); }
-
     // Build the widget into the (still hidden) modal, so the click only has to
     // reveal it. Called on first intent — hover, focus or touch of any trigger.
     function initCalendly() {
@@ -704,12 +717,24 @@
       el.addEventListener('pointerdown', intent, { once: true, passive: true });
     });
 
-    // Nothing is competing for bandwidth once the page is idle, so fetch the
-    // widget's assets then. Still no iframe — that waits for intent.
+    // Build the whole widget — iframe included — while the visitor is still
+    // reading, so the click has nothing left to do. Calendly's own booking UI
+    // (calendar, timezones, available slots) is the slow part and it is fetched
+    // inside that iframe, which is why warming only the script was not enough.
+    //
+    // Deliberately on idle rather than on load: requestIdleCallback fires when
+    // the browser has spare time, so this never competes with first paint or
+    // with the opening scroll.
+    function preloadCalendly() {
+      wantsWidget = true;
+      loadCalendly();
+      initCalendly();          // no-op until the script lands; onload retries
+    }
+
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(warmCalendly, { timeout: 4000 });
+      requestIdleCallback(preloadCalendly, { timeout: 5000 });
     } else {
-      window.addEventListener('load', () => setTimeout(warmCalendly, 1800));
+      window.addEventListener('load', () => setTimeout(preloadCalendly, 2000));
     }
 
     function openCal(returnTo) {
