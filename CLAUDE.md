@@ -296,6 +296,53 @@ Both were verified by killing the scripts. Keep them if you refactor.
   consent banner. A `Booking opened` goal fires from `main.js` when the Calendly
   modal opens — add it as a goal in Plausible to see conversions.
 
+## Tracking (Meta Pixel + Conversions API)
+
+`js/consent.js` owns all of it. Nothing tracking-related belongs in a `<script>`
+tag in the HTML — it would run before consent.
+
+Three events, in funnel order: **PageView** (on pixel load), **Contact** (click of
+any `[data-calendly]` trigger), **Lead** (Calendly posts `calendly.event_scheduled`
+from its inline iframe). Pixel ID `1282102860523144`.
+
+**Every event goes out twice**, browser (`fbq`) and server (`POST /api/capi` →
+Meta Conversions API), carrying the **same `event_id`** so Meta deduplicates them.
+The server leg is a first-party request, so it survives the content blockers and
+iOS privacy that eat `connect.facebook.net` — which is the whole reason it is
+there. Changing one leg without the other breaks deduplication and doubles every
+number in the ad account.
+
+`api/` is two plain Node functions with no dependencies. Vercel picks them up
+automatically; this does **not** introduce a build step or a package.json, and
+`_meta.js` is not routed because Vercel ignores `_`-prefixed files.
+
+Set in **Vercel → Settings → Environment Variables** (nothing secret in the repo):
+
+| Variable | Value |
+|---|---|
+| `META_PIXEL_ID` | `1282102860523144` |
+| `META_CAPI_TOKEN` | Events Manager → Settings → Conversions API → Generate access token |
+| `META_TEST_EVENT_CODE` | optional; routes events to Test Events. **Remove after verifying** or nothing counts as live. |
+
+Without the token `/api/capi` returns 501 and the browser leg carries on alone,
+so a missing variable degrades rather than breaks.
+
+**`?fbdebug=1` on any URL** turns on console logging for the rest of the session —
+every event sent, every Calendly message received, and the *reason* an event was
+skipped. Reach for it before touching code: "Meta shows nothing" is far more often
+refused consent or a blocker than a bug. Verified end-to-end in a real browser:
+the listener fires `Lead` exactly once from a genuine `https://calendly.com`
+origin, ignores repeats, and ignores same-origin spoofs.
+
+The Lead `event_id` is derived from Calendly's own invitee URI (`lead_<uuid>`),
+not from a random value, so a server-side Calendly webhook could later report the
+same booking and still deduplicate. That webhook is **not** built — it is the only
+way to get a hashed email into the server event, so it is the next step if match
+quality needs to improve.
+
+Marketing consent gates both legs. Server-side is the same processing over a
+different pipe, not a way around the GDPR.
+
 ## SEO / AEO
 
 **Canonical host is `https://www.hanostudios.xyz`** — the apex 301s to it, so every

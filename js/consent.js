@@ -53,6 +53,11 @@
 
   var loaded = { analytics: false, marketing: false };
 
+  /* Marketing consent, as a flag. The pixel stub below makes window.fbq a
+     function even when connect.facebook.net is blocked, so "has fbq" is not
+     the same question as "may we track" — the server leg needs this one. */
+  var marketingOn = false;
+
   var LOADERS = {
     analytics: function () {
       /* Plausible is cookieless and privacy-first, but it is still an
@@ -76,11 +81,15 @@
       (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
       /* eslint-enable */
       window.fbq('init', META_PIXEL_ID);
-      window.fbq('track', 'PageView');
+      /* Sent through track() like the others, so it carries an eventID and
+         is mirrored to the Conversions API. */
+      track('PageView');
     }
   };
 
   function apply(prefs) {
+    /* Before the loaders run: LOADERS.marketing calls track(), which checks it. */
+    if (prefs.marketing) marketingOn = true;
     Object.keys(LOADERS).forEach(function (key) {
       if (prefs[key] && !loaded[key]) {
         loaded[key] = true;
@@ -89,23 +98,130 @@
     });
   }
 
-  /* A stored acceptance applies immediately, before the UI exists. */
-  var saved = read();
-  if (saved) apply(saved);
-
   /* ---- Funnel events --------------------------------------------------
      visitor -> interested (Contact) -> booked (Lead).
 
-     fbq only exists once marketing consent has loaded the pixel, so every
-     call is guarded: without consent these are no-ops rather than errors.
+     Each event goes out on two channels carrying ONE shared event_id:
+
+       browser   fbq('track', name, {}, { eventID: id })
+       server    POST /api/capi  ->  Meta Conversions API
+
+     Meta deduplicates on that id, so the pair is counted once. The server
+     leg is a first-party request to our own domain, which is the point:
+     it still lands when a content blocker, a corporate proxy or iOS
+     privacy has killed connect.facebook.net, and browser-only events are
+     exactly what Meta was losing.
+
+     Both legs sit behind marketing consent. Sending server-side is not a
+     way around the GDPR — it is the same processing over a different pipe.
+
      The listeners are always attached, so a visitor who accepts mid-session
      is tracked from that point on without a reload. --------------------- */
 
-  function track(event) {
-    if (typeof window.fbq !== 'function') return false;
-    window.fbq('track', event);
+  /* Add ?fbdebug=1 to any URL to have every decision logged to the console
+     for the rest of the session — including the reason an event was NOT
+     sent. This is how to check a machine that "shows nothing in Meta"
+     without guessing at consent state or ad blockers. */
+  var DEBUG = (function () {
+    var asked = /[?&]fbdebug=1/.test(window.location.search);
+    try {
+      if (asked) window.sessionStorage.setItem('hano-fbdebug', '1');
+      return window.sessionStorage.getItem('hano-fbdebug') === '1';
+    } catch (e) { return asked; }
+  })();
+
+  function log() {
+    if (!DEBUG || !window.console || !console.log) return;
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift('[hano pixel]');
+    console.log.apply(console, args);
+  }
+
+  function uuid() {
+    if (window.crypto && window.crypto.randomUUID) return window.crypto.randomUUID();
+    return 'e' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 10);
+  }
+
+  function cookie(name) {
+    var m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return m ? m.pop() : '';
+  }
+
+  /* _fbc is normally written by fbevents.js from ?fbclid=. Derive it here
+     too: on a blocked pixel that cookie never appears, and without it the
+     server event cannot be attributed to the ad click that paid for it.
+     Computed once — a value that drifted by event would look to Meta like
+     several different clicks. */
+  var derivedFbc = (function () {
+    var m = window.location.search.match(/[?&]fbclid=([^&]+)/);
+    return m ? 'fb.1.' + Date.now() + '.' + decodeURIComponent(m[1]) : '';
+  })();
+
+  function clickId() { return cookie('_fbc') || derivedFbc; }
+
+  /* fbevents.js writes _fbp a moment after it loads, and PageView is sent
+     before that — so the first server event would go out with no browser id
+     at all, which is the single biggest input to match quality. Wait for
+     the cookie, briefly, then send regardless. Once it exists (every event
+     after the first) the callback runs immediately and nothing is delayed. */
+  function whenFbp(cb) {
+    if (cookie('_fbp')) return cb();
+    var waited = 0;
+    var timer = window.setInterval(function () {
+      waited += 100;
+      if (cookie('_fbp') || waited >= 2000) {
+        window.clearInterval(timer);
+        cb();
+      }
+    }, 100);
+  }
+
+  function toServer(name, id) {
+    if (!window.fetch) return;                 /* ancient browser: browser leg only */
+    whenFbp(function () {
+      window.fetch('/api/capi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        /* A CTA click can start a navigation; keepalive lets the request
+           outlive the page rather than being cancelled halfway. */
+        keepalive: true,
+        credentials: 'omit',
+        body: JSON.stringify({
+          event_name: name,
+          event_id: id,
+          event_source_url: window.location.href,
+          fbp: cookie('_fbp'),
+          fbc: clickId()
+        })
+      }).then(function (res) {
+        log('server', name, id, '->', res.status);
+      }).catch(function (err) {
+        /* A bonus channel. The browser leg has already gone; never surface. */
+        log('server', name, 'failed:', err && err.message);
+      });
+    });
+  }
+
+  function track(name, id) {
+    if (!marketingOn) {
+      log('skipped', name, '- marketing consent not granted');
+      return false;
+    }
+    id = id || uuid();
+    if (typeof window.fbq === 'function') {
+      window.fbq('track', name, {}, { eventID: id });
+      log('browser', name, id);
+    } else {
+      log('browser', name, 'skipped - fbq missing');
+    }
+    toServer(name, id);
     return true;
   }
+
+  /* A stored acceptance applies immediately, before the UI exists. Runs
+     after the helpers above because the marketing loader calls track(). */
+  var saved = read();
+  if (saved) apply(saved);
 
   /* Every route to the call — the hero CTA, the footer bar, the in-copy
      link and the menu item — is a [data-calendly] trigger, so one delegated
@@ -138,16 +254,41 @@
            url.hostname.slice(-13) === '.calendly.com';
   }
 
+  /* Calendly's payload carries the invitee URI. Deriving the id from it
+     rather than at random means a second source for the same booking — a
+     server-side Calendly webhook, if one is ever added — produces the same
+     event_id and Meta still counts one Lead. Random id when it is absent. */
+  function leadId(data) {
+    var uri = data && data.payload && data.payload.invitee && data.payload.invitee.uri;
+    if (typeof uri === 'string') {
+      var slug = uri.split('/').pop();
+      if (slug) return 'lead_' + slug;
+    }
+    return uuid();
+  }
+
   var leadSent = false;
   window.addEventListener('message', function (e) {
     /* Only trust Calendly's own frames. */
     if (!fromCalendly(e.origin)) return;
-    if (!e.data || e.data.event !== 'calendly.event_scheduled') return;
+
+    var data = e.data;
+    /* Calendly posts an object; tolerate a JSON string rather than drop it. */
+    if (typeof data === 'string') {
+      try { data = JSON.parse(data); } catch (err) { return; }
+    }
+    if (!data || typeof data.event !== 'string') return;
+
+    /* Every Calendly event, so a failed booking test shows what DID arrive
+       instead of leaving "nothing happened" as the only evidence. */
+    log('calendly message:', data.event);
+
+    if (data.event !== 'calendly.event_scheduled') return;
     /* Calendly can emit the event more than once for a single booking;
        Lead must count once per visit. */
     if (leadSent) return;
     leadSent = true;
-    track('Lead');
+    track('Lead', leadId(data));
   });
 
   /* ---- UI ------------------------------------------------------------- */
