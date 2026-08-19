@@ -61,6 +61,29 @@ The hero pin uses `pinSpacing:false` (the square covers the screen at the end, s
 reserved spacing was only ever a black void) and the statement pin box is sized by
 padding, not 100svh — both were the causes of the recurring "huge gap" reports.
 
+**Frames 217-220 moved the hero nav to a top bar.** `.hero-top` is absolutely
+positioned — the mark on the left, the links, then CONTACT US pushed right —
+so it cannot disturb `.hero`'s space-between distribution. The tagline moved
+down inside `.hero-bottom`, directly above the wordmark, which left
+`.hero-bottom` as the only in-flow child and is why it carries `margin-top:auto`.
+There is no `.hero-nav` at the foot any more.
+
+The bar does **not** fade with the pin timeline: 218 and 220 both still draw it
+while the words divide. Instead the desktop bar hands its corner to the menu
+button, which fades in at 60svh and lands exactly on top of CONTACT US while the
+hero is still pinned. That handover is a `.nav-armed` class on `<html>` toggled
+beside `.menu-btn.is-visible` — **a sibling selector cannot work here**, because
+ScrollTrigger wraps `.hero` in a `.pin-spacer` and `.menu-btn` is no longer its
+sibling. It is scoped to `min-width:601px`; on a phone the button shows from the
+first frame and the bar holds only the mark, which 220 keeps.
+
+Phone (<=600px) drops the inline links and CONTACT US entirely and closes the
+hero on `.hero-cta-bar`, a full-bleed white action bar whose negative margins
+undo `.hero`'s padding. `.menu-btn` is forced visible there since it is the only
+route to the nav. Figma also lists PROCESS in the bar; left out, because that
+link was removed from the nav on request — restore it here and in the menu
+overlay together.
+
 Footer copyright reads "© 2026 Hano **Animations**" (frame 173 — the legal
 entity); the wordmark and the menu overlay say Hano **Studios** (frame 183).
 This is deliberate, not a typo.

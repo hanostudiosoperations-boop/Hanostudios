@@ -320,6 +320,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .hero-tagline{
   position:relative; z-index:2;
   max-width:36ch;
+  margin-bottom:clamp(18px,2.4vw,34px);
   font-size:clamp(13px, 1.15vw, 16px);
   font-weight:400;
   line-height:1.5;
@@ -332,14 +333,59 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   letter-spacing:0;
 }
 
-.hero-mark{
+/* Frames 217-220. The top bar is absolutely positioned so it cannot affect
+   .hero's space-between distribution — the tagline and title keep the exact
+   placement they had before the bar existed. */
+.hero-top{
   position:absolute;
   top:var(--pad);
+  left:var(--pad);
   right:var(--pad);
-  z-index:2;
-  width:clamp(38px, 4vw, 58px);
+  z-index:3;
+  display:flex;
+  align-items:center;
+  gap:clamp(20px,3.4vw,52px);
+}
+
+.hero-mark{
+  flex:none;
+  width:clamp(30px, 2.6vw, 38px);
   height:auto;
 }
+
+.hero-top-nav ul{ display:flex; gap:clamp(18px,2.6vw,44px); }
+.hero-top-nav a,
+.hero-top-cta{
+  font-size:clamp(11px,.92vw,13px);
+  font-weight:500;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:var(--frost);
+  white-space:nowrap;
+  transition:color .25s ease;
+}
+.hero-top-nav a:hover,
+.hero-top-cta:hover{ color:var(--aurora); }
+/* Pushed to the far right of the bar, per 217. */
+.hero-top-cta{ margin-left:auto; }
+
+/* The hero is pinned, so the bar is still on screen when the fixed menu button
+   fades in at 60% of a viewport — and CONTACT US sits exactly under it. The
+   button opens an overlay carrying all of these links anyway, so the bar hands
+   over to it rather than sharing the corner. .menu-btn and .hero are siblings
+   in <body>, which is what makes this a CSS-only handover with no second
+   scroll listener to keep in sync. */
+.hero-top{ transition:opacity .3s ease; }
+/* Desktop only. On a phone the button is present from the first frame and the
+   bar holds nothing but the mark, which 220 still draws mid-split — there is
+   no corner to hand over there. */
+@media (min-width:601px){
+  .nav-armed .hero-top{ opacity:0; pointer-events:none; }
+}
+
+/* Phone: the bar keeps only the mark, the links live in the menu overlay, and
+   the action moves to .hero-cta-bar at the foot of the hero (219). */
+.hero-cta-bar{ display:none; }
 
 /* Centred on the hero, above the glow but below the words, so the title reads
    over it while it is small and it swallows the screen once it grows.
@@ -365,7 +411,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   will-change:transform, border-radius, opacity;
 }
 
-.hero-bottom{ position:relative; z-index:2; }
+/* The tagline moved inside, so this is now the hero's only in-flow child and
+   space-between alone would park it at the top. Keep it on the floor. */
+.hero-bottom{ position:relative; z-index:2; margin-top:auto; }
 
 .hero-title{
   display:flex;
@@ -383,25 +431,6 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .ht-gap{ flex:0 0 .22em; }
 .ht-a,.ht-b{ display:inline-block; will-change:transform, filter, opacity; }
 
-.hero-nav{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-  margin-top:clamp(16px,2vw,28px);
-  padding-top:clamp(14px,1.6vw,20px);
-  border-top:1px solid var(--ink-14);
-}
-.hero-nav ul{ display:flex; gap:clamp(18px,3.4vw,58px); }
-.hero-nav a{
-  font-size:clamp(11px,1vw,14px);
-  font-weight:500;
-  letter-spacing:.06em;
-  text-transform:uppercase;
-  color:var(--ink-90);
-  transition:color .25s ease;
-}
-.hero-nav a:hover{ color:var(--aurora); }
 
 /* ============================================================
    STATEMENT / CLIENTS
@@ -1567,7 +1596,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   inset:0;
   background:rgba(10,10,10,.88);
   opacity:0;
-  transition:opacity .3s ease;
+  /* The widget is pre-built and warm, so this transition is now the whole
+     perceived open time. .3s read as a wait; .14s reads as instant. */
+  transition:opacity .14s ease;
 }
 .cal-modal.is-open .cal-backdrop{ opacity:1; }
 
@@ -1584,7 +1615,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   overflow:hidden;
   opacity:0;
   transform:translateY(14px) scale(.99);
-  transition:opacity .3s ease, transform .3s cubic-bezier(.22,1,.36,1);
+  transition:opacity .16s ease, transform .18s cubic-bezier(.22,1,.36,1);
 }
 .cal-modal.is-open .cal-panel{ opacity:1; transform:none; }
 
@@ -1767,10 +1798,30 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 }
 
 @media (max-width:600px){
-  .hero-nav{ flex-direction:column; align-items:flex-start; gap:12px; }
-  /* Frame 2: the four links spread edge to edge on one row, LET'S TALK on its
-     own row beneath. */
-  .hero-nav ul{ width:100%; justify-content:space-between; gap:0; }
+  /* Frame 219: mark on the left, menu button on the right, no inline links. */
+  .hero-top-nav{ display:none; }
+  .hero-top-cta{ display:none; }
+  .hero-mark{ width:34px; }
+  /* 219 draws the button in the hero, and with the inline links gone it is the
+     only route to the nav on a phone — so it no longer waits for the scroll
+     threshold that reveals it on desktop. */
+  .menu-btn{ opacity:1; pointer-events:auto; }
+
+  /* Full-bleed white action bar closing the hero. The negative margins undo
+     .hero's padding so it reaches both edges and the bottom, as drawn. */
+  .hero-cta-bar{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:26px calc(var(--pad) * -1) calc(var(--pad) * -1);
+    padding:20px var(--pad);
+    background:var(--frost);
+    color:var(--void);
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+  }
   /* Stacked two-line title, sized to frame 2 where "STUDIOS." spans nearly the
      full width — 19vw is the largest size that clears the 20px side pads. */
   .hero-title{ flex-direction:column; align-items:flex-start; line-height:.94; font-size:19vw; }

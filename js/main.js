@@ -120,7 +120,14 @@
   // it stays fully on screen through the whole split and the button never showed.
   // Scroll position works whether or not GSAP is driving the pin.
   const revealMenuBtn = () => {
-    menuBtn.classList.toggle('is-visible', window.scrollY > window.innerHeight * 0.6);
+    const on = window.scrollY > window.innerHeight * 0.6;
+    menuBtn.classList.toggle('is-visible', on);
+    // The hero is pinned, so its top bar is still on screen when this button
+    // arrives — and CONTACT US sits exactly under it. Flagging the root lets
+    // CSS hand the corner over. It has to be the root rather than a sibling
+    // selector because ScrollTrigger wraps .hero in a .pin-spacer, which
+    // breaks any relationship between .menu-btn and .hero-top.
+    document.documentElement.classList.toggle('nav-armed', on);
   };
   window.addEventListener('scroll', revealMenuBtn, { passive: true });
   revealMenuBtn();
@@ -744,19 +751,24 @@
     }
 
     if ('requestIdleCallback' in window) {
-      requestIdleCallback(preloadCalendly, { timeout: 5000 });
+      requestIdleCallback(preloadCalendly, { timeout: 1200 });
     } else {
-      window.addEventListener('load', () => setTimeout(preloadCalendly, 2000));
+      window.addEventListener('load', () => setTimeout(preloadCalendly, 600));
     }
 
     function openCal(returnTo) {
       lastFocus = returnTo;
+      // Warm means the modal is already displayed and laid out, so the
+      // transition has a start value right now. Cold has just been unhidden
+      // and needs one frame before the browser has anything to animate from.
+      const wasWarm = calModal.classList.contains('is-warm');
       calModal.hidden = false;
       // Leaving the warm state is all an open has to do when the widget was
       // pre-built: the calendar is already rendered behind the zero opacity.
       calModal.removeAttribute('inert');
       calModal.classList.remove('is-warm');
-      requestAnimationFrame(() => calModal.classList.add('is-open'));
+      if (wasWarm) calModal.classList.add('is-open');
+      else requestAnimationFrame(() => calModal.classList.add('is-open'));
       document.body.style.overflow = 'hidden';
       setPageInert(true, [calModal]);
       wantsWidget = true;
@@ -924,8 +936,11 @@
 
     heroTL
       .to('.hero-tagline', { opacity: 0, y: -40, ease: 'none', duration: 0.24 }, 0)
-      .to('.hero-mark',    { opacity: 0, ease: 'none', duration: 0.24 }, 0)
-      .to('.hero-nav',     { opacity: 0, y: 30, ease: 'none', duration: 0.22 }, 0)
+      // The top bar deliberately does NOT fade: frames 218 and 220 both still
+      // draw the mark, the links and CONTACT US while the words divide, so it
+      // rides the whole sequence. Only the phone's action bar goes with the
+      // title it sits under.
+      .to('.hero-cta-bar', { opacity: 0, y: 30, ease: 'none', duration: 0.22 }, 0)
       // Title climbs to the middle of the screen before anything divides.
       .to(heroTitle, { y: toCentre, ease: 'none', duration: 0.3 }, 0)
       // Then the two words part. They start at their natural positions so the

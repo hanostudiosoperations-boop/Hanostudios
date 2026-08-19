@@ -238,13 +238,23 @@
 
   <div class="hero-glow" aria-hidden="true"></div>
 
-  <p class="hero-tagline">
-    We turn strategy into brands, products and<br>
-    campaigns that <em>dominate markets</em>, earn trust,<br>
-    and convert attention into growth.
-  </p>
-
-  <img class="hero-mark" src="assets/logo/logomark_white.png" alt="Hano Studios mark">
+  <!-- Frames 217-220. The mark moves to the left and the bar carries the nav
+       plus a CONTACT US action on the right. It stays put through the pinned
+       title sequence — 218 and 220 both still draw it while the words divide —
+       so unlike the tagline it is NOT faded out by the timeline in main.js.
+       Figma also lists PROCESS here; left out because that link was removed
+       from the nav on request. Restore it here and in the menu together. -->
+  <div class="hero-top">
+    <img class="hero-mark" src="assets/logo/logomark_white.png" alt="Hano Studios mark">
+    <nav class="hero-top-nav" aria-label="Primary">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#services">Services</a></li>
+      </ul>
+    </nav>
+    <a class="hero-top-cta" href="#contact" data-calendly>Contact us</a>
+  </div>
 
   <!-- The transition square. Appears between the two words of the real hero title
        as they divide, rotates out of its kite, then grows to cover the screen
@@ -252,17 +262,23 @@
   <span class="hero-square" aria-hidden="true"></span>
 
   <div class="hero-bottom">
+    <!-- 217 and 219 both set the tagline directly above the wordmark, not up
+         against the top edge — the top bar owns that row now. -->
+    <p class="hero-tagline">
+      We turn strategy into brands, products and<br>
+      campaigns that <em>dominate markets</em>, earn trust,<br>
+      and convert attention into growth.
+    </p>
+
     <h1 class="hero-title" id="heroTitle">
       <span class="ht-a">HANO</span><span class="ht-gap"></span><span class="ht-b">STUDIOS.</span>
     </h1>
-    <nav class="hero-nav">
-      <ul>
-        <li><a href="#about">About</a></li>
-        <li><a href="#works">Works</a></li>
-        <li><a href="#services">Services</a></li>
-      </ul>
-      <a class="hero-nav-cta" href="#contact" data-calendly>Let's talk</a>
-    </nav>
+    <!-- Frame 219: on the phone the nav collapses into the menu button and the
+         hero ends on a full-bleed white action bar instead. Desktop keeps its
+         row in .hero-top, so this is the only CTA the phone layout needs. -->
+    <a class="hero-cta-bar" href="#contact" data-calendly>
+      Contact us <span aria-hidden="true">&rarr;</span>
+    </a>
   </div>
 </header>
 
