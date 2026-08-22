@@ -734,9 +734,7 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .arrow:hover{ color:var(--frost); transform:translateX(3px); }
 
 /* Sound toggle. Sits with the arrows and inherits their colour, so the icon
-   fill/stroke follow currentColor and the hover state comes for free.
-   Shared: the showcase carousel uses it, and main.js builds the same button
-   into any case-study gallery holding a video[data-audio]. */
+   fill/stroke follow currentColor and the hover state comes for free. */
 .sound-btn{
   display:inline-grid;
   place-items:center;

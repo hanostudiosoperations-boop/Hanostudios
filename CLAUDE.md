@@ -232,27 +232,7 @@ their heights.
 Videos use `preload="none"`, so nothing downloads for slides never reached — but
 that also leaves the element at `readyState 0` with no source selected, and
 `play()` on that rejects without ever fetching. main.js calls `load()` first the
-one time a slide becomes active.
-
-**Sound is opt-in, and `data-audio` is the switch.** main.js builds a
-`.sound-btn` — the same markup, icons and CSS as the showcase carousel's
-`#showSound` — into any gallery holding a `video[data-audio]`, and into no other,
-so a gallery of stills never carries a dead control. Rules the implementation
-keeps: only the *centred* slide is ever unmuted (several play at once, and
-unmuting them all is just noise); only one gallery on the page may be audible
-(they register mute callbacks in a shared `muteOthers` list); leaving the
-viewport calls `setSound(false)` rather than just muting the elements, so the
-button never reads "on" for a gallery nobody can hear; and `reduce` suppresses
-*autoplay* but not a clip the visitor explicitly asked for, or the next `sync()`
-would pause it a moment after the toggle started it.
-
-Single-slide galleries (Kalshi, both Hano Crypto clips) draw no arrows and no
-dots, so they have no `.gallery-foot` in the markup — main.js builds a minimal
-one to hang the toggle on. **Only add `data-audio` after checking the file
-actually has sound**, with
-`ffmpeg -i clip.mp4 -map a:0 -af volumedetect -f null /dev/null`; five clips
-carry it today (Bybit `social-1`/`social-2`, Kalshi `xrp-bank`, Hano Crypto
-`war-against-china`/`trumps-planned-crash`). **Playwright's bundled Chromium has no
+one time a slide becomes active. **Playwright's bundled Chromium has no
 proprietary codecs** (`canPlayType('video/mp4; codecs="avc1…"')` is empty), so
 playback can only be verified with `chromium.launch({channel:'chrome'})` — it
 fails there for the existing showcase clips too, which is the browser, not the file.
@@ -263,34 +243,6 @@ Source masters live outside the repo: `~/Downloads/bybit` (88MB),
 the same settings the showcase clips use: H.264, CRF 27, long edge 960, AAC 96k,
 `+faststart`. Kalshi's poster is grabbed at `-ss 3` — the clip opens on
 near-black, so frame 0 gives a 4.5KB blank; Hano Crypto ships its own posters.
-
-**The four Bybit Card films are the exception: they are stream copies, not
-re-encodes.** `~/Downloads/Bybit/Bybit Card/` (the folder replaced the older
-lowercase `bybit` one — macOS is case-insensitive, so the earlier social-clip
-masters are gone) ships H.264 Main/4.1 yuv420p 30fps at ~2Mbps and 4MB, which is
-already web-shaped, so `-c:v copy -an -movflags +faststart` gives the client's
-own pixels with no generation loss. The first encode instead ran CRF 27 at long
-edge 1440, which *upscaled* the 4:5 clips from 1080x1350 to 1152x1440 and threw
-away half the bitrate — that is what "such a low quality" was. Sources, matched
-to the site slugs by frame comparison, not by filename:
-
-| slug | master | native |
-|---|---|---|
-| `card-1` | `7/7V_45_SW.mp4` | 1080x1350 |
-| `card-2` | `3/3 9_16.mp4` | 1080x1920 |
-| `card-3` | `1/1V_45_SW.mp4` | 1080x1350 |
-| `card-4` | `4/4V_169.mp4` | 1920x1080 |
-
-**Every audio track in that folder is digital silence** (-91dB, and the one
-outlier peaks at -61.7dB), so the films are delivered `-an` and carry no
-`data-audio`. Don't "restore" their sound by lifting an audio track off a
-sibling aspect variant — there is nothing on it. Real audio needs new masters
-from the client.
-
-`social-1` / `social-2` are still the original 540x960 @ ~300kbps encodes and
-are the lowest-quality assets on the page. Their masters are **not** on this
-machine — nothing under `~/Downloads` matches their 38.47s / 20.71s durations —
-so they cannot be improved without the client re-supplying them.
 
 **ffprobe reports Crypteum's master as 1920x1080 but it is a 9:16 reel** — that
 is the stored size, read before the rotation metadata. `scale=-2:960` handles it
