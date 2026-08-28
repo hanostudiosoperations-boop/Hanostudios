@@ -239,8 +239,10 @@
     <p>Every concept was animated and adapted into four formats for all major platforms — one idea, one consistent visual language, running cleanly across every screen it touched. A single concept became a full, polished matrix of deliverables, instantly recognizable as Bybit wherever it appeared.</p>
   </section>
 
-  <!-- Video slides: poster shows until the slide is active, then it plays muted
-       and loops. preload="none" so nothing downloads for slides never reached. -->
+  <!-- Video slides: poster shows until the slide is active, then it plays and
+       loops. preload="none" so nothing downloads for slides never reached.
+       No data-audio on these four: the masters Bybit supplied carry no sound
+       at all, so main.js gives this gallery no sound toggle. -->
   <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="Bybit Card campaign films">
     <div class="gallery-track" data-gallery-track>
       <figure class="slide"><video src="../assets/video/work/bybit/card-1.mp4" poster="../assets/img/work/bybit/card-1-poster.jpg" muted loop playsinline preload="none" aria-label="Lev kryptolivet med Bybit Card — Swedish lifestyle spot"></video></figure>
@@ -266,8 +268,8 @@
 
   <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="Bybit EU social content">
     <div class="gallery-track" data-gallery-track>
-      <figure class="slide"><video src="../assets/video/work/bybit/social-1.mp4" poster="../assets/img/work/bybit/social-1-poster.jpg" muted loop playsinline preload="none" aria-label="Bybit EU talking-head clip rebuilt in motion"></video></figure>
-      <figure class="slide"><video src="../assets/video/work/bybit/social-2.mp4" poster="../assets/img/work/bybit/social-2-poster.jpg" muted loop playsinline preload="none" aria-label="Bybit app UI animation"></video></figure>
+      <figure class="slide"><video src="../assets/video/work/bybit/social-1.mp4" data-audio poster="../assets/img/work/bybit/social-1-poster.jpg" muted loop playsinline preload="none" aria-label="Bybit EU talking-head clip rebuilt in motion"></video></figure>
+      <figure class="slide"><video src="../assets/video/work/bybit/social-2.mp4" data-audio poster="../assets/img/work/bybit/social-2-poster.jpg" muted loop playsinline preload="none" aria-label="Bybit app UI animation"></video></figure>
     </div>
     <div class="gallery-foot">
       <div class="gallery-arrows">

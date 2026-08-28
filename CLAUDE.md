@@ -186,6 +186,23 @@ needs `.slide.slide-board` specificity** — as a single class it loses to the
 later `.slide img{width:auto;height:100%}` and the slide collapses to 0 high.
 It also has no "Why It Matters" section; don't add one.
 
+**The mood board is now a live Milanote iframe, not the still.** `.case-board`
+is a bordered panel on the same two-track grid as `.gallery` (minus the bleed —
+it is a framed panel, not a strip that runs off the edge). Milanote publishes an
+oEmbed for the board URL whose `html` is exactly that iframe, so framing is the
+supported path; the only anti-framing headers `app.milanote.com` sends are the
+deprecated `x-content-security-policy` / `x-webkit-csp` pair, which current
+browsers ignore. **If Milanote ever ships a real `content-security-policy` the
+frame goes blank** — `assets/img/work/hano-crypto/mood-board.jpg` is kept in the
+repo (and still serves as the page's `og:image` and schema `image`) so the
+`.slide-board` gallery can be restored in one step. `.slide.slide-board` stays in
+the CSS for that reason; it is currently unused. `.case-board-mask` covers
+Milanote's own badge along the foot, sized by `--board-mask-h` /
+`--board-mask-inset` so it can be moved in one line.
+
+`.slide-board` needs `.slide.slide-board` specificity — see above; that trap
+still applies if you put the still back.
+
 Hano Crypto's mark is the client's own artwork at
 `assets/img/clients/hano-crypto.png`, built from `Logowhite.PNG` in the repo
 root — a purple roundel with black type. Two earlier attempts (a raster crop off
@@ -232,7 +249,34 @@ their heights.
 Videos use `preload="none"`, so nothing downloads for slides never reached — but
 that also leaves the element at `readyState 0` with no source selected, and
 `play()` on that rejects without ever fetching. main.js calls `load()` first the
-one time a slide becomes active. **Playwright's bundled Chromium has no
+one time a slide becomes active.
+
+**Sound is opt-in, and `data-audio` is the switch.** main.js builds a
+`.sound-btn` — the same markup, icons and CSS as the showcase carousel's
+`#showSound` — into any gallery holding a `video[data-audio]`, and into no other,
+so a gallery of stills never carries a dead control. Rules the implementation
+keeps: only the *centred* slide is ever unmuted (several play at once, and
+unmuting them all is just noise); only one gallery on the page may be audible
+(they register mute callbacks in a shared `muteOthers` list); leaving the
+viewport calls `setSound(false)` rather than just muting the elements, so the
+button never reads "on" for a gallery nobody can hear; and `reduce` suppresses
+*autoplay* but not a clip the visitor explicitly asked for, or the next `sync()`
+would pause it a moment after the toggle started it.
+
+Single-slide galleries (Kalshi, both Hano Crypto clips) draw no arrows and no
+dots, so they have no `.gallery-foot` in the markup — main.js builds a minimal
+one to hang the toggle on. **Only add `data-audio` after checking the file
+actually has sound**, with
+`ffmpeg -i clip.mp4 -map a:0 -af volumedetect -f null /dev/null`; five clips
+carry it today (Bybit `social-1`/`social-2`, Kalshi `xrp-bank`, Hano Crypto
+`war-against-china`/`trumps-planned-crash`).
+
+**The four Bybit Card films carry no audio stream at all** — every audio track in
+the supplied `~/Downloads/Bybit/Bybit Card/` masters is digital silence (-91dB,
+and the one outlier peaks at -61.7dB), so they are encoded `-an` and get no
+`data-audio` and no toggle. Don't "restore" their sound by lifting a track off a
+sibling aspect variant; there is nothing on it. Real audio needs new masters from
+the client. **Playwright's bundled Chromium has no
 proprietary codecs** (`canPlayType('video/mp4; codecs="avc1…"')` is empty), so
 playback can only be verified with `chromium.launch({channel:'chrome'})` — it
 fails there for the existing showcase clips too, which is the browser, not the file.
@@ -276,7 +320,13 @@ Both were verified by killing the scripts. Keep them if you refactor.
 - ~~**Showcase videos are not supplied yet.**~~ Each `.phone` holds a `<video>` with the
   existing still as its `poster`. The playback controller in `main.js` is finished and
   verified: it plays the active slide, auto-advances on `ended`, wraps around, pauses
-  off-screen, and the arrows work. It activates per phone the moment you add
+  off-screen, and the arrows work. Leaving the viewport **resets the sound
+  toggle**, it does not only pause: pausing alone left `soundOn` true, so the
+  button still read "on" for a carousel nobody could hear and the clip resumed
+  *with sound* the moment the section clipped back into view. The `reduce` guard
+  sits inside the intersecting branch, not at the top of the observer — leaving
+  has to stop sound in every mode, and the toggle can start a clip under reduced
+  motion. It activates per phone the moment you add
   `data-src="assets/video/showcase/<slug>.mp4"` to that `<video>` — there is a comment
   beside each one with the exact line. A phone with no `data-src` just shows its poster,
   so no missing file is ever requested.

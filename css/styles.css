@@ -734,7 +734,9 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
 .arrow:hover{ color:var(--frost); transform:translateX(3px); }
 
 /* Sound toggle. Sits with the arrows and inherits their colour, so the icon
-   fill/stroke follow currentColor and the hover state comes for free. */
+   fill/stroke follow currentColor and the hover state comes for free.
+   Shared: the showcase carousel uses it, and main.js builds the same button
+   into any case-study gallery holding a video[data-audio]. */
 .sound-btn{
   display:inline-grid;
   place-items:center;
@@ -1384,6 +1386,46 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   object-fit:contain;
 }
 
+/* Milanote mood board embed. Laid out on the same two-track grid as .gallery
+   so it lines up with the copy column, but without the bleed: this one is a
+   framed panel, not a strip that runs off the edge. */
+.case-board{
+  display:grid;
+  grid-template-columns:var(--col) minmax(0, 1fr);
+  gap:clamp(18px,2.6vw,40px);
+  margin:0 0 clamp(30px,3.6vw,52px);
+}
+.case-board > *{ grid-column:2; }
+
+/* The bordered frame. Aspect ratio rather than a fixed height, so the board
+   keeps its shape down to a phone; 16/10 is close to the board's own 1.91:1
+   preview without going letterbox-thin in the column. */
+.case-board-frame{
+  --board-mask-h:46px;      /* how much of the foot the mask covers */
+  --board-mask-inset:0px;   /* nudge it off the bottom edge if the badge floats */
+  position:relative;
+  width:100%;
+  aspect-ratio:16 / 10;
+  border:1px solid rgba(255,255,255,.14);
+  border-radius:4px;
+  overflow:hidden;
+  background:#141414;
+}
+.case-board-frame iframe{
+  display:block;
+  width:100%;
+  height:100%;
+  border:0;
+}
+.case-board-mask{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:var(--board-mask-inset);
+  height:var(--board-mask-h);
+  background:#141414;
+}
+
 .gallery-foot{
   display:flex;
   align-items:center;
@@ -1406,8 +1448,13 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
    the indent is dropped and the remaining grid rows stack to full width. */
 @media (max-width:760px){
   .case-row,
+  .case-board,
   .gallery{ grid-template-columns:1fr; gap:14px; }
-  .gallery > *{ grid-column:1; }
+  .gallery > *,
+  .case-board > *{ grid-column:1; }
+  /* A 16/10 panel in a phone-width column is only ~220px tall, so the badge
+     mask has to shrink with it or it eats a fifth of the board. */
+  .case-board-frame{ --board-mask-h:30px; }
   .case-row > :last-child{ max-width:none; }
   .case-sec{ margin-left:0; max-width:none; }
   .case-brand{ padding-top:0; }

@@ -217,7 +217,7 @@
 
   <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="War against China">
     <div class="gallery-track" data-gallery-track>
-      <figure class="slide slide-tall"><video src="../assets/video/work/hano-crypto/war-against-china.mp4" poster="../assets/img/work/hano-crypto/war-against-china-poster.jpg" muted loop playsinline preload="none" aria-label="War against China — the most viral Hano Crypto video"></video></figure>
+      <figure class="slide slide-tall"><video src="../assets/video/work/hano-crypto/war-against-china.mp4" data-audio poster="../assets/img/work/hano-crypto/war-against-china-poster.jpg" muted loop playsinline preload="none" aria-label="War against China — the most viral Hano Crypto video"></video></figure>
     </div>
   </div>
 
@@ -247,7 +247,7 @@
 
   <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="Trump's Planned Crash">
     <div class="gallery-track" data-gallery-track>
-      <figure class="slide slide-tall"><video src="../assets/video/work/hano-crypto/trumps-planned-crash.mp4" poster="../assets/img/work/hano-crypto/trumps-planned-crash-poster.jpg" muted loop playsinline preload="none" aria-label="Trump's Planned Crash — Hano Crypto video"></video></figure>
+      <figure class="slide slide-tall"><video src="../assets/video/work/hano-crypto/trumps-planned-crash.mp4" data-audio poster="../assets/img/work/hano-crypto/trumps-planned-crash-poster.jpg" muted loop playsinline preload="none" aria-label="Trump's Planned Crash — Hano Crypto video"></video></figure>
     </div>
   </div>
 
@@ -292,9 +292,26 @@
     <p>Visual style guides, asset palettes, and motion references for the Hano Crypto visual system.</p>
   </section>
 
-  <div class="gallery" data-gallery aria-roledescription="carousel" aria-label="Hano Crypto mood board">
-    <div class="gallery-track" data-gallery-track>
-      <figure class="slide slide-board"><img src="../assets/img/work/hano-crypto/mood-board.jpg" alt="Hano Crypto mood board: brand overview, typography, data visualization, thumbnail style, signature assets and colour palette" loading="lazy"></figure>
+  <!-- The live Milanote board, not a still. Milanote publishes an oEmbed for
+       this URL whose html is exactly this iframe, so framing is the supported
+       path; the only anti-framing headers it sends are the deprecated
+       x-content-security-policy / x-webkit-csp pair, which current browsers
+       ignore. If Milanote ever ships a real CSP the frame goes blank —
+       assets/img/work/hano-crypto/mood-board.jpg is still in the repo and this
+       block reverts to the .slide-board gallery in one step.
+       loading="lazy" keeps the third-party frame off the wire until the
+       visitor is near it. -->
+  <div class="case-board">
+    <div class="case-board-frame">
+      <iframe src="https://app.milanote.com/1WuE101EFh7P6W?p=aJ9GnNfyp9Q"
+              title="Hano Crypto mood board"
+              loading="lazy"></iframe>
+      <!-- Covers Milanote's own badge along the foot of the board. Height and
+           edge are the two --board-mask-* custom properties, so moving it is a
+           one-line change once you can see where the badge actually lands. It
+           deliberately keeps pointer-events, so the badge underneath is not
+           clickable through it. -->
+      <div class="case-board-mask" aria-hidden="true"></div>
     </div>
   </div>
 

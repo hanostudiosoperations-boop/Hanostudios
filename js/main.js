@@ -384,16 +384,31 @@
     // so a video is never playing off-screen.
     const showObserver = new IntersectionObserver(
       entries => entries.forEach(en => {
-        if (reduce) return;
         if (en.isIntersecting) {
+          // The reduce guard sits here, not at the top: leaving the viewport
+          // has to stop sound in every mode, and the sound toggle can start a
+          // clip even under reduced motion.
+          if (reduce) return;
           // Resync to wherever the strip actually is, not whatever `current`
           // last held — see nearestPhone()'s comment.
           current = nearestPhone();
           play(current);
-        } else phones.forEach(p => {
-          const v = p.querySelector('.phone-video');
-          if (v) v.pause();
-        });
+        } else {
+          // Scrolling past resets the toggle rather than only pausing. Pausing
+          // alone left soundOn true, so the button still read "on" for a
+          // carousel nobody could hear, and the clip resumed *with sound*
+          // behind the visitor the moment the section clipped back into view.
+          soundOn = false;
+          syncSoundBtn();
+          phones.forEach(p => {
+            const v = p.querySelector('.phone-video');
+            if (!v) return;
+            v.pause();
+            // A paused clip is silent, but muting means a stray play() cannot
+            // blare from off screen.
+            v.muted = true;
+          });
+        }
       }),
       { threshold: 0.35 }
     );
@@ -495,12 +510,46 @@
   // hold any number of them. Nothing here runs on the landing page (no matches),
   // and with no JS at all the track is still a horizontally scrollable strip
   // with snap points — the arrows and dots are progressive enhancement.
+  // Only one clip on the page is ever audible. Each gallery that has a toggle
+  // registers a mute callback here, and whichever one is switched on silences
+  // the rest first — two galleries left unmuted would otherwise talk over each
+  // other the moment they share the viewport.
+  const muteOthers = [];
+
   document.querySelectorAll('[data-gallery]').forEach(gallery => {
     const track = gallery.querySelector('[data-gallery-track]');
     if (!track) return;
     const slides = Array.from(track.children);
     const dotsBox = gallery.querySelector('[data-gallery-dots]');
     if (!slides.length) return;
+
+    // A clip is only marked data-audio when its master genuinely carries sound.
+    // The Bybit Card films were delivered silent — every audio track in the
+    // supplied set peaks below -60dB — so that gallery gets no toggle rather
+    // than a button that appears to do nothing.
+    const hasAudio = track.querySelector('video[data-audio]');
+    let soundOn = false;
+    let soundBtn = null;
+
+    // Sound rides on the centred slide only. Several slides play at once (that
+    // is the whole look), so unmuting all of them would just be noise.
+    function applyMute() {
+      slides.forEach((slide, i) => {
+        const v = slide.querySelector('video');
+        if (!v) return;
+        v.muted = !(soundOn && i === current && v.hasAttribute('data-audio'));
+      });
+    }
+
+    function setSound(on) {
+      soundOn = Boolean(on && hasAudio);
+      if (soundBtn) {
+        soundBtn.classList.toggle('is-on', soundOn);
+        soundBtn.setAttribute('aria-pressed', String(soundOn));
+        soundBtn.setAttribute('aria-label', soundOn ? 'Mute video' : 'Unmute video');
+      }
+      applyMute();
+    }
 
     // Centre a slide in the track. Same maths as the showcase carousel: derive
     // the target from the element's own offset rather than stepping by a guessed
@@ -525,22 +574,39 @@
     function sync(index) {
       current = Math.max(0, Math.min(index, slides.length - 1));
       const view = track.getBoundingClientRect();
-      slides.forEach(slide => {
+      slides.forEach((slide, i) => {
         const v = slide.querySelector('video');
         if (!v) return;
         const r = slide.getBoundingClientRect();
         // Mostly-visible inside the track's own viewport.
         const shown = Math.min(r.right, view.right) - Math.max(r.left, view.left);
-        if (shown > r.width * 0.5 && !reduce) {
+        // Reduced motion suppresses autoplay, but not a clip the visitor has
+        // explicitly asked to hear — without this exception the next sync()
+        // would pause it again a moment after the toggle started it.
+        const wanted = !reduce || (soundOn && i === current);
+        if (shown > r.width * 0.5 && wanted) {
           // preload="none" leaves the element at HAVE_NOTHING with no source
           // selected, and play() on that rejects without ever fetching. Kick a
           // load() the first time a slide comes into view; from then on the
           // buffered data is reused and this is a no-op.
           if (v.readyState === 0) v.load();
+          v.muted = !(soundOn && i === current && v.hasAttribute('data-audio'));
           const attempt = v.play();
-          if (attempt && attempt.catch) attempt.catch(() => {});
+          if (attempt && attempt.catch) attempt.catch(() => {
+            // Autoplay refused. If sound was the reason, drop back to muted so
+            // the clip still runs rather than freezing on its poster, and put
+            // the toggle back so the button is not lying about the state.
+            if (!v.muted) {
+              setSound(false);
+              const retry = v.play();
+              if (retry && retry.catch) retry.catch(() => {});
+            }
+          });
         } else {
           v.pause();
+          // A paused clip is silent anyway, but leaving it unmuted means any
+          // stray play() would blare.
+          v.muted = true;
         }
       });
       if (dotsBox) {
@@ -570,6 +636,54 @@
     if (prevBtn) prevBtn.addEventListener('click', () => goTo(current - 1, true));
     if (nextBtn) nextBtn.addEventListener('click', () => goTo(current + 1, true));
 
+    // Built here rather than in the markup, the same way the dots are, so a
+    // gallery of stills never carries a dead control. Muted is the only state a
+    // browser will autoplay in, so that is where this starts; the click is both
+    // the visitor's opt-in and the gesture that makes unmuted playback
+    // permissible from then on. Markup and icons match #showSound exactly.
+    let arrowsBox = gallery.querySelector('.gallery-arrows');
+    if (hasAudio && !arrowsBox) {
+      // Kalshi and Hano Crypto draw a single clip with no arrows and no dots,
+      // so those galleries have no foot to hang the toggle on. Build a minimal
+      // one — same row, same spacing, just the one control. `.gallery > *` puts
+      // it in the copy column, so it lines up with the slide above it.
+      const foot = document.createElement('div');
+      foot.className = 'gallery-foot';
+      arrowsBox = document.createElement('div');
+      arrowsBox.className = 'gallery-arrows';
+      foot.appendChild(arrowsBox);
+      gallery.appendChild(foot);
+    }
+    if (hasAudio && arrowsBox) {
+      soundBtn = document.createElement('button');
+      soundBtn.type = 'button';
+      soundBtn.className = 'arrow sound-btn';
+      soundBtn.setAttribute('aria-pressed', 'false');
+      soundBtn.setAttribute('aria-label', 'Unmute video');
+      soundBtn.innerHTML =
+        '<svg class="ico-muted" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+          '<path d="M4 9v6h4l5 4V5L8 9H4z"/>' +
+          '<path d="M16.5 9.5l5 5m0-5l-5 5" class="stroke"/>' +
+        '</svg>' +
+        '<svg class="ico-on" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' +
+          '<path d="M4 9v6h4l5 4V5L8 9H4z"/>' +
+          '<path d="M16.5 8.8a4.5 4.5 0 010 6.4M19 6.3a8 8 0 010 11.4" class="stroke"/>' +
+        '</svg>';
+      soundBtn.addEventListener('click', () => {
+        const turningOn = !soundOn;
+        // Silence every other gallery first. Our own callback is in this list
+        // too, but soundOn is still false while turning on, so it no-ops.
+        if (turningOn) muteOthers.forEach(fn => fn());
+        setSound(turningOn);
+        // Settle playback for the new state straight away rather than waiting
+        // for the next scroll. This is also what makes the button work under
+        // reduced motion, where nothing is playing until it is asked for.
+        sync(current);
+      });
+      arrowsBox.appendChild(soundBtn);
+      muteOthers.push(() => { if (soundOn) setSound(false); });
+    }
+
     // A swipe moves scrollLeft without going through goTo(), so re-derive which
     // slide won once the browser says the scroll has settled.
     track.addEventListener('scrollend', () => sync(nearest()));
@@ -577,7 +691,12 @@
     // Pause everything while the gallery is off screen.
     const io = new IntersectionObserver(entries => entries.forEach(en => {
       if (en.isIntersecting) sync(nearest());
-      else slides.forEach(s => { const v = s.querySelector('video'); if (v) v.pause(); });
+      else {
+        // Reset the toggle rather than just muting the elements, or the button
+        // would still read "on" for a gallery nobody can hear.
+        setSound(false);
+        slides.forEach(s => { const v = s.querySelector('video'); if (v) v.pause(); });
+      }
     }), { threshold: 0.25 });
     io.observe(gallery);
 
