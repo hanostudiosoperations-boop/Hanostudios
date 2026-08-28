@@ -684,6 +684,29 @@
       muteOthers.push(() => { if (soundOn) setSound(false); });
     }
 
+    // A gallery whose slides all fit has nothing to scroll, so the track's bleed
+    // to the right edge only strands them at the left of the copy column. Mark
+    // it and let the CSS drop the bleed and centre them. This cannot be a media
+    // query: it depends on how wide the slides turn out to be, and a pair that
+    // fits on a desktop overflows on a phone.
+    function measure() {
+      // +1 absorbs sub-pixel rounding, which otherwise reports a 1px overflow
+      // on a track that visibly fits.
+      gallery.classList.toggle('is-static', track.scrollWidth <= track.clientWidth + 1);
+    }
+    measure();
+    // Slides are width:auto at a fixed height, so their width is not known
+    // until the media reports its aspect ratio. preload="none" videos never
+    // do until they are loaded, so re-measure whenever one arrives; the poster
+    // fires load on the img path only.
+    slides.forEach(slide => {
+      const media = slide.querySelector('img, video');
+      if (!media) return;
+      media.addEventListener('load', measure);
+      media.addEventListener('loadedmetadata', measure);
+    });
+    window.addEventListener('resize', measure);
+
     // A swipe moves scrollLeft without going through goTo(), so re-derive which
     // slide won once the browser says the scroll has settled.
     track.addEventListener('scrollend', () => sync(nearest()));

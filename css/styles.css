@@ -1426,6 +1426,25 @@ button{ font:inherit; color:inherit; background:none; border:0; cursor:pointer; 
   background:#141414;
 }
 
+/* Set by main.js on any gallery whose slides all fit — see measure(). The
+   bleed exists so an overflowing strip runs off the right edge; on a gallery
+   with nothing to scroll it only strands the slides at the left of the copy
+   column, which is what left Kalshi's single clip and Bybit's pair of socials
+   hard against the text margin with the column empty beside them. */
+.gallery.is-static .gallery-track{
+  margin-right:0;
+  justify-content:center;
+}
+/* Arrows and dots that cannot move anything are dead controls. The sound
+   toggle lives in the same .gallery-arrows row, so hide the two buttons and
+   the dots by name rather than hiding the row. */
+.gallery.is-static [data-gallery-prev],
+.gallery.is-static [data-gallery-next],
+.gallery.is-static [data-gallery-dots]{ display:none; }
+/* …which can leave the foot holding only the sound toggle. Centre it under the
+   centred slide rather than leaving it alone at the far left. */
+.gallery.is-static .gallery-foot{ justify-content:center; }
+
 .gallery-foot{
   display:flex;
   align-items:center;

@@ -240,7 +240,19 @@ intro text. Verified at 1470/1200/900/761/760/600/390 on all three pages: a
 uniform gap, no overlap, heading left edge == copy left edge.
 
 Galleries are `[data-gallery]`; main.js wires arrows, dots, swipe and per-slide
-video play/pause for any number of them per page. **Slides are capped on both
+video play/pause for any number of them per page.
+
+**A gallery whose slides all fit is centred, and main.js has to measure that.**
+`measure()` sets `.is-static` when `scrollWidth <= clientWidth + 1`; the CSS then
+drops the track's right-edge bleed and centres the slides, hides the prev/next
+buttons and dots (dead controls with nothing to scroll — hidden *by name*, since
+the sound toggle shares `.gallery-arrows`), and centres the foot. It cannot be a
+media query: it depends on how wide the slides resolve, and a pair that fits on a
+desktop overflows on a phone. Slides are `width:auto` at a fixed height, so their
+width is unknown until the media reports its aspect ratio — `preload="none"`
+videos never do until loaded — so `measure()` re-runs on `load`,
+`loadedmetadata` and `resize`. Without it, Kalshi's single clip and Bybit's pair
+of socials sat hard against the text margin with the column empty beside them. **Slides are capped on both
 axes** — a height cap alone makes 16:9 stills ~1.8x the phone's width, a width
 cap alone lets the track grow to the tallest slide and strands the arrows
 hundreds of px below a short one. `align-items:flex-start` stops flex equalising
